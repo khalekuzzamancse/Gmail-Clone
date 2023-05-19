@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GmailCloneTheme {
                 val drawerItems = linkedMapOf(
-                    Pair("Group1", getGroup1()),
+                    Pair("Group1",getGroup1()),
                     Pair("Recent labels", getRecentLabels()),
                     Pair("All labels", getAllLabels()),
                     Pair("Google apps", getGoogleAppsLabels()),

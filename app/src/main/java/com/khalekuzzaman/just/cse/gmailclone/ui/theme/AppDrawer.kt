@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -61,16 +62,13 @@ fun AppDrawer(
 private fun DrawerContent(drawerRoutes: LinkedHashMap<String, List<DrawerItem>>) {
     ModalDrawerSheet() {
         drawerRoutes.forEach { (groupName, routesInTheGroup) ->
-            NavigationDrawerItem(
-                icon = { },
-                label = { Text(groupName) },
-                selected = false,
-                onClick = {
-
-                },
-
-
-                )
+            val shouldShowGroupName= groupName.equals("")
+            if(!shouldShowGroupName){
+                DisplayGroupName(groupName = groupName)
+            }
+            else{
+              DisplayDivider()
+            }
             //placing the each drawer items
             routesInTheGroup.forEach { item ->
                 NavigationDrawerItem(
@@ -80,7 +78,6 @@ private fun DrawerContent(drawerRoutes: LinkedHashMap<String, List<DrawerItem>>)
                     onClick = {
 
                     },
-
 
                 )
 
@@ -107,6 +104,10 @@ private fun DisplayGroupName(groupName: String) {
     ){
         Text(text = groupName)
     }
+}
+@Composable
+private fun DisplayDivider(){
+    Divider()
 }
 
 @Composable
