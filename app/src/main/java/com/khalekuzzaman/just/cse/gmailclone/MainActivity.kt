@@ -10,37 +10,30 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.khalekuzzaman.just.cse.gmailclone.ui.theme.AppDrawer
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
+import com.khalekuzzaman.just.cse.gmailclone.ui.theme.getAllLabels
+import com.khalekuzzaman.just.cse.gmailclone.ui.theme.getGoogleAppsLabels
+import com.khalekuzzaman.just.cse.gmailclone.ui.theme.getGroup1
+import com.khalekuzzaman.just.cse.gmailclone.ui.theme.getLastLabels
+import com.khalekuzzaman.just.cse.gmailclone.ui.theme.getRecentLabels
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             GmailCloneTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
+                val drawerItems = linkedMapOf(
+                    Pair("Group1", getGroup1()),
+                    Pair("Recent labels", getRecentLabels()),
+                    Pair("All labels", getAllLabels()),
+                    Pair("Google apps", getGoogleAppsLabels()),
+                    Pair("", getLastLabels()),
+                )
+                AppDrawer(drawerRoutes = drawerItems) {
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    GmailCloneTheme {
-        Greeting("Android")
-    }
-}
