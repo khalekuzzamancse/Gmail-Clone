@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.AppDrawer
+import com.khalekuzzaman.just.cse.gmailclone.ui.theme.DrawerItem
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.getAllLabels
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.getGoogleAppsLabels
@@ -23,14 +24,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GmailCloneTheme {
-                val drawerItems = linkedMapOf(
-                    Pair("Group1",getGroup1()),
+                val drawerItems: List<Pair<String, List<DrawerItem>>> = listOf(
+                    Pair("",getGroup1()),
                     Pair("Recent labels", getRecentLabels()),
                     Pair("All labels", getAllLabels()),
                     Pair("Google apps", getGoogleAppsLabels()),
-                    Pair("", getLastLabels()),
+                    Pair("", getLastLabels())
                 )
-                AppDrawer(drawerRoutes = drawerItems) {
+                AppDrawer(drawerItems = drawerItems) {
                 }
             }
         }

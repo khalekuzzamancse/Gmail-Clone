@@ -17,6 +17,8 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -35,7 +37,7 @@ data class DrawerItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppDrawer(
-    drawerRoutes: LinkedHashMap<String, List<DrawerItem>>,
+    drawerItems: List<Pair<String, List<DrawerItem>>>,
     //Make sure later,that the  hashmap is immutable,
     //so that no one can add or remove item from it
     //also mark it as stable or immutable so  that
@@ -51,7 +53,7 @@ fun AppDrawer(
             .verticalScroll(scrollState)
             .width(drawerWidth),
         drawerState = rememberDrawerState(DrawerValue.Open),
-        drawerContent = { DrawerContent(drawerRoutes = drawerRoutes) }) {
+        drawerContent = { DrawerContent(drawerItems) }) {
         Content()
 
     }
@@ -59,31 +61,35 @@ fun AppDrawer(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DrawerContent(drawerRoutes: LinkedHashMap<String, List<DrawerItem>>) {
+private fun DrawerContent(drawerItems: List<Pair<String, List<DrawerItem>>>) {
     ModalDrawerSheet() {
-        drawerRoutes.forEach { (groupName, routesInTheGroup) ->
-            val shouldShowGroupName= groupName.equals("")
-            if(!shouldShowGroupName){
+
+        val firstGroupFirstItem= drawerItems[0].second[0];
+        val selectedItem = remember { mutableStateOf(firstGroupFirstItem) }
+        drawerItems.forEach { group ->
+            val groupName = group.first
+            val items = group.second
+            //
+            val shouldShowGroupName = groupName.equals("")
+            if (!shouldShowGroupName) {
                 DisplayGroupName(groupName = groupName)
-            }
-            else{
-              DisplayDivider()
+            } else {
+                DisplayDivider()
             }
             //placing the each drawer items
-            routesInTheGroup.forEach { item ->
+            items.forEach { drawerItem ->
                 NavigationDrawerItem(
-                    icon = { Icon(item.icon, contentDescription = null) },
-                    label = { Text(item.label) },
-                    selected = false,
+                    icon = { Icon(drawerItem.icon, contentDescription = null) },
+                    label = { Text(drawerItem.label) },
+                    selected = drawerItem == selectedItem.value,
                     onClick = {
-
+                        selectedItem.value = drawerItem
                     },
 
-                )
-
+                    )
             }
-
         }
+
 
     }
 
@@ -101,12 +107,13 @@ private fun DisplayGroupName(groupName: String) {
         //from the  NavigationDrawer() composable
         Modifier.padding(start = 16.dp, end = 24.dp),
         verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
         Text(text = groupName)
     }
 }
+
 @Composable
-private fun DisplayDivider(){
+private fun DisplayDivider() {
     Divider()
 }
 
@@ -117,14 +124,14 @@ private fun Content() {
 @Preview(showBackground = true)
 @Composable
 fun AppDrawerPreview() {
-    val drawerItems = linkedMapOf(
-        Pair("Group1", getGroup1()),
+    val drawerItems: List<Pair<String, List<DrawerItem>>> = listOf(
+        Pair("", getGroup1()),
         Pair("Recent labels", getRecentLabels()),
         Pair("All labels", getAllLabels()),
         Pair("Google apps", getGoogleAppsLabels()),
-        Pair("", getLastLabels()),
+        Pair("", getLastLabels())
     )
-    AppDrawer(drawerRoutes = drawerItems) {
+    AppDrawer(drawerItems = drawerItems) {
     }
 }
 
