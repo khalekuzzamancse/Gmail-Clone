@@ -15,8 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 fun EmailList(
     modifier: Modifier = Modifier,
     emails: List<EmailModel>,
-    onChangeBookmark: (itemID: Int) -> Unit = {}
-    ) {
+    onChangeBookmark: (itemID: Int) -> Unit = {},
+) {
     //List of selected email
     var selectedEmailIds by remember {
         mutableStateOf(emptySet<Int>())
@@ -33,7 +33,7 @@ fun EmailList(
                         selectedEmailIds.minus(email.emailid) else selectedEmailIds.plus(email.emailid)
 
                 },
-                onChangeBookmark =onChangeBookmark
+                onChangeBookmark = onChangeBookmark
             )
 
         }
@@ -46,6 +46,28 @@ fun EmailList(
 @Composable
 @Preview(showBackground = true)
 private fun EmailListPreview() {
-    //EmailList(emails = emails)
+    val emails = listOf(
+        EmailModel(
+            emailid = 1,
+            userName = "Abdur Razzak",
+            subject = "This the subjct of the email,that will be used for testing purpose",
+            message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
+                    " and the other tool.",
+            isBookMarked = false,
+            timeOrDate = "13-03-23",
+            profileImageId = R.drawable.profile_image
+        ),
+        EmailModel(
+            emailid = 2,
+            userName = "Md Khalekuzzaman",
+            subject = "This the subjct of the email,that will be used for testing purpose",
+            message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
+                    " and the other tool.",
+            isBookMarked = false,
+            timeOrDate = "13-03-23",
+            profileImageId = R.drawable.profile_image
+        ),
+    )
+    EmailList(emails = emails)
 }
 
