@@ -1,5 +1,6 @@
 package com.khalekuzzaman.just.cse.gmailclone
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,38 +40,48 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlin.random.Random
 
 @Composable
 fun DemoList() {
     val items = (0..100).toList() // Example list of items
     LazyColumn {
         items(items) { item ->
-            EmailItem()
+
         }
     }
 }
 
+data class EmailModel(
+    val itemID: Int,
+    val subject: String,
+    val message: String,
+    val timeOrDate: String,
+    val profileImageId: Int,
+    val isBookMarked: Boolean,
+)
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EmailItem(
-    onLongClick: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    info: EmailModel,
+    onLongClick: (itemID: Int) -> Unit = {},
     isSelected: Boolean = false,
-    isBookMarked: Boolean = false,
+    onChangeBookmark: (itemID: Int) -> Unit = {},
 ) {
-    var selected by remember {
-        mutableStateOf(isSelected)
-    }
+
     Box(modifier = Modifier
         .padding(10.dp)
         .fillMaxWidth()
         .combinedClickable(
             onClick = {},
             onLongClick = {
-                selected = !selected
+                onLongClick(info.itemID)
             }
         )
         .background(
-            if (selected) MaterialTheme.colorScheme.primaryContainer
+            if (isSelected) MaterialTheme.colorScheme.primaryContainer
             else MaterialTheme.colorScheme.surface,
             shape = MaterialTheme.shapes.small
         )) {
@@ -78,7 +89,9 @@ fun EmailItem(
         Row(
             modifier = Modifier.padding(margin)
         ) {
-            if (selected) {
+            //
+
+            if (isSelected) {
                 SelectedProfileImage()
             } else {
                 ProfileImage(drawableResource = R.drawable.profile_image)
@@ -92,10 +105,12 @@ fun EmailItem(
                     "13-03-23"
                 )
                 MessageSubjectBookmark(
-                    subject = "This the subjct of the email,that will be used for testing purpose",
-                    message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
-                            " and the other tool.",
-                    isBookMarked = isBookMarked
+                    subject = info.subject,
+                    message = info.message,
+                    isBookMarked = info.isBookMarked,
+                    onBookmarkIconClick = {
+                        onChangeBookmark(info.itemID)
+                    },
                 )
 
             }
@@ -109,7 +124,7 @@ fun EmailItem(
 
 
 @Composable
-fun TitleAndTime(title: String, time: String) {
+private fun TitleAndTime(title: String, time: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -130,6 +145,7 @@ private fun DateORTime(modifier: Modifier = Modifier, time: String) {
         style = MaterialTheme.typography.labelSmall,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
+        modifier = modifier,
     )
 }
 
@@ -149,7 +165,13 @@ private fun Title(modifier: Modifier = Modifier, title: String) {
 
 
 @Composable
-fun MessageSubjectBookmark(subject: String, message: String, isBookMarked: Boolean = false) {
+private fun MessageSubjectBookmark(
+    subject: String,
+    message: String,
+    isBookMarked: Boolean = false,
+    onBookmarkIconClick: () -> Unit = {},
+
+    ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -160,12 +182,12 @@ fun MessageSubjectBookmark(subject: String, message: String, isBookMarked: Boole
             subject = subject,
             message = message
         )
-        BookmarkIcon(isBookMarked = isBookMarked)
+        BookmarkIcon(isBookMarked = isBookMarked, onBookmarkIconClick = onBookmarkIconClick)
     }
 }
 
 @Composable
-fun SubjectAndMessage(
+private fun SubjectAndMessage(
     modifier: Modifier = Modifier,
     subject: String, message: String,
 ) {
@@ -176,7 +198,7 @@ fun SubjectAndMessage(
 }
 
 @Composable
-fun Subject(modifier: Modifier = Modifier, subject: String) {
+private fun Subject(modifier: Modifier = Modifier, subject: String) {
     Text(
         modifier = modifier,
         text = subject,
@@ -187,7 +209,7 @@ fun Subject(modifier: Modifier = Modifier, subject: String) {
 }
 
 @Composable
-fun Message(modifier: Modifier = Modifier, message: String) {
+private fun Message(modifier: Modifier = Modifier, message: String) {
     Text(
         modifier = modifier,
         text = message,
@@ -199,16 +221,16 @@ fun Message(modifier: Modifier = Modifier, message: String) {
 
 
 @Composable
-fun BookmarkIcon(modifier: Modifier = Modifier, isBookMarked: Boolean = false) {
-    var bookmarked by remember {
-        mutableStateOf(isBookMarked)
-    }
+private fun BookmarkIcon(
+    modifier: Modifier = Modifier,
+    isBookMarked: Boolean = false,
+    onBookmarkIconClick: () -> Unit = {},
+) {
     CustomIconButton(
-        onClick = { bookmarked = !bookmarked },
+        onClick = onBookmarkIconClick,
         modifier = modifier
-
     ) {
-        val icon = if (bookmarked) R.drawable.ic_bookmarked
+        val icon = if (isBookMarked) R.drawable.ic_bookmarked
         else R.drawable.ic_bookmark
         Icon(
             painter = painterResource(icon),
@@ -219,7 +241,7 @@ fun BookmarkIcon(modifier: Modifier = Modifier, isBookMarked: Boolean = false) {
 }
 
 @Composable
-fun CustomIconButton(
+private fun CustomIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -256,7 +278,7 @@ fun CustomIconButton(
 }
 
 @Composable
-fun ProfileImage(
+private fun ProfileImage(
     drawableResource: Int,
     modifier: Modifier = Modifier,
 ) {
@@ -270,7 +292,7 @@ fun ProfileImage(
 }
 
 @Composable
-fun SelectedProfileImage(modifier: Modifier = Modifier) {
+private fun SelectedProfileImage(modifier: Modifier = Modifier) {
     Box(
         modifier
             .size(40.dp)
@@ -358,10 +380,22 @@ private fun BookmarkIconPreview() {
 @Preview(showBackground = true)
 private fun EmailItemPreviews() {
     Column() {
-        EmailItem()
-        EmailItem(isSelected = true)
-        EmailItem(isBookMarked = true)
-        EmailItem(isSelected = true, isBookMarked = true)
+        val email = EmailModel(
+            itemID = Random.nextInt(),
+            subject = "This the subjct of the email,that will be used for testing purpose",
+            message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
+                    " and the other tool.",
+            isBookMarked = false,
+            timeOrDate = "13-03-23",
+            profileImageId = R.drawable.profile_image
+        )
+        EmailItem(info = email)
+        EmailItem(info = email.copy(itemID = Random.nextInt()), isSelected = true)
+        EmailItem(info = email.copy(itemID = Random.nextInt(), isBookMarked = true))
+        EmailItem(
+            info = email.copy(itemID = Random.nextInt(), isBookMarked = true),
+            isSelected = true
+        )
     }
 
 }
