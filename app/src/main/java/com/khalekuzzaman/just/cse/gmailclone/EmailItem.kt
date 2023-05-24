@@ -16,14 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.magnifier
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -38,12 +34,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -62,20 +54,23 @@ fun DemoList() {
 @Composable
 fun EmailItem(
     onLongClick: () -> Unit = {},
-
-    ) {
-    var isSelected by remember {
-        mutableStateOf(false)
+    isSelected: Boolean = false,
+    isBookMarked: Boolean = false,
+) {
+    var selected by remember {
+        mutableStateOf(isSelected)
     }
     Box(modifier = Modifier
         .padding(10.dp)
         .fillMaxWidth()
         .combinedClickable(
             onClick = {},
-            onLongClick = { isSelected = !isSelected }
+            onLongClick = {
+                selected = !selected
+            }
         )
         .background(
-            if (isSelected) MaterialTheme.colorScheme.primaryContainer
+            if (selected) MaterialTheme.colorScheme.primaryContainer
             else MaterialTheme.colorScheme.surface,
             shape = MaterialTheme.shapes.small
         )) {
@@ -83,7 +78,7 @@ fun EmailItem(
         Row(
             modifier = Modifier.padding(margin)
         ) {
-            if (isSelected) {
+            if (selected) {
                 SelectedProfileImage()
             } else {
                 ProfileImage(drawableResource = R.drawable.profile_image)
@@ -98,7 +93,9 @@ fun EmailItem(
                 )
                 MessageSubjectBookmark(
                     subject = "This the subjct of the email,that will be used for testing purpose",
-                    message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose and the other tool."
+                    message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
+                            " and the other tool.",
+                    isBookMarked = isBookMarked
                 )
 
             }
@@ -152,7 +149,7 @@ private fun Title(modifier: Modifier = Modifier, title: String) {
 
 
 @Composable
-fun MessageSubjectBookmark(subject: String, message: String) {
+fun MessageSubjectBookmark(subject: String, message: String, isBookMarked: Boolean = false) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -163,8 +160,7 @@ fun MessageSubjectBookmark(subject: String, message: String) {
             subject = subject,
             message = message
         )
-        BookmarkIcon(
-        )
+        BookmarkIcon(isBookMarked = isBookMarked)
     }
 }
 
@@ -203,9 +199,9 @@ fun Message(modifier: Modifier = Modifier, message: String) {
 
 
 @Composable
-fun BookmarkIcon(modifier: Modifier = Modifier) {
+fun BookmarkIcon(modifier: Modifier = Modifier, isBookMarked: Boolean = false) {
     var bookmarked by remember {
-        mutableStateOf(false)
+        mutableStateOf(isBookMarked)
     }
     CustomIconButton(
         onClick = { bookmarked = !bookmarked },
@@ -348,59 +344,25 @@ private fun SubjectAndMessagePreview() {
     )
 }
 
-
 @Composable
 @Preview(showBackground = true)
-private fun EmailItemPreview() {
-    val isSelected = false;
-    Row(
-    ) {
-        if (isSelected) {
-            SelectedProfileImage()
-        } else {
-            ProfileImage(drawableResource = R.drawable.profile_image)
-        }
-
-        Column(
-            modifier = Modifier.padding(start = 8.dp)
-        ) {
-            TitleAndTime(
-                "Md Khalekuzzaman ",
-                "13-03-23"
-            )
-            MessageSubjectBookmark(
-                subject = "This the subjct of the email,that will be used for testing purpose",
-                message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose and the other tool."
-            )
-        }
-
+private fun BookmarkIconPreview() {
+    Column {
+        BookmarkIcon(isBookMarked = false)
+        BookmarkIcon(isBookMarked = true)
     }
 }
 
+
 @Composable
 @Preview(showBackground = true)
-private fun SelectedEmailItemPreview() {
-    val isSelected = true;
-    Row(
-    ) {
-        if (isSelected) {
-            SelectedProfileImage()
-        } else {
-            ProfileImage(drawableResource = R.drawable.profile_image)
-        }
-
-        Column(
-            modifier = Modifier.padding(start = 8.dp)
-        ) {
-            TitleAndTime(
-                "Md Khalekuzzaman ",
-                "13-03-23"
-            )
-            MessageSubjectBookmark(
-                subject = "This the subjct of the email,that will be used for testing purpose",
-                message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose and the other tool."
-            )
-        }
-
+private fun EmailItemPreviews() {
+    Column() {
+        EmailItem()
+        EmailItem(isSelected = true)
+        EmailItem(isBookMarked = true)
+        EmailItem(isSelected = true, isBookMarked = true)
     }
+
 }
+
