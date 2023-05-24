@@ -1,8 +1,14 @@
 package com.khalekuzzaman.just.cse.gmailclone
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
 
 class MainActivity : ComponentActivity() {
@@ -10,7 +16,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GmailCloneTheme {
-                DemoList()
+                Column {
+                     val selected by remember{
+                         mutableStateOf(false)
+                     }
+                    EmailItem(){
+                        selected!=selected
+                        Log.i("EmailItem", selected.toString())
+                    }
+                    EmailItem()
+                    EmailItem()
+                    EmailItem()
+                    EmailItem()
+                    EmailItem()
+
+                }
+
 //                val drawerGroups= listOf(
 //                    DrawerGroup("Group 1", DrawerItemsProvider.getAllInboxes(),false),
 //                    DrawerGroup("Group 1", DrawerItemsProvider.getGroup01(),false),
