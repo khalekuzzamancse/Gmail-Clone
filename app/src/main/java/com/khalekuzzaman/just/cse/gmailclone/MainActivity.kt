@@ -18,76 +18,119 @@ class MainActivity : ComponentActivity() {
         setContent {
             GmailCloneTheme {
                 Column {
-                    var email by remember {
-                        mutableStateOf(
+                    var emails by remember {
+                        mutableStateOf(listOf(
                             EmailModel(
-                                itemID = Random.nextInt(),
+                                emailid = 1,
+                                userName = "Abdur Razzak",
                                 subject = "This the subjct of the email,that will be used for testing purpose",
                                 message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
                                         " and the other tool.",
                                 isBookMarked = false,
                                 timeOrDate = "13-03-23",
                                 profileImageId = R.drawable.profile_image
-                            )
-                        )
-                    }
-                    var selected by remember {
-                        mutableStateOf(false)
-                    }
-
-
-                    var email2 by remember {
-                        mutableStateOf(
+                            ),
                             EmailModel(
-                                itemID = Random.nextInt(),
+                                emailid = 2,
+                                userName = "Md Khalekuzzaman",
                                 subject = "This the subjct of the email,that will be used for testing purpose",
                                 message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
                                         " and the other tool.",
                                 isBookMarked = false,
                                 timeOrDate = "13-03-23",
                                 profileImageId = R.drawable.profile_image
-                            )
-                        )
+                            ),
+                        ))
                     }
 
-                    //
-                    var selected2 by remember {
-                        mutableStateOf(false)
-                    }
-                    //
-                    EmailItem(
-                        info = email,
-                        isSelected = selected,
-                        onLongClick = {
-                            selected = !selected
-                            Log.i("onLongClick", selected.toString())
-
-                        },
-                        onChangeBookmark = { itemID ->
-                            email = email.copy(isBookMarked = !email.isBookMarked)
+                    EmailList(emails = emails, onChangeBookmark = { itemID ->
+                        val updatedEmailList = emails.toMutableList()
+                        val index = updatedEmailList.indexOfFirst { it.emailid == itemID }
+                        if (index != -1) {
+                            val email = updatedEmailList[index]
+                            val updatedEmail= email.copy(isBookMarked = !email.isBookMarked)
+                            updatedEmailList[index] = updatedEmail
+                            emails=updatedEmailList
                             Log.i(
                                 "EmailItemTest:onBookmark()",
-                                itemID.toString() + "->" + email.isBookMarked.toString()
+                                itemID.toString() + "->" + updatedEmail.isBookMarked.toString()
                             )
                         }
-                    )
-                    //
-                    EmailItem(
-                        info = email2,
-                        isSelected = selected2,
-                        onLongClick = {
-                            selected2 = !selected2
-                            Log.i("onLongClick", selected2.toString())
 
-                        },
-                        onChangeBookmark = { itemID ->
-                            email2 = email2.copy(isBookMarked = !email2.isBookMarked)
-                            Log.i(
-                                "EmailItemTest:onBookmark()",
-                                itemID.toString() + "->" + email2.isBookMarked.toString()
-                            )
-                        }
-                    )
+
+                    })
+//                    var email by remember {
+//                        mutableStateOf(
+//                            EmailModel(
+//                                itemID = Random.nextInt(),
+//                                userName = "Abdur Razzak",
+//                                subject = "This the subjct of the email,that will be used for testing purpose",
+//                                message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
+//                                        " and the other tool.",
+//                                isBookMarked = false,
+//                                timeOrDate = "13-03-23",
+//                                profileImageId = R.drawable.profile_image
+//                            )
+//                        )
+//                    }
+//                    var selected by remember {
+//                        mutableStateOf(false)
+//                    }
+//
+//
+//                    var email2 by remember {
+//                        mutableStateOf(
+//                            EmailModel(
+//                                itemID = Random.nextInt(),
+//                                userName = "Md Khalekuzzaman",
+//                                subject = "This the subjct of the email,that will be used for testing purpose",
+//                                message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
+//                                        " and the other tool.",
+//                                isBookMarked = false,
+//                                timeOrDate = "13-03-23",
+//                                profileImageId = R.drawable.profile_image
+//                            )
+//                        )
+//                    }
+//
+//                    //
+//                    var selected2 by remember {
+//                        mutableStateOf(false)
+//                    }
+//                    //
+//                    EmailItem(
+//                        info = email,
+//                        isSelected = selected,
+//                        onLongClick = {
+//                            selected = !selected
+//                            Log.i("onLongClick", selected.toString())
+//
+//                        },
+//                        onChangeBookmark = { itemID ->
+//                            email = email.copy(isBookMarked = !email.isBookMarked)
+//                            Log.i(
+//                                "EmailItemTest:onBookmark()",
+//                                itemID.toString() + "->" + email.isBookMarked.toString()
+//                            )
+//                        }
+//                    )
+//                    //
+//                    EmailItem(
+//                        info = email2,
+//                        isSelected = selected2,
+//                        onLongClick = {
+//                            selected2 = !selected2
+//                            Log.i("onLongClick", selected2.toString())
+//
+//                        },
+//                        onChangeBookmark = { itemID ->
+//                            email2 = email2.copy(isBookMarked = !email2.isBookMarked)
+//                            Log.i(
+//                                "EmailItemTest:onBookmark()",
+//                                itemID.toString() + "->" + email2.isBookMarked.toString()
+//                            )
+//                        }
+//                    )
                 }
 
 //                val drawerGroups= listOf(
@@ -104,5 +147,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 }
 

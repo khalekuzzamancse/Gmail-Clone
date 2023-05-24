@@ -1,6 +1,5 @@
 package com.khalekuzzaman.just.cse.gmailclone
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,8 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -28,10 +25,7 @@ import androidx.compose.material3.TabRowDefaults.contentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,18 +36,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 
-@Composable
-fun DemoList() {
-    val items = (0..100).toList() // Example list of items
-    LazyColumn {
-        items(items) { item ->
-
-        }
-    }
-}
 
 data class EmailModel(
-    val itemID: Int,
+    val emailid: Int,
+    val userName: String,
     val subject: String,
     val message: String,
     val timeOrDate: String,
@@ -77,7 +63,7 @@ fun EmailItem(
         .combinedClickable(
             onClick = {},
             onLongClick = {
-                onLongClick(info.itemID)
+                onLongClick(info.emailid)
             }
         )
         .background(
@@ -101,15 +87,15 @@ fun EmailItem(
                 modifier = Modifier.padding(start = 8.dp)
             ) {
                 TitleAndTime(
-                    "Md Khalekuzzaman ",
-                    "13-03-23"
+                    info.userName,
+                    info.timeOrDate
                 )
                 MessageSubjectBookmark(
                     subject = info.subject,
                     message = info.message,
                     isBookMarked = info.isBookMarked,
                     onBookmarkIconClick = {
-                        onChangeBookmark(info.itemID)
+                        onChangeBookmark(info.emailid)
                     },
                 )
 
@@ -381,7 +367,8 @@ private fun BookmarkIconPreview() {
 private fun EmailItemPreviews() {
     Column() {
         val email = EmailModel(
-            itemID = Random.nextInt(),
+            emailid = Random.nextInt(),
+            userName = "Md Khalekuzzaman",
             subject = "This the subjct of the email,that will be used for testing purpose",
             message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
                     " and the other tool.",
@@ -390,10 +377,10 @@ private fun EmailItemPreviews() {
             profileImageId = R.drawable.profile_image
         )
         EmailItem(info = email)
-        EmailItem(info = email.copy(itemID = Random.nextInt()), isSelected = true)
-        EmailItem(info = email.copy(itemID = Random.nextInt(), isBookMarked = true))
+        EmailItem(info = email.copy(emailid = Random.nextInt()), isSelected = true)
+        EmailItem(info = email.copy(emailid = Random.nextInt(), isBookMarked = true))
         EmailItem(
-            info = email.copy(itemID = Random.nextInt(), isBookMarked = true),
+            info = email.copy(emailid = Random.nextInt(), isBookMarked = true),
             isSelected = true
         )
     }
