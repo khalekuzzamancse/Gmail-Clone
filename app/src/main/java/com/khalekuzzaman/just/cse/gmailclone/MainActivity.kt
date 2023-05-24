@@ -18,30 +18,7 @@ class MainActivity : ComponentActivity() {
             GmailCloneTheme {
                 Column {
                     var emails by remember {
-                        mutableStateOf(
-                            listOf(
-                                EmailModel(
-                                    emailid = 1,
-                                    userName = "Abdur Razzak",
-                                    subject = "This the subjct of the email,that will be used for testing purpose",
-                                    message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
-                                            " and the other tool.",
-                                    isBookMarked = false,
-                                    timeOrDate = "13-03-23",
-                                    profileImageId = R.drawable.profile_image
-                                ),
-                                EmailModel(
-                                    emailid = 2,
-                                    userName = "Md Khalekuzzaman",
-                                    subject = "This the subjct of the email,that will be used for testing purpose",
-                                    message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
-                                            " and the other tool.",
-                                    isBookMarked = false,
-                                    timeOrDate = "13-03-23",
-                                    profileImageId = R.drawable.profile_image
-                                ),
-                            )
-                        )
+                        mutableStateOf(getFakeEmails())
                     }
 
                     EmailList(emails = emails, onChangeBookmark = { emailId ->
@@ -56,6 +33,7 @@ class MainActivity : ComponentActivity() {
     }
 
 }
+
 
 class BookmarkUpdater(private val emails: List<EmailModel>) {
     private val updatedEmailList: MutableList<EmailModel> = emails.toMutableList();

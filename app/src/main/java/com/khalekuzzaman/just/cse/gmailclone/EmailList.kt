@@ -1,6 +1,5 @@
 package com.khalekuzzaman.just.cse.gmailclone
 
-import android.util.Log
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -46,28 +45,22 @@ fun EmailList(
 @Composable
 @Preview(showBackground = true)
 private fun EmailListPreview() {
-    val emails = listOf(
-        EmailModel(
-            emailid = 1,
-            userName = "Abdur Razzak",
-            subject = "This the subjct of the email,that will be used for testing purpose",
-            message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
-                    " and the other tool.",
-            isBookMarked = false,
-            timeOrDate = "13-03-23",
-            profileImageId = R.drawable.profile_image
-        ),
-        EmailModel(
-            emailid = 2,
-            userName = "Md Khalekuzzaman",
-            subject = "This the subjct of the email,that will be used for testing purpose",
-            message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
-                    " and the other tool.",
-            isBookMarked = false,
-            timeOrDate = "13-03-23",
-            profileImageId = R.drawable.profile_image
-        ),
-    )
-    EmailList(emails = emails)
+    EmailList(emails = getFakeEmails())
 }
-
+fun getFakeEmails(): List<EmailModel> {
+    val list: MutableList<EmailModel> = mutableListOf()
+    for (i in 1..10) {
+        val email = EmailModel(
+            emailid = i,
+            userName = "Md Khalekuzzaman : $i",
+            subject = "This the subjct of the email,that will be used for testing purpose",
+            message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
+                    " and the other tool.",
+            isBookMarked = false,
+            timeOrDate = "13-03-23",
+            profileImageId = R.drawable.profile_image
+        )
+        list.add(email)
+    }
+    return list
+}
