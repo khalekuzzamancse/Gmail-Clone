@@ -16,18 +16,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GmailCloneTheme {
-                Column {
-                    var emails by remember {
-                        mutableStateOf(getFakeEmails())
-                    }
-
-                    EmailList(emails = emails, onChangeBookmark = { emailId ->
-                        emails = BookmarkUpdater(emails).update(emailId)
-                    })
-
-//                AppDrawer2(drawerGroups) {
+                TopAppbarM3_01()
+//                Column {
+//                    var emails by remember {
+//                        mutableStateOf(getFakeEmails())
+//                    }
+//
+//                    EmailList(emails = emails, onChangeBookmark = { emailId ->
+//                        emails = BookmarkUpdater(emails).update(emailId)
+//                    })
+//
+////                AppDrawer2(drawerGroups) {
+////                }
 //                }
-                }
             }
         }
     }
