@@ -263,19 +263,7 @@ private fun CustomIconButton(
     }
 }
 
-@Composable
-private fun ProfileImage(
-    drawableResource: Int,
-    modifier: Modifier = Modifier,
-) {
-    Image(
-        modifier = modifier
-            .size(40.dp)
-            .clip(CircleShape),
-        painter = painterResource(id = drawableResource),
-        contentDescription = null,
-    )
-}
+
 
 @Composable
 private fun SelectedProfileImage(modifier: Modifier = Modifier) {

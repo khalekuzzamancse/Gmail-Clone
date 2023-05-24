@@ -5,18 +5,40 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             GmailCloneTheme {
-                TopAppbarM3_01()
+                Scaffold(
+                    topBar = {
+                        CommonTopAppbar()
+                    }) {
+                    LazyColumn(modifier = Modifier.padding(it)) {
+                        items(10) { index ->
+                            Text(
+                                "I'm item $index", modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            )
+                        }
+                    }
+                }
 //                Column {
 //                    var emails by remember {
 //                        mutableStateOf(getFakeEmails())

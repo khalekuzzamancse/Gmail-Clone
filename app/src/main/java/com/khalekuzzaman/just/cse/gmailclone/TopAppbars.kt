@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.Px
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -39,21 +40,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 
-//val toolbarHeight = 48.dp
-// val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.roundToPx().toFloat() }
-// var toolbarOffsetHeightPx by
-//remember { mutableStateOf(0f) }
-//    val nestedScrollConnection = remember {
-//         object : NestedScrollConnection {
-//            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-//                val delta = available.y
-//                val newOffset = toolbarOffsetHeightPx + delta
-//                Log.i("Scrooling:TopAppbarM3_01()", newOffset.toString())
-//                toolbarOffsetHeightPx = newOffset.coerceIn(-toolbarHeightPx, 0f)
-//                return Offset.Zero
-//            }
-//        }
-//  }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,7 +58,7 @@ fun TopAppbarM3_01() {
         modifier = Modifier.nestedScroll(collapsableToolbarState.nestedScrollConnection),
         topBar = {
             CollapseAbleTopAppbar(
-                moveAppbarVerticallyBy,
+                moveAppbarVerticallyBy = moveAppbarVerticallyBy,
             )
         }) {
         LazyColumn {
@@ -82,6 +68,7 @@ fun TopAppbarM3_01() {
                         .fillMaxWidth()
                         .padding(16.dp)
                 )
+
             }
         }
 
@@ -90,7 +77,47 @@ fun TopAppbarM3_01() {
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CommonTopAppbar(moveAppbarVerticallyBy: Int = 0) {
+    CollapseAbleTopAppbar {
+        SearchBar(modifier = Modifier.fillMaxSize().weight(1f))
+        ProfileImage(drawableResource = R.drawable.profile_image)
+    }
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CollapseAbleTopAppbar(
+    modifier: Modifier = Modifier,
+    title: String? = null,
+    moveAppbarVerticallyBy: Int = 0,
+    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+    onNavigationIconClick: () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
+) {
+
+    TopAppBar(
+        modifier = modifier
+            .offset { IntOffset(x = 0, y = moveAppbarVerticallyBy) },
+        title = {
+            title?.let { text ->
+                Text(text)
+            }
+        },
+        actions = actions,
+        navigationIcon = {
+            IconButton(onClick = { onNavigationIconClick() }) {
+                Icon(imageVector = Icons.Default.Menu, contentDescription = null)
+            }
+        },
+        scrollBehavior = scrollBehavior
+    )
+}
+
+
+///
 class CollapsableToolbarState(
     density: Density,
     private val onToolbarOffsetChanged: (Int) -> Unit,
@@ -120,34 +147,39 @@ class CollapsableToolbarState(
         }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CollapseAbleTopAppbar(
-    moveAppbarVerticallyBy: Int = 0,
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-) {
-
-
-    TopAppBar(
-        modifier = Modifier
-            .offset { IntOffset(x = 0, y = moveAppbarVerticallyBy) },
-        title = {
-            Text("Home Page")
-        },
-        navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = null)
-            }
-        }, scrollBehavior = scrollBehavior
-    )
-}
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(showBackground = true)
 private fun CollapsableTopAppbarPreview() {
     //CollapseAbleTopAppbar()
     TopAppbarM3_01()
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview(showBackground = true)
+private fun CommonTopAppbarPreview() {
+    CommonTopAppbar()
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview(showBackground = true)
+private fun CommonTopAppbarPreview2() {
+    Scaffold(
+        topBar = {
+            CommonTopAppbar()
+        }) {
+        LazyColumn(modifier = Modifier.padding(it)) {
+            items(10) { index ->
+                Text(
+                    "I'm item $index", modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+            }
+        }
+    }
+
 }
