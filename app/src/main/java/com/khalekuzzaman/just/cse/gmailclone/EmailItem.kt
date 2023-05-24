@@ -86,7 +86,7 @@ fun EmailItem(
             if (isSelected) {
                 SelectedProfileImage()
             } else {
-                ProfileImage(drawableResource = R.drawable.profile_image, description = "")
+                ProfileImage(drawableResource = R.drawable.profile_image)
             }
 
             Column(
@@ -262,7 +262,6 @@ fun CustomIconButton(
 @Composable
 fun ProfileImage(
     drawableResource: Int,
-    description: String,
     modifier: Modifier = Modifier,
 ) {
     Image(
@@ -270,7 +269,7 @@ fun ProfileImage(
             .size(40.dp)
             .clip(CircleShape),
         painter = painterResource(id = drawableResource),
-        contentDescription = description,
+        contentDescription = null,
     )
 }
 
@@ -294,7 +293,15 @@ fun SelectedProfileImage(modifier: Modifier = Modifier) {
 }
 //---------------------
 //---------------------
+//---------------------
+//---------------------
 
+
+@Composable
+@Preview(showBackground = true)
+private fun ProfileImagePreview() {
+    ProfileImage(drawableResource = R.drawable.profile_image)
+}
 
 @Composable
 @Preview(showBackground = true)
@@ -304,25 +311,96 @@ private fun SelectedImagePreview() {
 
 @Composable
 @Preview(showBackground = true)
-private fun MessageAndBookmarkPreview() {
-    // MessageAndBookMark(message = "Hi")
+private fun TitlePreview() {
+    Title(title = "Md Khalekuzzaman")
 }
 
 @Composable
 @Preview(showBackground = true)
-private fun InboxEmailListPreview() {
-    //  DemoList()
+private fun DateOrTimePreview() {
+    DateORTime(time = "13-03-23")
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun TitleAndDatePreview() {
+    TitleAndTime(title = "Md Khaleuzzaman", time = "13-03-23")
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun SubjectPreview() {
+    Subject(subject = "This is subject...")
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun MessagePreview() {
+    Message(message = "Dear,Md. Khalekuzzaman.How are you?,Assuming that your are fine and toaday is..")
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun SubjectAndMessagePreview() {
+    SubjectAndMessage(
+        subject = "Congratulation for cloning the gmail app,with jetpack compose",
+        message = "Dear,Md. Khalekuzzaman.How are you?,Assuming that your are fine and toaday is.."
+    )
 }
 
 
 @Composable
 @Preview(showBackground = true)
 private fun EmailItemPreview() {
-    EmailItem()
+    val isSelected = false;
+    Row(
+    ) {
+        if (isSelected) {
+            SelectedProfileImage()
+        } else {
+            ProfileImage(drawableResource = R.drawable.profile_image)
+        }
+
+        Column(
+            modifier = Modifier.padding(start = 8.dp)
+        ) {
+            TitleAndTime(
+                "Md Khalekuzzaman ",
+                "13-03-23"
+            )
+            MessageSubjectBookmark(
+                subject = "This the subjct of the email,that will be used for testing purpose",
+                message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose and the other tool."
+            )
+        }
+
+    }
 }
 
 @Composable
 @Preview(showBackground = true)
 private fun SelectedEmailItemPreview() {
-    EmailItem()
+    val isSelected = true;
+    Row(
+    ) {
+        if (isSelected) {
+            SelectedProfileImage()
+        } else {
+            ProfileImage(drawableResource = R.drawable.profile_image)
+        }
+
+        Column(
+            modifier = Modifier.padding(start = 8.dp)
+        ) {
+            TitleAndTime(
+                "Md Khalekuzzaman ",
+                "13-03-23"
+            )
+            MessageSubjectBookmark(
+                subject = "This the subjct of the email,that will be used for testing purpose",
+                message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose and the other tool."
+            )
+        }
+
+    }
 }
