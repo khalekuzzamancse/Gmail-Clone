@@ -1,4 +1,4 @@
-package com.khalekuzzaman.just.cse.gmailclone
+package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size

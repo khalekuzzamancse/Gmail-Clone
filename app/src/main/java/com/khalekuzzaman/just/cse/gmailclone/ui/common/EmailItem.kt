@@ -1,7 +1,6 @@
-package com.khalekuzzaman.just.cse.gmailclone
+package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -34,6 +33,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.khalekuzzaman.just.cse.gmailclone.R
 import kotlin.random.Random
 
 

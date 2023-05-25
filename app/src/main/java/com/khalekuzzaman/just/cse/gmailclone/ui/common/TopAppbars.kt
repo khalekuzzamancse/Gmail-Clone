@@ -1,10 +1,6 @@
-package com.khalekuzzaman.just.cse.gmailclone
+package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import android.annotation.SuppressLint
-import android.util.Log
-import androidx.annotation.Px
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,12 +16,13 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.TopAppBarState
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,17 +30,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.khalekuzzaman.just.cse.gmailclone.R
 import kotlin.math.roundToInt
 
 
@@ -87,11 +83,6 @@ fun TopAppbarM3_01() {
 @Composable
 fun CommonTopAppbar(moveAppbarVerticallyBy: Int = 0) {
     CollapseAbleTopAppbar {
-        SearchBar(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
-        )
         ProfileImage(drawableResource = R.drawable.profile_image)
     }
 
@@ -122,7 +113,11 @@ fun CollapseAbleTopAppbar(
                 Icon(imageVector = Icons.Default.Menu, contentDescription = null)
             }
         },
-        scrollBehavior = scrollBehavior
+        scrollBehavior = scrollBehavior,
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
+        )
+
     )
 }
 
@@ -162,7 +157,7 @@ class CollapsableToolbarState(
 @Composable
 fun ContextualTopAppbar(
     onBackArrowClick: () -> Unit = {},
-    selectedEmails: Int = 0,
+    selectedEmails: Int,
     onArchiveButtonClick: () -> Unit = {},
     onDeleteButtonClick: () -> Unit = {},
     onMarkAsUnReadButtonClick: () -> Unit = {},
@@ -175,6 +170,10 @@ fun ContextualTopAppbar(
                 onClick = onBackArrowClick
             )
         },
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
+        )
+        ,
         actions = {
             if (selectedEmails > 0) {
                 Text(text = "$selectedEmails")
@@ -205,7 +204,7 @@ fun ContextualTopAppbar(
 @Composable
 @Preview(showBackground = true)
 private fun ContextualTopAppbarPreview() {
-    ContextualTopAppbar()
+    ContextualTopAppbar(selectedEmails = 0)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -214,7 +213,7 @@ private fun ContextualTopAppbarPreview() {
 private fun ContextualTopAppbarPreview2() {
     Scaffold(
         topBar = {
-            ContextualTopAppbar()
+            ContextualTopAppbar(selectedEmails = 0)
         }) {
         LazyColumn(modifier = Modifier.padding(it)) {
             items(3) { index ->
