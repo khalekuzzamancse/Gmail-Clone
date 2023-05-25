@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonTopAppbar
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.ContextualTopAppbar
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.allinbox.AllInboxScreen
+import com.khalekuzzaman.just.cse.gmailclone.ui.screens.openemail.SenderInfoHeader
+import com.khalekuzzaman.just.cse.gmailclone.ui.screens.openemail.SubjectAndSenderInfo
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,11 +38,12 @@ class MainActivity : ComponentActivity() {
                             )
                     }) {
                     Column(modifier = Modifier.padding(it)) {
-                        AllInboxScreen(
-                            onEmailSelectedCountChange = { count ->
-                                selectedEmails = count
-                            }
-                        )
+//                        AllInboxScreen(
+//                            onEmailSelectedCountChange = { count ->
+//                                selectedEmails = count
+//                            }
+//                        )
+                        SubjectAndSenderInfo()
                     }
 
                 }
