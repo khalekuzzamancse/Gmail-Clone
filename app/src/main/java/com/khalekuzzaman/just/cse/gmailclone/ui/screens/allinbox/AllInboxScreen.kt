@@ -18,17 +18,18 @@ fun AllInboxScreen(
     onEmailSelectedCountChange: (totalSelected: Int) -> Unit,
 ) {
 
-    val emails by remember {
+    var emails by remember {
         mutableStateOf(FakeEmailList().getFakeEmails())
     }
     //List of selected email
     var selectedEmailIds by remember {
         mutableStateOf(emptySet<Int>())
     }
+
     EmailList(
         emails = emails,
         onChangeBookmark = { emailId ->
-            BookmarkUpdater(emails).update(emailId)
+            emails = BookmarkUpdater(emails).update(emailId)
         },
         selectedEmailIds = selectedEmailIds,
         onEmailSelectedOrDeselected = { emailId ->

@@ -42,6 +42,6 @@ private fun EmailListPreview() {
         emails = FakeEmailList().getFakeEmails(),
         onChangeBookmark = {},
         onEmailSelectedOrDeselected = {},
-        selectedEmailIds = emptySet()
+        selectedEmailIds = emptySet(),
     )
 }
