@@ -206,62 +206,9 @@ private fun Message(modifier: Modifier = Modifier, message: String) {
 }
 
 
-@Composable
-private fun BookmarkIcon(
-    modifier: Modifier = Modifier,
-    isBookMarked: Boolean = false,
-    onBookmarkIconClick: () -> Unit = {},
-) {
-    CustomIconButton(
-        onClick = onBookmarkIconClick,
-        modifier = modifier
-    ) {
-        val icon = if (isBookMarked) R.drawable.ic_bookmarked
-        else R.drawable.ic_bookmark
-        Icon(
-            painter = painterResource(icon),
-            contentDescription = null
-        )
-    }
 
-}
 
-@Composable
-private fun CustomIconButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    content: @Composable () -> Unit,
-) {
-    /*
-    Note:
-    The icon button that is provided by compose library has some minimum size so that is can
-    match the target touch,but in this case we want the icon button size,should be the same as the
-    icon size so that we can easily place it with the other content,
-    that is why we we edited the IconButton() source code and create a customIcon button
-    that will take the exact size of it content size
 
-     */
-
-    Box(
-        modifier =
-        modifier
-            .wrapContentSize()
-            .clickable(
-                onClick = onClick,
-                enabled = enabled,
-                role = Role.Button,
-                interactionSource = interactionSource,
-                indication = rememberRipple(
-                    bounded = false,
-                )
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        CompositionLocalProvider(LocalContentColor provides contentColor, content = content)
-    }
-}
 
 
 
