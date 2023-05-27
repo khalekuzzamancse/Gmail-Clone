@@ -2,21 +2,32 @@ package com.khalekuzzaman.just.cse.gmailclone.ui.screens.openemail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -27,29 +38,58 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.khalekuzzaman.just.cse.gmailclone.R
+import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmail
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.BookmarkIcon
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonIconButton
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CustomIconButton
-import javax.security.auth.Subject
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.FormLayout
+import com.khalekuzzaman.just.cse.gmailclone.utils.UrlFinder
 
 
 @Composable
 fun SubjectAndSenderInfo() {
+    val scrollState = rememberScrollState()
     Column(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier
+            .padding(10.dp)
+            .verticalScroll(scrollState)
     ) {
         SubjectAndBookmark(
             subjectText = "A personal acccess token(classic) has been added to your account",
             onBookmarkChange = {})
+        //
+        var shouldShowRecipentInfo by remember {
+            mutableStateOf(false)
+        }
         SenderInfoHeader(
             userName = "Md Abul Kalam Azad",
             time = "5 days ago",
-            profileImageId = R.drawable.ic_profile_2
+            profileImageId = R.drawable.ic_profile_2,
+            onExpandClick = {
+                shouldShowRecipentInfo=!shouldShowRecipentInfo
+            }
         )
-        EmailBody(message = "")
-    }
 
+
+        if (shouldShowRecipentInfo) {
+            EmailRecipientInfo(
+                from = "khalekuzzaman91@gmail.com",
+                to = "khalekuzzaman91@gmail.com",
+                date = "26 Mar 2023, 8:26 pm",
+            )
+        }
+
+        //
+        EmailBody(message = FakeEmail().get())
+        BottomButtonSection(
+            onReplyClick = {},
+            onReplyAllClick = {},
+            onForwardClick = {}
+        )
+
+    }
 }
+
 
 @Composable
 @Preview(showBackground = true)
@@ -59,69 +99,146 @@ private fun SubjectAndSenderInfoPreview() {
 
 @Composable
 private fun EmailBody(modifier: Modifier = Modifier, message: String) {
-    //This text is used a annoted string string
-    val annotatedEmailString: AnnotatedString = buildAnnotatedString {
-        val str = "We will hold AtCoder Grand Contest 062. This contest counts for GP30 scores.\n" +
-                "\n" +
-                "    Contest URL: https://atcoder.jp/contests/agc062\n" +
-                "    Start Time: http://www.timeanddate.com/worldclock/fixedtime.html?iso=20230521T2100&p1=248\n" +
-                "    Duration: 180 minutes\n" +
-                "    Number of Tasks: 6\n" +
-                "    Writer: chinerist\n" +
-                "    Tester: maspy, IH19980412\n" +
-                "    Rated range: 1200 ~\n" +
-                "\n" +
-                "The point values will be 400-700-800-1100-1300-2000.\n" +
-                "\n" +
-                "We are looking forward to your participation!\n" +
-                "\n" +
-                "- How to Unsubscribe Email Newsletters\n" +
-                "1: First, please sign in => https://atcoder.jp/login\n" +
-                "2: Clear all \"Notification settings\" from => https://atcoder.jp/settings\n" +
-                "-----\n" +
-                "AtCoder Development Team\n" +
-                "https://atcoder.jp/"
-        val startIndex = str.indexOf("link")
-        val endIndex = startIndex + 4
-        append(str)
-        addStyle(
-            style = SpanStyle(
-                color = Color.Blue,
-                textDecoration = TextDecoration.Underline
-            ),
-            start = startIndex,
-            end = endIndex
-        )
-        // attach a string annotation that stores a URL to the text "link"
-        addStringAnnotation(
-            tag = "Contest URL: https://atcoder.jp/contests/agc062\n",
-            annotation = "Contest URL: https://atcoder.jp/contests/agc062\n",
-            start = startIndex,
-            end = endIndex
+    SelectionContainer {
+        val annotatedEmailString: AnnotatedString = buildAnnotatedString {
+            var str = message
+            append(str)
+            val urls = UrlFinder().findUrls(str)
+            urls.forEach { pair ->
+                addStyle(
+                    style = SpanStyle(
+                        color = Color.Blue,
+                        textDecoration = TextDecoration.Underline
+                    ),
+                    start = pair.first,
+                    end = pair.second + 1
+                )
+            }
+
+        }
+        ClickableText(
+            modifier = modifier,
+            text = annotatedEmailString,
+            onClick = {
+
+            }
         )
     }
 
-// UriHandler parse and opens URI inside AnnotatedString Item in Browser
-    val uriHandler = LocalUriHandler.current
-
-// Clickable text returns position of text that is clicked in onClick callback
-    ClickableText(
-        text = annotatedEmailString,
-        onClick = {
-            annotatedEmailString
-                .getStringAnnotations("URL", it, it)
-                .firstOrNull()?.let { stringAnnotation ->
-                    uriHandler.openUri(stringAnnotation.item)
-                }
-        }
-    )
 
 }
+
 @Composable
-@Preview(showBackground = true, showSystemUi = true)
-private fun EmailBodyPreview(){
-    EmailBody(message = "")
+private fun EmailRecipientInfo(
+    from: String,
+    to: String,
+    date: String,
+) {
+
+    Surface(
+        tonalElevation = 5.dp
+    ) {
+        FormLayout(eachRow1stChildMaxWidth = 100.dp) {
+            Text(text = "From")
+            Text(text = from)
+            Text(text = "to")
+            Text(text = to)
+            Text(text = "Date")
+            Text(text = date)
+        }
+    }
+
+
+
 }
+
+@Composable
+@Preview(showBackground = true)
+private fun EmailRecipientInfoPreview() {
+    EmailRecipientInfo(
+        from = "khalekuzzaman91@gmail.com",
+        to = "khalekuzzaman91@gmail.com",
+        date = "26 Mar 2023, 8:26 pm",
+    )
+}
+
+@Composable
+private fun BottomButtonSection(
+    modifier: Modifier = Modifier,
+    onReplyClick: () -> Unit,
+    onReplyAllClick: () -> Unit,
+    onForwardClick: () -> Unit,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+    ) {
+        BottomSectionButton(
+            modifier = Modifier.weight(1f),
+            leftIconId = R.drawable.ic_reply, label = "Reply", onClick = {})
+        BottomSectionButton(
+            modifier = Modifier.weight(1f),
+            leftIconId = R.drawable.ic_reply_all, label = "Reply all", onClick = {})
+        BottomSectionButton(
+            modifier = Modifier.weight(1f),
+            leftIconId = R.drawable.ic_forward, label = "Forward", onClick = {})
+    }
+
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun BottomButtonSectionPreview() {
+    BottomButtonSection(
+        onReplyClick = {},
+        onReplyAllClick = {},
+        onForwardClick = {}
+    )
+}
+
+@Composable
+private fun BottomSectionButton(
+    modifier: Modifier = Modifier,
+    leftIconId: Int,
+    label: String,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(3.dp),
+        onClick = onClick,
+        contentPadding = PaddingValues(0.dp),
+        //using content padding allows to do not shrink the button
+        //when it has small size.it shirnk all the button when width is
+        //less
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ),
+        elevation = ButtonDefaults.buttonElevation(5.dp)
+    ) {
+        Icon(painter = painterResource(id = leftIconId), contentDescription = null)
+        Text(
+            maxLines = 1,
+            text = label,
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun BottomSectionButtonPreview() {
+    BottomSectionButton(leftIconId = R.drawable.ic_reply, label = "Reply") {
+    }
+}
+
+@Composable
+@Preview(showBackground = true, showSystemUi = false)
+private fun EmailBodyPreview() {
+    EmailBody(message = FakeEmail().get())
+}
+
 @Composable
 private fun SubjectAndBookmark(
     modifier: Modifier = Modifier,
@@ -149,6 +266,7 @@ fun SenderInfoHeader(
     userName: String,
     time: String,
     profileImageId: Int,
+    onExpandClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -166,6 +284,7 @@ fun SenderInfoHeader(
             modifier = Modifier.weight(.5f),
             userName = userName,
             time = time,
+            onExpandClick=onExpandClick
         )
         CommonIconButton(
             modifier = Modifier.weight(.1f),
@@ -182,6 +301,7 @@ fun SenderInfoHeader(
 private fun EmailInfo(
     modifier: Modifier = Modifier,
     userName: String, time: String,
+    onExpandClick: () -> Unit,
 ) {
     Column(modifier = modifier) {
         SenderNameAndTime(userName = userName, time = time)
@@ -189,10 +309,12 @@ private fun EmailInfo(
             Text(
                 text = "to me"
             )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_down_arrow),
-                contentDescription = null
-            )
+            CustomIconButton(onClick =onExpandClick) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_down_arrow),
+                    contentDescription = null
+                )
+            }
 
         }
     }
@@ -246,7 +368,7 @@ private fun SenderHeaderPreview() {
         userName = "Md Abul Kalam Azad",
         time = "5 days ago",
         profileImageId = R.drawable.ic_profile_2
-    )
+    ) {}
 }
 
 
