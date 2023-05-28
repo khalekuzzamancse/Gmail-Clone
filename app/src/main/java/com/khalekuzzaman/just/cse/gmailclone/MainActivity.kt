@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonTopAppbar
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.ContextualTopAppbar
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.allinbox.AllInboxScreen
+import com.khalekuzzaman.just.cse.gmailclone.ui.screens.compose_email.ComposeEmail
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.openemail.SenderInfoHeader
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.openemail.SubjectAndSenderInfo
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
@@ -43,7 +44,8 @@ class MainActivity : ComponentActivity() {
 //                                selectedEmails = count
 //                            }
 //                        )
-                        SubjectAndSenderInfo()
+                       // SubjectAndSenderInfo()
+                        ComposeEmail()
                     }
 
                 }
