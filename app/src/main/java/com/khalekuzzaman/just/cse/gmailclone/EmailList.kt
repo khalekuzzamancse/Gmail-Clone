@@ -19,7 +19,9 @@ fun EmailList(
 ) {
 
 
-    LazyColumn() {
+    LazyColumn(
+
+    ) {
         items(items = emails, key = { it.emailid }) { email ->
             EmailItem(
                 info = email,
