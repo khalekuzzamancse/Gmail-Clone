@@ -1,6 +1,5 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.screens.Common
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,10 +30,7 @@ import com.khalekuzzaman.just.cse.gmailclone.utils.CustomNestedScrollConnection
 import com.khalekuzzaman.just.cse.gmailclone.utils.ScrollDirection
 
 @Composable
-fun BottomNavigationBar(
-    selectedDestination: String,
-    navigateToTopLevelDestination: () -> Unit,
-) {
+fun BottomNavigationBar() {
     NavigationBar(modifier = Modifier.fillMaxWidth()) {
         NavigationBarItem(
             selected = false,
@@ -62,7 +58,7 @@ fun BottomNavigationBar(
 @Composable
 @Preview
 private fun BottomNavbarPreview() {
-    BottomNavigationBar(selectedDestination = "", navigateToTopLevelDestination = {})
+    BottomNavigationBar()
 }
 
 @Composable
@@ -107,7 +103,7 @@ fun BottomNavigationDemo() {
 
     var shouldShowExpendedFab by remember { mutableStateOf((true))
     }
-    val nestedScrollConnection = CustomNestedScrollConnection { delta, scrollDir ->
+    val nestedScrollConnection = CustomNestedScrollConnection { _, scrollDir ->
         shouldShowExpendedFab = (scrollDir != ScrollDirection.UP)
     }
 
@@ -123,8 +119,7 @@ fun BottomNavigationDemo() {
 
         },
         bottomBar = {
-            BottomNavigationBar(selectedDestination = "") {
-            }
+            BottomNavigationBar()
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
