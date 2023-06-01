@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.EmailList
 import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.ShowFAB
 import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
 import com.khalekuzzaman.just.cse.gmailclone.utils.CustomNestedScrollConnection
 import com.khalekuzzaman.just.cse.gmailclone.utils.ScrollDirection
@@ -61,40 +62,6 @@ private fun BottomNavbarPreview() {
     BottomNavigationBar()
 }
 
-@Composable
-fun ShowFAB(
-    modifier: Modifier = Modifier,
-    shouldShowExpandedFAB: Boolean = true,
-    onClick: () -> Unit,
-) {
-    if (shouldShowExpandedFAB) {
-        ExtendedFloatingActionButton(
-            modifier = modifier,
-            onClick = onClick,
-        ) {
-            ComposeIcon()
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                text = "Compose"
-            )
-        }
-    } else {
-        FloatingActionButton(
-            modifier = modifier,
-            onClick = onClick
-        ) {
-            ComposeIcon()
-        }
-    }
-}
-
-@Composable
-private fun ComposeIcon() {
-    Icon(
-        painter = painterResource(id = R.drawable.ic_compose),
-        contentDescription = null
-    )
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -106,8 +73,6 @@ fun BottomNavigationDemo() {
     val nestedScrollConnection = CustomNestedScrollConnection { _, scrollDir ->
         shouldShowExpendedFab = (scrollDir != ScrollDirection.UP)
     }
-
-
 
     Scaffold(
         modifier = Modifier.nestedScroll(nestedScrollConnection),

@@ -3,7 +3,6 @@ package com.khalekuzzaman.just.cse.gmailclone.ui.common
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -61,7 +60,8 @@ fun TopAppbarM3_01() {
         topBar = {
             CollapseAbleTopAppbar(
                 moveAppbarVerticallyBy = moveAppbarVerticallyBy,
-            )
+                onNavigationIconClick = {}
+            ) {}
         }) {
         LazyColumn {
             items(100) { index ->
@@ -80,11 +80,15 @@ fun TopAppbarM3_01() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun CommonTopAppbar(moveAppbarVerticallyBy: Int = 0) {
-    CollapseAbleTopAppbar {
-        ProfileImage(drawableResource = R.drawable.profile_image)
-    }
+fun CommonTopAppbar(onNavigationIconClick: () -> Unit) {
+    CollapseAbleTopAppbar(
+        actions = {
+            ProfileImage(drawableResource = R.drawable.profile_image)
+        },
+        onNavigationIconClick = onNavigationIconClick
+    )
 
 }
 
@@ -95,8 +99,8 @@ fun CollapseAbleTopAppbar(
     title: String? = null,
     moveAppbarVerticallyBy: Int = 0,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-    onNavigationIconClick: () -> Unit = {},
-    actions: @Composable RowScope.() -> Unit = {},
+    onNavigationIconClick: () -> Unit,
+    actions: @Composable() (RowScope.() -> Unit) = {},
 ) {
 
     TopAppBar(
@@ -172,8 +176,7 @@ fun ContextualTopAppbar(
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
-        )
-        ,
+        ),
         actions = {
             if (selectedEmails > 0) {
                 Text(text = "$selectedEmails")
@@ -242,7 +245,7 @@ private fun CollapsableTopAppbarPreview() {
 @Composable
 @Preview(showBackground = true)
 private fun CommonTopAppbarPreview() {
-    CommonTopAppbar()
+    CommonTopAppbar {}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -251,7 +254,7 @@ private fun CommonTopAppbarPreview() {
 private fun CommonTopAppbarPreview2() {
     Scaffold(
         topBar = {
-            CommonTopAppbar()
+            CommonTopAppbar {}
         }) {
         LazyColumn(modifier = Modifier.padding(it)) {
             items(10) { index ->

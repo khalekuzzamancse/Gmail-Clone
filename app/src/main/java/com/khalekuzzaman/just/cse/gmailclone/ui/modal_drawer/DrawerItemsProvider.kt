@@ -30,7 +30,7 @@ class Destinations {
     }
 }
 
-class DrawerItemsProvider {
+object DrawerItemsProvider {
      val drawerGroups = listOf(
         DrawerGroup("Group 1", this.getAllInboxes(), false),
         DrawerGroup("Group 1", this.getGroup01(), false),

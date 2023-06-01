@@ -1,8 +1,12 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.modal_drawer
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
@@ -18,7 +22,6 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -26,59 +29,60 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.khalekuzzaman.just.cse.gmailclone.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun ModalDrawer(
+    modifier: Modifier,
     drawerGroups: List<DrawerGroup>,
     //Make sure later,that the  hashmap is immutable,
     //so that no one can add or remove item from it
     //also mark it as stable or immutable so  that
     //compose compiler can optimize it
     onNavigate: (navigateTo: String) -> Unit,
-    drawerState: DrawerState = rememberDrawerState(DrawerValue.Open),
-    coroutineScope: CoroutineScope,
-) {
-    val scrollState = rememberScrollState()
-    val drawerWidth = with(LocalDensity.current) {
-        (LocalConfiguration.current.screenWidthDp * 0.9).dp
-    }
+    drawerState: DrawerState,
+    closeDrawer: () -> Unit,
+    content: @Composable () -> Unit,
+
+    ) {
+
+
     ModalNavigationDrawer(
-        modifier = Modifier
-            .verticalScroll(scrollState)
-            .width(drawerWidth),
+        modifier = modifier,
         drawerState = drawerState,
         drawerContent = {
+            val drawerWidth = with(LocalDensity.current) {
+                (LocalConfiguration.current.screenWidthDp * 0.80).dp
+            }
             DrawerContent(
+                modifier = Modifier.width(drawerWidth),
                 drawerGroups,
-                drawerState = drawerState,
                 onNavigate = onNavigate,
-                coroutineScope = coroutineScope
+                closeDrawer = closeDrawer,
             )
         }) {
-        Content()
-
+        content()
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DrawerContent(
+    modifier: Modifier = Modifier,
     drawerGroups: List<DrawerGroup>,
     onNavigate: (navigateTo: String) -> Unit,
-    coroutineScope: CoroutineScope,
-    drawerState: DrawerState,
+    closeDrawer: () -> Unit,
 ) {
-    ModalDrawerSheet() {
+    val scrollState = rememberScrollState()
+    ModalDrawerSheet(
+        modifier = modifier.verticalScroll(scrollState)
+    ) {
 
         val firstGroupFirstItem = drawerGroups[0].items[0];
         val selectedItem = remember { mutableStateOf(firstGroupFirstItem) }
         drawerGroups.forEach { group ->
-
             val items = group.items
             //
             if (group.showGroupName) {
@@ -100,9 +104,7 @@ private fun DrawerContent(
                     onClick = {
                         selectedItem.value = drawerItem
                         onNavigate(drawerItem.label)
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
+                        closeDrawer()
                     },
                 )
             }
@@ -135,22 +137,29 @@ private fun DisplayDivider() {
     Divider()
 }
 
-@Composable
-private fun Content() {
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 private fun ModalDrawerPreview() {
-
     ModalDrawer(
-        drawerGroups = DrawerItemsProvider().drawerGroups,
-        drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
-        coroutineScope = rememberCoroutineScope(),
+        drawerGroups = DrawerItemsProvider.drawerGroups,
         onNavigate = {},
-    )
+        drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
+        closeDrawer = {},
+        modifier = Modifier
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "Hello")
+        }
+    }
 }
+
 
 
 
