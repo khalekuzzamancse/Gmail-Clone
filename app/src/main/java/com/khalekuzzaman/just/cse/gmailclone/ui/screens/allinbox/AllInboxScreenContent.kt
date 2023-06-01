@@ -1,22 +1,18 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.screens.allinbox
 
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.EmailList
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
-import com.khalekuzzaman.just.cse.gmailclone.ui.screens.Common.CommonScreenWithModalDrawerAndBottomNavigationAndFAB
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonScreenWithModalDrawerAndBottomNavigationAndFAB
 import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
-import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)

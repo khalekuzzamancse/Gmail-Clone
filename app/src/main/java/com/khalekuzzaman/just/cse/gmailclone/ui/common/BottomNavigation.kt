@@ -1,4 +1,4 @@
-package com.khalekuzzaman.just.cse.gmailclone.ui.screens.Common
+package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.EmailList
 import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
-import com.khalekuzzaman.just.cse.gmailclone.ui.common.ShowFAB
 import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
 import com.khalekuzzaman.just.cse.gmailclone.utils.CustomNestedScrollConnection
 import com.khalekuzzaman.just.cse.gmailclone.utils.ScrollDirection

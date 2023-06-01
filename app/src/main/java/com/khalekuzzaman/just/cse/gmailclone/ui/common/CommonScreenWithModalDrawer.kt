@@ -1,4 +1,4 @@
-package com.khalekuzzaman.just.cse.gmailclone.ui.screens.Common
+package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -17,11 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
-import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonTopAppbar
-import com.khalekuzzaman.just.cse.gmailclone.ui.common.ContextualTopAppbar
-import com.khalekuzzaman.just.cse.gmailclone.ui.common.ShowFAB
-import com.khalekuzzaman.just.cse.gmailclone.ui.modal_drawer.DrawerItemsProvider
-import com.khalekuzzaman.just.cse.gmailclone.ui.modal_drawer.ModalDrawer
 import com.khalekuzzaman.just.cse.gmailclone.utils.CustomNestedScrollConnection
 import com.khalekuzzaman.just.cse.gmailclone.utils.ScrollDirection
 

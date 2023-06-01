@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonTopAppbar
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.ContextualTopAppbar
-import com.khalekuzzaman.just.cse.gmailclone.ui.screens.Common.CommonScreenWithModalDrawerAndBottomNavigationAndFAB
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.allinbox.AllInboxScreen
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.allinbox.AllInboxScreenContent
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
