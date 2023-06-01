@@ -3,15 +3,13 @@ package com.khalekuzzaman.just.cse.gmailclone.ui.screens.Common
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,45 +28,52 @@ import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
 import com.khalekuzzaman.just.cse.gmailclone.utils.CustomNestedScrollConnection
 import com.khalekuzzaman.just.cse.gmailclone.utils.ScrollDirection
 
+data class BottomNavigationItem(
+    val label: String,
+    val iconId: Int,
+)
+
+val bottomNavigationItems = listOf(
+    BottomNavigationItem("mail", R.drawable.ic_email),
+    BottomNavigationItem("video chat", R.drawable.ic_video_chat),
+)
+
 @Composable
-fun BottomNavigationBar() {
-    NavigationBar(modifier = Modifier.fillMaxWidth()) {
-        NavigationBarItem(
-            selected = false,
-            onClick = {},
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_email),
-                    contentDescription = null
-                )
-            }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = {},
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_video_chat),
-                    contentDescription = null
-                )
-            }
-        )
+fun BottomNavigationBar(items: List<BottomNavigationItem>) {
+    NavigationBar(modifier = Modifier.fillMaxWidth().height(60.dp)) {
+        var selected by remember {
+            mutableStateOf(items[0])
+        }
+        items.forEach { item ->
+            NavigationBarItem(
+                selected = selected == item,
+                onClick = {
+                    selected = item
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = item.iconId),
+                        contentDescription = null
+                    )
+                }
+            )
+        }
     }
 }
 
 @Composable
 @Preview
 private fun BottomNavbarPreview() {
-    BottomNavigationBar()
+    BottomNavigationBar(bottomNavigationItems)
 }
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigationDemo() {
 
-    var shouldShowExpendedFab by remember { mutableStateOf((true))
+    var shouldShowExpendedFab by remember {
+        mutableStateOf((true))
     }
     val nestedScrollConnection = CustomNestedScrollConnection { _, scrollDir ->
         shouldShowExpendedFab = (scrollDir != ScrollDirection.UP)
@@ -84,7 +89,7 @@ fun BottomNavigationDemo() {
 
         },
         bottomBar = {
-            BottomNavigationBar()
+            BottomNavigationBar(bottomNavigationItems)
         }
     ) {
         Column(modifier = Modifier.padding(it)) {

@@ -91,7 +91,7 @@ fun ScreenScaffold(
                 )
         },
         bottomBar = {
-            BottomNavigationBar()
+            BottomNavigationBar(bottomNavigationItems)
         }
 
     ) {
