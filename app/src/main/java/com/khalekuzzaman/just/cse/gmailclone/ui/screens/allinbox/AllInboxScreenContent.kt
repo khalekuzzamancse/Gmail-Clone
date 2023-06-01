@@ -1,18 +1,51 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.screens.allinbox
 
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.EmailList
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
+import com.khalekuzzaman.just.cse.gmailclone.ui.screens.Common.CommonScreenWithModalDrawerAndBottomNavigationAndFAB
 import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
+import kotlinx.coroutines.launch
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllInboxScreen(
+    modifier: Modifier = Modifier,
+    onNavigate: (navigateTo: String) -> Unit,
+    closeDrawer: () -> Unit,
+    drawerState: DrawerState,
+    openDrawer: () -> Unit,
+) {
+
+    CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
+        modifier = modifier,
+        onNavigate = onNavigate,
+        closeDrawer = closeDrawer,
+        drawerState = drawerState,
+        openDrawer = openDrawer
+    ) {
+        //Screen Content
+        AllInboxScreenContent(
+            onEmailSelectedCountChange = {
+            })
+
+    }
+}
+
+@Composable
+fun AllInboxScreenContent(
     modifier: Modifier = Modifier,
     onChangeBookmark: (itemID: Int) -> Unit = {},
     onEmailSelectedCountChange: (totalSelected: Int) -> Unit,
@@ -27,6 +60,7 @@ fun AllInboxScreen(
     }
 
     EmailList(
+        modifier = modifier,
         emails = emails,
         onChangeBookmark = { emailId ->
             emails = BookmarkUpdater(emails).update(emailId)
@@ -47,7 +81,7 @@ fun AllInboxScreen(
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 private fun AllInboxScreenPreview() {
-    AllInboxScreen(
+    AllInboxScreenContent(
         onEmailSelectedCountChange = {}
     )
 }

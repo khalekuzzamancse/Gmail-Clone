@@ -21,6 +21,7 @@ import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonTopAppbar
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.ContextualTopAppbar
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.Common.CommonScreenWithModalDrawerAndBottomNavigationAndFAB
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.allinbox.AllInboxScreen
+import com.khalekuzzaman.just.cse.gmailclone.ui.screens.allinbox.AllInboxScreenContent
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
 import kotlinx.coroutines.launch
 
@@ -32,21 +33,24 @@ class MainActivity : ComponentActivity() {
         setContent {
             GmailCloneTheme {
                 val coroutineScope = rememberCoroutineScope()
-                val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
-                CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
-                    onNavigate = {},
-                    closeDrawer = {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
-                    },
-                    drawerState = drawerState,
-                    openDrawer = {
-                        coroutineScope.launch {
-                            drawerState.open()
-                        }
+                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                val openDrawer: () -> Unit = {
+                    coroutineScope.launch {
+                        drawerState.open()
                     }
-                ) {}
+                }
+                val closeDrawer: () -> Unit = {
+                    coroutineScope.launch {
+                        drawerState.close()
+                    }
+                }
+
+                AllInboxScreen(
+                    onNavigate = {},
+                    closeDrawer = closeDrawer,
+                    drawerState = drawerState,
+                    openDrawer = openDrawer
+                )
             }
         }
 
@@ -68,7 +72,7 @@ class MainActivity : ComponentActivity() {
                     )
             }) {
             Column(modifier = Modifier.padding(it)) {
-                AllInboxScreen(
+                AllInboxScreenContent(
                     onEmailSelectedCountChange = { count ->
                         selectedEmails = count
                     }
