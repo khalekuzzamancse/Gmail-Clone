@@ -39,7 +39,9 @@ val bottomNavigationItems = listOf(
 
 @Composable
 fun BottomNavigationBar(items: List<BottomNavigationItem>) {
-    NavigationBar(modifier = Modifier.fillMaxWidth().height(60.dp)) {
+    NavigationBar(modifier = Modifier
+        .fillMaxWidth()
+        .height(60.dp)) {
         var selected by remember {
             mutableStateOf(items[0])
         }
@@ -111,7 +113,8 @@ fun BottomNavigationDemo() {
                     } else {
                         selectedEmailIds.plus(emailId)
                     }
-                }
+                },
+                onEmailItemClick = {}
             )
         }
 

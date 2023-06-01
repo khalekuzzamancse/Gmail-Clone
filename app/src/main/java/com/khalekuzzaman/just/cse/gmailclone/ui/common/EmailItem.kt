@@ -2,9 +2,7 @@ package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,24 +10,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TabRowDefaults.contentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,19 +41,22 @@ data class EmailModel(
 @Composable
 fun EmailItem(
     modifier: Modifier = Modifier,
-    info: EmailModel,
+    emailModel: EmailModel,
     onLongClick: (itemID: Int) -> Unit = {},
     isSelected: Boolean = false,
+    onEmailItemClick: (EmailModel) -> Unit,
     onChangeBookmark: (itemID: Int) -> Unit = {},
 ) {
 
-    Box(modifier = Modifier
+    Box(modifier = modifier
         .padding(10.dp)
         .fillMaxWidth()
         .combinedClickable(
-            onClick = {},
+            onClick = {
+                onEmailItemClick(emailModel)
+            },
             onLongClick = {
-                onLongClick(info.emailid)
+                onLongClick(emailModel.emailid)
             }
         )
         .background(
@@ -87,15 +80,15 @@ fun EmailItem(
                 modifier = Modifier.padding(start = 8.dp)
             ) {
                 TitleAndTime(
-                    info.userName,
-                    info.timeOrDate
+                    emailModel.userName,
+                    emailModel.timeOrDate
                 )
                 MessageSubjectBookmark(
-                    subject = info.subject,
-                    message = info.message,
-                    isBookMarked = info.isBookMarked,
+                    subject = emailModel.subject,
+                    message = emailModel.message,
+                    isBookMarked = emailModel.isBookMarked,
                     onBookmarkIconClick = {
-                        onChangeBookmark(info.emailid)
+                        onChangeBookmark(emailModel.emailid)
                     },
                 )
 
@@ -206,12 +199,6 @@ private fun Message(modifier: Modifier = Modifier, message: String) {
 }
 
 
-
-
-
-
-
-
 @Composable
 private fun SelectedProfileImage(modifier: Modifier = Modifier) {
     Box(
@@ -311,12 +298,19 @@ private fun EmailItemPreviews() {
             timeOrDate = "13-03-23",
             profileImageId = R.drawable.profile_image
         )
-        EmailItem(info = email)
-        EmailItem(info = email.copy(emailid = Random.nextInt()), isSelected = true)
-        EmailItem(info = email.copy(emailid = Random.nextInt(), isBookMarked = true))
+        EmailItem(emailModel = email, onEmailItemClick = {})
         EmailItem(
-            info = email.copy(emailid = Random.nextInt(), isBookMarked = true),
+            emailModel = email.copy(emailid = Random.nextInt()),
+            onEmailItemClick = {},
             isSelected = true
+        )
+        EmailItem(
+            emailModel = email.copy(emailid = Random.nextInt(), isBookMarked = true),
+            onEmailItemClick = {})
+        EmailItem(
+            emailModel = email.copy(emailid = Random.nextInt(), isBookMarked = true),
+            isSelected = true,
+            onEmailItemClick = {}
         )
     }
 

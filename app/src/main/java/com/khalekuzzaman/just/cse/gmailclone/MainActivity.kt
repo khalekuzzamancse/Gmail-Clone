@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonTopAppbar
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.ContextualTopAppbar
+import com.khalekuzzaman.just.cse.gmailclone.ui.navigation.ModalDrawerNavHost
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.allinbox.AllInboxScreen
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.allinbox.AllInboxScreenContent
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
@@ -31,25 +32,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GmailCloneTheme {
-                val coroutineScope = rememberCoroutineScope()
-                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-                val openDrawer: () -> Unit = {
-                    coroutineScope.launch {
-                        drawerState.open()
-                    }
-                }
-                val closeDrawer: () -> Unit = {
-                    coroutineScope.launch {
-                        drawerState.close()
-                    }
-                }
-
-                AllInboxScreen(
-                    onNavigate = {},
-                    closeDrawer = closeDrawer,
-                    drawerState = drawerState,
-                    openDrawer = openDrawer
-                )
+                ModalDrawerNavHost()
             }
         }
 
@@ -74,7 +57,7 @@ class MainActivity : ComponentActivity() {
                 AllInboxScreenContent(
                     onEmailSelectedCountChange = { count ->
                         selectedEmails = count
-                    }
+                    }, onEmailItemClick = {}
                 )
                 // SubjectAndSenderInfo()
                 // ComposeEmail()

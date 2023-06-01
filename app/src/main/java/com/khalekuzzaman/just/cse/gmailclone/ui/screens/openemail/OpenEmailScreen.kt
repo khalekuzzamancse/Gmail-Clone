@@ -47,6 +47,10 @@ import com.khalekuzzaman.just.cse.gmailclone.utils.UrlFinder
 
 
 @Composable
+fun OpenEmail(){
+    SubjectAndSenderInfo()
+}
+@Composable
 fun SubjectAndSenderInfo() {
     val scrollState = rememberScrollState()
     Column(

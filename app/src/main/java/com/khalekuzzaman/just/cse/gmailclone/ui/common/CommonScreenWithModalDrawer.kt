@@ -28,8 +28,8 @@ fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
     closeDrawer: () -> Unit,
     drawerState: DrawerState,
     openDrawer: () -> Unit,
+    onFabClick: () -> Unit,
     screenContent: @Composable () -> Unit,
-
 ) {
     ModalDrawer(
         modifier = modifier,
@@ -41,7 +41,8 @@ fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
         ScreenScaffold(
             modifier = Modifier.fillMaxSize(),
             screenContent = screenContent,
-            openDrawer = openDrawer
+            openDrawer = openDrawer,
+            onFabClick = onFabClick
         )
     }
 
@@ -54,6 +55,7 @@ fun ScreenScaffold(
     modifier: Modifier = Modifier,
     screenContent: @Composable () -> Unit,
     openDrawer: () -> Unit,
+    onFabClick: () -> Unit,
 ) {
     var selectedEmails by remember {
         mutableStateOf(0)
@@ -71,7 +73,7 @@ fun ScreenScaffold(
         floatingActionButton = {
             ShowFAB(
                 shouldShowExpandedFAB = shouldShowExpendedFab,
-                onClick = {}
+                onClick = onFabClick
             )
 
         },
@@ -111,8 +113,10 @@ private fun CommonScreenDemo1() {
         onNavigate = {},
         closeDrawer = { /*TODO*/ },
         drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-        openDrawer = {}
-    ) {}
+        openDrawer = {},
+        onFabClick = {},
+        screenContent = {}
+    )
 
 }
 
@@ -127,6 +131,8 @@ private fun CommonScreenDemo2() {
         onNavigate = {},
         closeDrawer = { /*TODO*/ },
         drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
-       openDrawer = {}
-    ) {}
+        openDrawer = {},
+        onFabClick = {},
+        screenContent = {}
+    )
 }

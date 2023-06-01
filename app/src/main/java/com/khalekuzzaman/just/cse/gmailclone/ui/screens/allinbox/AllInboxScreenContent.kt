@@ -12,31 +12,36 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.EmailList
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonScreenWithModalDrawerAndBottomNavigationAndFAB
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun AllInboxScreen(
     modifier: Modifier = Modifier,
     onNavigate: (navigateTo: String) -> Unit,
     closeDrawer: () -> Unit,
-    drawerState: DrawerState,
     openDrawer: () -> Unit,
-) {
+    onFabClick: () -> Unit,
+    onEmailItemClick: (EmailModel) -> Unit,
+    drawerState: DrawerState,
+    ) {
 
     CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
         modifier = modifier,
         onNavigate = onNavigate,
         closeDrawer = closeDrawer,
         drawerState = drawerState,
-        openDrawer = openDrawer
+        openDrawer = openDrawer,
+        onFabClick = onFabClick
     ) {
         //Screen Content
         AllInboxScreenContent(
             onEmailSelectedCountChange = {
-            })
-
+            },
+        onEmailItemClick =onEmailItemClick )
     }
 }
 
@@ -45,6 +50,7 @@ fun AllInboxScreenContent(
     modifier: Modifier = Modifier,
     onChangeBookmark: (itemID: Int) -> Unit = {},
     onEmailSelectedCountChange: (totalSelected: Int) -> Unit,
+    onEmailItemClick: (EmailModel) -> Unit,
 ) {
 
     var emails by remember {
@@ -69,7 +75,8 @@ fun AllInboxScreenContent(
                 selectedEmailIds.plus(emailId)
             }
             onEmailSelectedCountChange(selectedEmailIds.size)
-        }
+        },
+        onEmailItemClick = onEmailItemClick
     )
 
 }
@@ -78,6 +85,7 @@ fun AllInboxScreenContent(
 @Preview(showBackground = true, showSystemUi = true)
 private fun AllInboxScreenPreview() {
     AllInboxScreenContent(
-        onEmailSelectedCountChange = {}
+        onEmailSelectedCountChange = {},
+        onEmailItemClick = {}
     )
 }

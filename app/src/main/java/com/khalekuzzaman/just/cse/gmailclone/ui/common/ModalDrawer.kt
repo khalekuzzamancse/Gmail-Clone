@@ -188,7 +188,7 @@ data class DrawerGroup(
 ----------------
 ----------
  */
-class Destinations {
+class DrawerDestinations {
     companion object {
         const val ALL_INBOXES = "All inboxes"
         const val PRIMARY = "Primary"
@@ -228,47 +228,47 @@ object DrawerItemsProvider {
     )
 
     private fun getAllInboxes(): List<ModalDrawerItem> = listOf(
-        ModalDrawerItem(Destinations.ALL_INBOXES, R.drawable.ic_all_inboxes, 0),
+        ModalDrawerItem(DrawerDestinations.ALL_INBOXES, R.drawable.ic_all_inboxes, 0),
     )
 
     private fun getGroup01(): List<ModalDrawerItem> = listOf(
-        ModalDrawerItem(Destinations.PRIMARY, R.drawable.ic_primary, 0),
-        ModalDrawerItem(Destinations.PROMOTIONS, R.drawable.ic_promotion, 0),
-        ModalDrawerItem(Destinations.SOCIAL, R.drawable.ic_social, 0),
-        ModalDrawerItem(Destinations.UPDATES, R.drawable.ic_updates, 0),
-        ModalDrawerItem(Destinations.FORUMS, R.drawable.ic_forums, 0)
+        ModalDrawerItem(DrawerDestinations.PRIMARY, R.drawable.ic_primary, 0),
+        ModalDrawerItem(DrawerDestinations.PROMOTIONS, R.drawable.ic_promotion, 0),
+        ModalDrawerItem(DrawerDestinations.SOCIAL, R.drawable.ic_social, 0),
+        ModalDrawerItem(DrawerDestinations.UPDATES, R.drawable.ic_updates, 0),
+        ModalDrawerItem(DrawerDestinations.FORUMS, R.drawable.ic_forums, 0)
     )
 
     private fun getGroup02(): List<ModalDrawerItem> = listOf(
-        ModalDrawerItem(Destinations.IMAP_TRASH, R.drawable.ic_label, 0),
-        ModalDrawerItem(Destinations.SMS, R.drawable.ic_label, 0)
+        ModalDrawerItem(DrawerDestinations.IMAP_TRASH, R.drawable.ic_label, 0),
+        ModalDrawerItem(DrawerDestinations.SMS, R.drawable.ic_label, 0)
     )
 
     private fun getAllLabels(): List<ModalDrawerItem> = listOf(
-        ModalDrawerItem(Destinations.STARTED, R.drawable.ic_started, 0),
-        ModalDrawerItem(Destinations.SNOOZED, R.drawable.ic_snoozed, 0),
-        ModalDrawerItem(Destinations.IMPORTANT, R.drawable.ic_important, 0),
-        ModalDrawerItem(Destinations.SENT, R.drawable.ic_sent, 0),
-        ModalDrawerItem(Destinations.SCHEDULED, R.drawable.ic_schedule, 0),
-        ModalDrawerItem(Destinations.OUTBOX, R.drawable.ic_outbox, 0),
-        ModalDrawerItem(Destinations.DRAFT, R.drawable.ic_draft, 0),
-        ModalDrawerItem(Destinations.ALL_MAIL, R.drawable.ic_sent, 0),
-        ModalDrawerItem(Destinations.SPAM, R.drawable.ic_spam, 0),
-        ModalDrawerItem(Destinations.BIN, R.drawable.ic_bin, 0),
-        ModalDrawerItem(Destinations.IMAP_SENT, R.drawable.ic_label, 0),
-        ModalDrawerItem(Destinations.IMAP_TRASH, R.drawable.ic_label, 0),
-        ModalDrawerItem(Destinations.CALL_LOG, R.drawable.ic_label, 0),
-        ModalDrawerItem(Destinations.SMS, R.drawable.ic_label, 0),
+        ModalDrawerItem(DrawerDestinations.STARTED, R.drawable.ic_started, 0),
+        ModalDrawerItem(DrawerDestinations.SNOOZED, R.drawable.ic_snoozed, 0),
+        ModalDrawerItem(DrawerDestinations.IMPORTANT, R.drawable.ic_important, 0),
+        ModalDrawerItem(DrawerDestinations.SENT, R.drawable.ic_sent, 0),
+        ModalDrawerItem(DrawerDestinations.SCHEDULED, R.drawable.ic_schedule, 0),
+        ModalDrawerItem(DrawerDestinations.OUTBOX, R.drawable.ic_outbox, 0),
+        ModalDrawerItem(DrawerDestinations.DRAFT, R.drawable.ic_draft, 0),
+        ModalDrawerItem(DrawerDestinations.ALL_MAIL, R.drawable.ic_sent, 0),
+        ModalDrawerItem(DrawerDestinations.SPAM, R.drawable.ic_spam, 0),
+        ModalDrawerItem(DrawerDestinations.BIN, R.drawable.ic_bin, 0),
+        ModalDrawerItem(DrawerDestinations.IMAP_SENT, R.drawable.ic_label, 0),
+        ModalDrawerItem(DrawerDestinations.IMAP_TRASH, R.drawable.ic_label, 0),
+        ModalDrawerItem(DrawerDestinations.CALL_LOG, R.drawable.ic_label, 0),
+        ModalDrawerItem(DrawerDestinations.SMS, R.drawable.ic_label, 0),
     )
 
     private fun getGoogleApps(): List<ModalDrawerItem> = listOf(
-        ModalDrawerItem(Destinations.CALENDAR, R.drawable.ic_calendar, 0),
-        ModalDrawerItem(Destinations.CONTACT, R.drawable.ic_contact, 0),
+        ModalDrawerItem(DrawerDestinations.CALENDAR, R.drawable.ic_calendar, 0),
+        ModalDrawerItem(DrawerDestinations.CONTACT, R.drawable.ic_contact, 0),
     )
 
     private fun getLastGroup(): List<ModalDrawerItem> = listOf(
-        ModalDrawerItem(Destinations.SETTINGS, R.drawable.ic_setting, 0),
-        ModalDrawerItem(Destinations.HELP_AND_FEEDBACK, R.drawable.ic_help_and_feedback, 0),
+        ModalDrawerItem(DrawerDestinations.SETTINGS, R.drawable.ic_setting, 0),
+        ModalDrawerItem(DrawerDestinations.HELP_AND_FEEDBACK, R.drawable.ic_help_and_feedback, 0),
     )
 
 }
