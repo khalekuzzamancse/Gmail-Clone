@@ -1,6 +1,7 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.utils.CustomNestedScrollConnection
 import com.khalekuzzaman.just.cse.gmailclone.utils.ScrollDirection
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
     modifier: Modifier = Modifier,
@@ -55,14 +55,13 @@ fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
             onArchiveButtonClick = onArchiveButtonClick,
             onBackArrowClick = onBackArrowClick,
             onDeleteButtonClick = onDeleteButtonClick,
-            onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick
+            onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick,
         )
     }
 
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenScaffold(
     modifier: Modifier = Modifier,
@@ -76,55 +75,73 @@ fun ScreenScaffold(
     onDeleteButtonClick: () -> Unit,
     onMarkAsUnReadButtonClick: () -> Unit,
 ) {
+    Box(
+    ) {
 
-    var shouldShowExpendedFab by remember {
-        mutableStateOf((true))
-    }
-    val nestedScrollConnection = CustomNestedScrollConnection { _, scrollDir ->
-        shouldShowExpendedFab = (scrollDir != ScrollDirection.UP)
-    }
-    Scaffold(
-        modifier = modifier
-            .nestedScroll(nestedScrollConnection),
-        floatingActionButton = {
-            ShowFAB(
-                shouldShowExpandedFAB = shouldShowExpendedFab,
-                onClick = onFabClick
-            )
-
-        },
-        topBar = {
-            if (shouldShowContextualTopAppbar) {
-                ContextualTopAppbar(
-                    selectedEmailCount = selectedEmailCount,
-                    onArchiveButtonClick = onArchiveButtonClick,
-                    onBackArrowClick = onBackArrowClick,
-                    onDeleteButtonClick = onDeleteButtonClick,
-                    onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick
-                )
-            } else {
-                CommonTopAppbar(
-                    onNavigationIconClick = openDrawer
-                )
-            }
-
-        },
-        bottomBar = {
-            BottomNavigationBar(bottomNavigationItems)
+        var shouldShowExpendedFab by remember {
+            mutableStateOf((true))
+        }
+        val nestedScrollConnection = CustomNestedScrollConnection { _, scrollDir ->
+            shouldShowExpendedFab = (scrollDir != ScrollDirection.UP)
         }
 
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
+        var showSearchBar by remember {
+            mutableStateOf(false)
+        }
+        if (showSearchBar) {
+            SearchBar(
+                modifier = Modifier.matchParentSize(),
+                onBackClick = {
+                    showSearchBar = false
+                }
+            )
+        }
+
+        Scaffold(
+            modifier = modifier
+                .nestedScroll(nestedScrollConnection),
+            floatingActionButton = {
+                ShowFAB(
+                    shouldShowExpandedFAB = shouldShowExpendedFab,
+                    onClick = onFabClick
+                )
+
+            },
+            topBar = {
+                if (shouldShowContextualTopAppbar) {
+                    ContextualTopAppbar(
+                        selectedEmailCount = selectedEmailCount,
+                        onArchiveButtonClick = onArchiveButtonClick,
+                        onBackArrowClick = onBackArrowClick,
+                        onDeleteButtonClick = onDeleteButtonClick,
+                        onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick
+                    )
+                } else {
+                    CommonTopAppbar(
+                        onNavigationIconClick = openDrawer,
+                        onSearchOpenerClick = {
+                            showSearchBar = true
+                        }
+                    )
+                }
+
+            },
+            bottomBar = {
+                BottomNavigationBar(bottomNavigationItems)
+            }
+
         ) {
-            screenContent()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
+            ) {
+                screenContent()
+            }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(
     showBackground = true,
@@ -139,8 +156,8 @@ private fun CommonScreenDemo1() {
         onFabClick = {},
         shouldShowContextualTopAppbar = false,
         selectedEmailCount = 0,
-        onArchiveButtonClick = {},
         onBackArrowClick = {},
+        onArchiveButtonClick = {},
         onDeleteButtonClick = {},
         onMarkAsUnReadButtonClick = {}
 
@@ -163,8 +180,8 @@ private fun CommonScreenDemo3() {
         onFabClick = {},
         shouldShowContextualTopAppbar = true,
         selectedEmailCount = 0,
-        onArchiveButtonClick = {},
         onBackArrowClick = {},
+        onArchiveButtonClick = {},
         onDeleteButtonClick = {},
         onMarkAsUnReadButtonClick = {}
     ) {}
@@ -186,8 +203,8 @@ private fun CommonScreenDemo2() {
         onFabClick = {},
         shouldShowContextualTopAppbar = false,
         selectedEmailCount = 0,
-        onArchiveButtonClick = {},
         onBackArrowClick = {},
+        onArchiveButtonClick = {},
         onDeleteButtonClick = {},
         onMarkAsUnReadButtonClick = {}
     ) {}

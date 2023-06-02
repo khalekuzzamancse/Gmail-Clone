@@ -1,12 +1,15 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -82,15 +85,30 @@ fun TopAppbarM3_01() {
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
-fun CommonTopAppbar(onNavigationIconClick: () -> Unit) {
+fun CommonTopAppbar(
+    onNavigationIconClick: () -> Unit,
+    onSearchOpenerClick: () -> Unit
+) {
+
     CollapseAbleTopAppbar(
-        actions = {
-            ProfileImage(drawableResource = R.drawable.profile_image)
-        },
         onNavigationIconClick = onNavigationIconClick
-    )
+    ){
+
+       Text(
+           modifier = Modifier
+               .wrapContentWidth()
+               .weight(1f).clickable {
+               onSearchOpenerClick()
+           },
+           text = "Search in emails")
+        ProfileImage(
+            modifier = Modifier.wrapContentWidth(),
+            drawableResource = R.drawable.profile_image
+        )
+    }
 
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -257,7 +275,7 @@ private fun CollapsableTopAppbarPreview() {
 @Composable
 @Preview(showBackground = true)
 private fun CommonTopAppbarPreview() {
-    CommonTopAppbar {}
+    CommonTopAppbar({},  onSearchOpenerClick = {})
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -266,7 +284,7 @@ private fun CommonTopAppbarPreview() {
 private fun CommonTopAppbarPreview2() {
     Scaffold(
         topBar = {
-            CommonTopAppbar {}
+            CommonTopAppbar({}, onSearchOpenerClick = {})
         }) {
         LazyColumn(modifier = Modifier.padding(it)) {
             items(10) { index ->

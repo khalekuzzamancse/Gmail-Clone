@@ -1,7 +1,6 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.screens
 
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,7 +14,6 @@ import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
 fun CommonEmailListScreen(
@@ -64,8 +62,8 @@ fun CommonEmailListScreen(
         onFabClick = onFabClick,
         shouldShowContextualTopAppbar = shouldShowContextualTopAppbar,
         selectedEmailCount = selectedEmailCount,
-        onArchiveButtonClick = {},
         onBackArrowClick = onBackArrowClick,
+        onArchiveButtonClick = {},
         onDeleteButtonClick = {},
         onMarkAsUnReadButtonClick = {}
     ) {

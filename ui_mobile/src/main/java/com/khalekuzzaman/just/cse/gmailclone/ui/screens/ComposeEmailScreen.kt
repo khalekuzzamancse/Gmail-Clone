@@ -123,7 +123,6 @@ private fun ComposableScreenTextField(
         },
         colors = TextFieldDefaults.textFieldColors(
             containerColor = MaterialTheme.colorScheme.surface,
-            textColor = MaterialTheme.colorScheme.onSurface,
             unfocusedIndicatorColor = MaterialTheme.colorScheme.surface,
             focusedIndicatorColor = MaterialTheme.colorScheme.surface,
         ),
