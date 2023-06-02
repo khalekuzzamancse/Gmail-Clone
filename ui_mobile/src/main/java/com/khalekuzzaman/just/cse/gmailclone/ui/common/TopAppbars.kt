@@ -160,11 +160,11 @@ class CollapsableToolbarState(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContextualTopAppbar(
-    onBackArrowClick: () -> Unit = {},
-    selectedEmails: Int,
-    onArchiveButtonClick: () -> Unit = {},
-    onDeleteButtonClick: () -> Unit = {},
-    onMarkAsUnReadButtonClick: () -> Unit = {},
+    onBackArrowClick: () -> Unit,
+    selectedEmailCount: Int,
+    onArchiveButtonClick: () -> Unit,
+    onDeleteButtonClick: () -> Unit,
+    onMarkAsUnReadButtonClick: () -> Unit,
 ) {
     TopAppBar(
         title = {},
@@ -178,8 +178,8 @@ fun ContextualTopAppbar(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
         ),
         actions = {
-            if (selectedEmails > 0) {
-                Text(text = "$selectedEmails")
+            if (selectedEmailCount > 0) {
+                Text(text = "$selectedEmailCount")
             }
 
             Spacer(modifier = Modifier.width(40.dp))
@@ -207,7 +207,13 @@ fun ContextualTopAppbar(
 @Composable
 @Preview(showBackground = true)
 private fun ContextualTopAppbarPreview() {
-    ContextualTopAppbar(selectedEmails = 0)
+    ContextualTopAppbar(
+        selectedEmailCount = 0,
+        onArchiveButtonClick = {},
+        onBackArrowClick = {},
+        onDeleteButtonClick = {},
+        onMarkAsUnReadButtonClick = {}
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -216,7 +222,13 @@ private fun ContextualTopAppbarPreview() {
 private fun ContextualTopAppbarPreview2() {
     Scaffold(
         topBar = {
-            ContextualTopAppbar(selectedEmails = 0)
+            ContextualTopAppbar(
+                selectedEmailCount = 0,
+                onArchiveButtonClick = {},
+                onBackArrowClick = {},
+                onDeleteButtonClick = {},
+                onMarkAsUnReadButtonClick = {}
+            )
         }) {
         LazyColumn(modifier = Modifier.padding(it)) {
             items(3) { index ->

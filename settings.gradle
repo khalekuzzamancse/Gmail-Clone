@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Gmail Clone"
-include ':app'
+include ':ui_mobile'

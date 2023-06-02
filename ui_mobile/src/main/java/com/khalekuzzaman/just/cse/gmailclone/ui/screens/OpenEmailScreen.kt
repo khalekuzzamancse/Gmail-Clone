@@ -1,4 +1,4 @@
-package com.khalekuzzaman.just.cse.gmailclone.ui.screens.openemail
+package com.khalekuzzaman.just.cse.gmailclone.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

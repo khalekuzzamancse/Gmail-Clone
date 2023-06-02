@@ -10,11 +10,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerDestinations
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
-import com.khalekuzzaman.just.cse.gmailclone.ui.screens.allinbox.AllInboxScreen
-import com.khalekuzzaman.just.cse.gmailclone.ui.screens.compose_email.ComposeEmail
-import com.khalekuzzaman.just.cse.gmailclone.ui.screens.openemail.OpenEmail
+import com.khalekuzzaman.just.cse.gmailclone.ui.screens.CommonEmailListScreen
+import com.khalekuzzaman.just.cse.gmailclone.ui.screens.ComposeEmail
+import com.khalekuzzaman.just.cse.gmailclone.ui.screens.OpenEmail
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,15 +54,17 @@ fun ModalDrawerNavHost(
     ) {
 
         composable(DrawerDestinations.ALL_INBOXES) {
-            AllInboxScreen(
+            CommonEmailListScreen(
                 onNavigate = navigateTo,
                 closeDrawer = closeDrawer,
-                drawerState = drawerState,
                 openDrawer = openDrawer,
                 onFabClick = navigateToComposeEmail,
-                onEmailItemClick = navigateToOpenEmail
+                onEmailItemClick = navigateToOpenEmail,
+                drawerState = drawerState,
+                emails = FakeEmailList().getFakeEmails()
             )
         }
+
         composable(NonTopDestinations.COMPOSE_EMAIL) {
             ComposeEmail()
         }

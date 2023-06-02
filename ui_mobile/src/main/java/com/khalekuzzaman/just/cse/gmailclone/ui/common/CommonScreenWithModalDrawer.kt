@@ -29,8 +29,15 @@ fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
     drawerState: DrawerState,
     openDrawer: () -> Unit,
     onFabClick: () -> Unit,
+    shouldShowContextualTopAppbar: Boolean,
+    selectedEmailCount: Int,
+    onBackArrowClick: () -> Unit,
+    onArchiveButtonClick: () -> Unit,
+    onDeleteButtonClick: () -> Unit,
+    onMarkAsUnReadButtonClick: () -> Unit,
     screenContent: @Composable () -> Unit,
-) {
+
+    ) {
     ModalDrawer(
         modifier = modifier,
         drawerGroups = DrawerItemsProvider.drawerGroups,
@@ -42,7 +49,13 @@ fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
             modifier = Modifier.fillMaxSize(),
             screenContent = screenContent,
             openDrawer = openDrawer,
-            onFabClick = onFabClick
+            onFabClick = onFabClick,
+            selectedEmailCount = selectedEmailCount,
+            shouldShowContextualTopAppbar = shouldShowContextualTopAppbar,
+            onArchiveButtonClick = onArchiveButtonClick,
+            onBackArrowClick = onBackArrowClick,
+            onDeleteButtonClick = onDeleteButtonClick,
+            onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick
         )
     }
 
@@ -56,10 +69,13 @@ fun ScreenScaffold(
     screenContent: @Composable () -> Unit,
     openDrawer: () -> Unit,
     onFabClick: () -> Unit,
+    selectedEmailCount: Int,
+    shouldShowContextualTopAppbar: Boolean,
+    onBackArrowClick: () -> Unit,
+    onArchiveButtonClick: () -> Unit,
+    onDeleteButtonClick: () -> Unit,
+    onMarkAsUnReadButtonClick: () -> Unit,
 ) {
-    var selectedEmails by remember {
-        mutableStateOf(0)
-    }
 
     var shouldShowExpendedFab by remember {
         mutableStateOf((true))
@@ -78,14 +94,20 @@ fun ScreenScaffold(
 
         },
         topBar = {
-            if (selectedEmails <= 0)
+            if (shouldShowContextualTopAppbar) {
+                ContextualTopAppbar(
+                    selectedEmailCount = selectedEmailCount,
+                    onArchiveButtonClick = onArchiveButtonClick,
+                    onBackArrowClick = onBackArrowClick,
+                    onDeleteButtonClick = onDeleteButtonClick,
+                    onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick
+                )
+            } else {
                 CommonTopAppbar(
                     onNavigationIconClick = openDrawer
                 )
-            else
-                ContextualTopAppbar(
-                    selectedEmails = selectedEmails
-                )
+            }
+
         },
         bottomBar = {
             BottomNavigationBar(bottomNavigationItems)
@@ -115,8 +137,37 @@ private fun CommonScreenDemo1() {
         drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
         openDrawer = {},
         onFabClick = {},
-        screenContent = {}
-    )
+        shouldShowContextualTopAppbar = false,
+        selectedEmailCount = 0,
+        onArchiveButtonClick = {},
+        onBackArrowClick = {},
+        onDeleteButtonClick = {},
+        onMarkAsUnReadButtonClick = {}
+
+    ) {}
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview(
+    showBackground = true,
+    showSystemUi = true
+)
+private fun CommonScreenDemo3() {
+    CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
+        onNavigate = {},
+        closeDrawer = { /*TODO*/ },
+        drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+        openDrawer = {},
+        onFabClick = {},
+        shouldShowContextualTopAppbar = true,
+        selectedEmailCount = 0,
+        onArchiveButtonClick = {},
+        onBackArrowClick = {},
+        onDeleteButtonClick = {},
+        onMarkAsUnReadButtonClick = {}
+    ) {}
 
 }
 
@@ -133,6 +184,11 @@ private fun CommonScreenDemo2() {
         drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
         openDrawer = {},
         onFabClick = {},
-        screenContent = {}
-    )
+        shouldShowContextualTopAppbar = false,
+        selectedEmailCount = 0,
+        onArchiveButtonClick = {},
+        onBackArrowClick = {},
+        onDeleteButtonClick = {},
+        onMarkAsUnReadButtonClick = {}
+    ) {}
 }
