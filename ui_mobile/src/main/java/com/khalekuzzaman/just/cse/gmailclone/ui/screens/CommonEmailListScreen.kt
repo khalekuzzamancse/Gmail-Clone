@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.khalekuzzaman.just.cse.gmailclone.EmailList
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailList
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonScreenWithModalDrawerAndBottomNavigationAndFAB
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
@@ -74,7 +74,6 @@ fun CommonEmailListScreen(
             onChangeBookmark = { emailId ->
                 emails = BookmarkUpdater(emails).update(emailId)
             },
-            selectedEmailIds = selectedEmailIds,
             onEmailSelectedOrDeselected = { emailId ->
                 selectedEmailIds = if (selectedEmailIds.contains(emailId)) {
                     selectedEmailIds.minus(emailId)
@@ -83,7 +82,9 @@ fun CommonEmailListScreen(
                 }
                 onEmailSelectedCountChange(selectedEmailIds.size)
             },
-            onEmailItemClick = onEmailItemClick
+            selectedEmailIds = selectedEmailIds,
+            onEmailItemClick = onEmailItemClick,
+            highlightedText = ""
         )
 
     }

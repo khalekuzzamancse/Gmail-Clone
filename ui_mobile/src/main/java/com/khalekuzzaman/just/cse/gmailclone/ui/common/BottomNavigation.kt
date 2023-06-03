@@ -20,7 +20,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.khalekuzzaman.just.cse.gmailclone.EmailList
 import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
 import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
@@ -106,7 +105,6 @@ fun BottomNavigationDemo() {
                 onChangeBookmark = { emailId ->
                     emails = BookmarkUpdater(emails).update(emailId)
                 },
-                selectedEmailIds = selectedEmailIds,
                 onEmailSelectedOrDeselected = { emailId ->
                     selectedEmailIds = if (selectedEmailIds.contains(emailId)) {
                         selectedEmailIds.minus(emailId)
@@ -114,6 +112,8 @@ fun BottomNavigationDemo() {
                         selectedEmailIds.plus(emailId)
                     }
                 },
+                selectedEmailIds = selectedEmailIds,
+                highlightedText = "",
                 onEmailItemClick = {}
             )
         }

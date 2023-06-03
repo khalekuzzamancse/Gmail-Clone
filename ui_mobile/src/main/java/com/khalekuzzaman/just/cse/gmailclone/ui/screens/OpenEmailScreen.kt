@@ -43,7 +43,7 @@ import com.khalekuzzaman.just.cse.gmailclone.ui.common.BookmarkIcon
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonIconButton
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CustomIconButton
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.FormLayout
-import com.khalekuzzaman.just.cse.gmailclone.utils.UrlFinder
+import com.khalekuzzaman.just.cse.gmailclone.utils.TextFinder
 
 
 @Composable
@@ -107,7 +107,7 @@ private fun EmailBody(modifier: Modifier = Modifier, message: String) {
         val annotatedEmailString: AnnotatedString = buildAnnotatedString {
             var str = message
             append(str)
-            val urls = UrlFinder().findUrls(str)
+            val urls = TextFinder().findUrls(str)
             urls.forEach { pair ->
                 addStyle(
                     style = SpanStyle(

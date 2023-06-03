@@ -20,10 +20,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.R
+import com.khalekuzzaman.just.cse.gmailclone.utils.TextFinder
 import kotlin.random.Random
 
 
@@ -45,6 +51,7 @@ fun EmailItem(
     onLongClick: (itemID: Int) -> Unit = {},
     isSelected: Boolean = false,
     onEmailItemClick: (EmailModel) -> Unit,
+    highLightedText: String="",
     onChangeBookmark: (itemID: Int) -> Unit = {},
 ) {
 
@@ -81,16 +88,17 @@ fun EmailItem(
             ) {
                 TitleAndTime(
                     emailModel.userName,
-                    emailModel.timeOrDate
+                    emailModel.timeOrDate,
+                    highLightedText = highLightedText
                 )
                 MessageSubjectBookmark(
                     subject = emailModel.subject,
                     message = emailModel.message,
                     isBookMarked = emailModel.isBookMarked,
-                    onBookmarkIconClick = {
-                        onChangeBookmark(emailModel.emailid)
-                    },
-                )
+                    highLightedText = highLightedText,
+                ) {
+                    onChangeBookmark(emailModel.emailid)
+                }
 
             }
 
@@ -103,7 +111,7 @@ fun EmailItem(
 
 
 @Composable
-private fun TitleAndTime(title: String, time: String) {
+private fun TitleAndTime(title: String, time: String, highLightedText: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -111,7 +119,8 @@ private fun TitleAndTime(title: String, time: String) {
     ) {
         Title(
             modifier = Modifier.weight(1f),
-            title = title
+            title = title,
+            highLightedText = highLightedText
         )
         DateORTime(time = time)
     }
@@ -129,9 +138,9 @@ private fun DateORTime(modifier: Modifier = Modifier, time: String) {
 }
 
 @Composable
-private fun Title(modifier: Modifier = Modifier, title: String) {
+private fun Title(modifier: Modifier = Modifier, title: String, highLightedText: String) {
     Text(
-        text = title,
+        text = getHighLightedString(title, highLightedText),
         style = MaterialTheme.typography.titleMedium,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
@@ -148,6 +157,7 @@ private fun MessageSubjectBookmark(
     subject: String,
     message: String,
     isBookMarked: Boolean = false,
+    highLightedText: String,
     onBookmarkIconClick: () -> Unit = {},
 
     ) {
@@ -159,7 +169,8 @@ private fun MessageSubjectBookmark(
         SubjectAndMessage(
             modifier = Modifier.weight(1f),
             subject = subject,
-            message = message
+            message = message,
+            highLightedText = highLightedText
         )
         BookmarkIcon(isBookMarked = isBookMarked, onBookmarkIconClick = onBookmarkIconClick)
     }
@@ -168,19 +179,19 @@ private fun MessageSubjectBookmark(
 @Composable
 private fun SubjectAndMessage(
     modifier: Modifier = Modifier,
-    subject: String, message: String,
+    subject: String, message: String, highLightedText: String,
 ) {
     Column(modifier = modifier) {
-        Subject(subject = subject)
-        Message(message = message)
+        Subject(subject = subject, highLightedText = highLightedText)
+        Message(message = message, highLightedText = highLightedText)
     }
 }
 
 @Composable
-private fun Subject(modifier: Modifier = Modifier, subject: String) {
+private fun Subject(modifier: Modifier = Modifier, subject: String, highLightedText: String) {
     Text(
         modifier = modifier,
-        text = subject,
+        text = getHighLightedString(subject, highLightedText),
         style = MaterialTheme.typography.bodyLarge,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
@@ -188,16 +199,34 @@ private fun Subject(modifier: Modifier = Modifier, subject: String) {
 }
 
 @Composable
-private fun Message(modifier: Modifier = Modifier, message: String) {
+private fun Message(modifier: Modifier = Modifier, message: String, highLightedText: String) {
     Text(
         modifier = modifier,
-        text = message,
+        text = getHighLightedString(message, highLightedText),
         style = MaterialTheme.typography.bodyLarge,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis
     )
 }
 
+fun getHighLightedString(text: String, highLightedText: String): AnnotatedString {
+    val annotatedEmailString: AnnotatedString = buildAnnotatedString {
+        var str = text
+        append(str)
+        val urls = TextFinder().findText(text, highLightedText)
+        urls.forEach { pair ->
+            addStyle(
+                style = SpanStyle(
+                    background = Color.Yellow,
+                    textDecoration = TextDecoration.None
+                ),
+                start = pair.first,
+                end = pair.second + 1
+            )
+        }
+    }
+    return annotatedEmailString
+}
 
 @Composable
 private fun SelectedProfileImage(modifier: Modifier = Modifier) {
@@ -238,7 +267,7 @@ private fun SelectedImagePreview() {
 @Composable
 @Preview(showBackground = true)
 private fun TitlePreview() {
-    Title(title = "Md Khalekuzzaman")
+    Title(title = "Md Khalekuzzaman", highLightedText = "")
 }
 
 @Composable
@@ -250,19 +279,22 @@ private fun DateOrTimePreview() {
 @Composable
 @Preview(showBackground = true)
 private fun TitleAndDatePreview() {
-    TitleAndTime(title = "Md Khaleuzzaman", time = "13-03-23")
+    TitleAndTime(title = "Md Khaleuzzaman", time = "13-03-23", highLightedText = "")
 }
 
 @Composable
 @Preview(showBackground = true)
 private fun SubjectPreview() {
-    Subject(subject = "This is subject...")
+    Subject(subject = "This is subject...", highLightedText = "")
 }
 
 @Composable
 @Preview(showBackground = true)
 private fun MessagePreview() {
-    Message(message = "Dear,Md. Khalekuzzaman.How are you?,Assuming that your are fine and toaday is..")
+    Message(
+        message = "Dear,Md. Khalekuzzaman.How are you?,Assuming that your are fine and toaday is..",
+        highLightedText = "Md"
+    )
 }
 
 @Composable
@@ -270,7 +302,8 @@ private fun MessagePreview() {
 private fun SubjectAndMessagePreview() {
     SubjectAndMessage(
         subject = "Congratulation for cloning the gmail app,with jetpack compose",
-        message = "Dear,Md. Khalekuzzaman.How are you?,Assuming that your are fine and toaday is.."
+        message = "Dear,Md. Khalekuzzaman.How are you?,Assuming that your are fine and toaday is..",
+        highLightedText = ""
     )
 }
 
@@ -298,19 +331,26 @@ private fun EmailItemPreviews() {
             timeOrDate = "13-03-23",
             profileImageId = R.drawable.profile_image
         )
-        EmailItem(emailModel = email, onEmailItemClick = {})
+        EmailItem(emailModel = email,
+            onEmailItemClick = {},
+            highLightedText = "MD",
+        )
         EmailItem(
             emailModel = email.copy(emailid = Random.nextInt()),
+            isSelected = true,
             onEmailItemClick = {},
-            isSelected = true
+
         )
         EmailItem(
             emailModel = email.copy(emailid = Random.nextInt(), isBookMarked = true),
-            onEmailItemClick = {})
+            onEmailItemClick = {},
+
+        )
         EmailItem(
             emailModel = email.copy(emailid = Random.nextInt(), isBookMarked = true),
             isSelected = true,
-            onEmailItemClick = {}
+            onEmailItemClick = {},
+
         )
     }
 
