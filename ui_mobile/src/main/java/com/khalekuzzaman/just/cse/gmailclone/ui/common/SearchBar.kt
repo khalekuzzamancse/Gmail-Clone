@@ -1,5 +1,8 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
+import android.util.Log
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +30,7 @@ fun SearchBar(
     var active by remember {
         mutableStateOf(true)
     }
-    var emails by remember {
+    var filteredEmails by remember {
         mutableStateOf(emptyList<EmailModel>())
     }
 
@@ -37,7 +40,7 @@ fun SearchBar(
         query = queryText,
         onQueryChange = {
             queryText = it
-            emails = getSearchResult(queryText)
+            filteredEmails = getSearchResult(queryText)
 
         },
         onSearch = {
@@ -68,6 +71,7 @@ fun SearchBar(
                     resourceId = R.drawable.ic_close,
                     onClick = {
                         queryText = ""
+                        filteredEmails = emptyList()
                     }
                 )
             } else {
@@ -83,19 +87,20 @@ fun SearchBar(
         }
     ) {
         EmailList(
-            emails = emails,
-            onChangeBookmark = {},
-            onEmailSelectedOrDeselected = {},
-            selectedEmailIds = emptySet(),
-            highlightedText = queryText,
-            onEmailItemClick = {}
-        )
+            emails = filteredEmails,
+            onBookIconClick = {
 
+            },
+            onEmailClick = {
+
+            },
+            highlightedText = queryText
+        )
 
     }
 }
 
-fun getSearchResult(queryText: String): List<EmailModel> {
+private fun getSearchResult(queryText: String): List<EmailModel> {
     return (
             FakeEmailList().getFakeEmails().filter { email ->
                 email.userName.contains(queryText, ignoreCase = true) ||
