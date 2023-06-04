@@ -9,13 +9,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,12 +29,11 @@ import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.R
 import kotlin.random.Random
 
-
 @Composable
 fun EmailList(
     modifier: Modifier = Modifier,
     emails: List<EmailModel>,
-    onBookIconClick: (EmailModel) -> Unit,
+    onBookIconClick: (itemId:Int) -> Unit,
     onEmailClick: (EmailModel) -> Unit,
     highlightedText: String,
 ) {
@@ -43,13 +48,43 @@ fun EmailList(
                 },
                 highLightedText = highlightedText,
                 onChangeBookmark = {
-                    onBookIconClick(email)
+                    onBookIconClick(email.emailid)
                 }
             )
 
         }
     }
 }
+
+@Composable
+fun EmailList(
+    modifier: Modifier = Modifier,
+    emails: List<EmailModel>,
+    onChangeBookmark: (itemID: Int) -> Unit,
+    onEmailSelectedOrDeselected: (itemID: Int) -> Unit,
+    selectedEmailIds: Set<Int>,
+    onEmailItemClick: (EmailModel) -> Unit,
+) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        items(items = emails, key = { it.emailid }) { email ->
+            EmailItem(
+                email = email,
+                onLongClick = {
+                    onEmailSelectedOrDeselected(email.emailid)
+                },
+                isSelected = selectedEmailIds.contains(email.emailid),
+                onEmailItemClick = { onEmailItemClick(email) },
+                onChangeBookmark = {
+                    onChangeBookmark(email.emailid)
+                }
+            )
+
+        }
+    }
+}
+
 
 /*
 The responsibility of the EmailItem() compose:
@@ -90,6 +125,173 @@ so Basically it will layout the email component,so it  has the
 reposibility to layout,if the layout need to change then only this function
 needed to change
  */
+
+@Composable
+fun EmailItem(
+    modifier: Modifier = Modifier,
+    email: EmailModel,
+    onLongClick: () -> Unit,
+    isSelected: Boolean,
+    onEmailItemClick: () -> Unit,
+    onChangeBookmark: () -> Unit,
+) {
+    EmailItemWithoutHighLight(
+        modifier = modifier,
+        userName = email.userName,
+        subject = email.subject,
+        message = email.message,
+        onEmailItemClick = onEmailItemClick,
+        onChangeBookmark = onChangeBookmark,
+        isBookmarked = email.isBookMarked,
+        timeOrDate = email.timeOrDate,
+        isSelected = isSelected,
+        onLongClick = onLongClick
+    )
+
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun EmailItemWithoutHighLightPreviews() {
+    Column() {
+        val email = EmailModel(
+            emailid = Random.nextInt(),
+            userName = "Md Khalekuzzaman",
+            subject = "This the subjct of the email,that will be used for testing purpose",
+            message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
+                    " and the other tool.",
+            isBookMarked = false,
+            timeOrDate = "13-03-23",
+            profileImageId = R.drawable.profile_image
+        )
+        EmailItem(
+            email = email,
+            onLongClick = {},
+            onChangeBookmark = {},
+            onEmailItemClick = {},
+            isSelected = false
+        )
+        EmailItem(
+            email = email.copy(emailid = Random.nextInt()),
+            onLongClick = {},
+            onChangeBookmark = {},
+            onEmailItemClick = {},
+            isSelected = true
+        )
+        EmailItem(
+            email = email.copy(
+                emailid = Random.nextInt(),
+                isBookMarked = true
+            ),
+            onLongClick = {},
+            onChangeBookmark = {},
+            onEmailItemClick = {},
+            isSelected = false
+        )
+        EmailItem(
+            email = email.copy(
+                emailid = Random.nextInt(),
+                isBookMarked = true
+            ),
+            onLongClick = {},
+            onChangeBookmark = {},
+            onEmailItemClick = {},
+            isSelected = true
+        )
+    }
+
+}
+
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun EmailItemWithoutHighLight(
+    modifier: Modifier = Modifier,
+    userName: String,
+    subject: String,
+    message: String,
+    onLongClick: () -> Unit,
+    isSelected: Boolean,
+    onEmailItemClick: () -> Unit,
+    onChangeBookmark: () -> Unit,
+    isBookmarked: Boolean,
+    timeOrDate: String,
+) {
+    Box(modifier = modifier
+        .padding(10.dp)
+        .fillMaxWidth()
+        .combinedClickable(
+            onClick = {
+                onEmailItemClick()
+            },
+            onLongClick = {
+                onLongClick()
+            }
+        )
+        .background(
+            if (isSelected) MaterialTheme.colorScheme.primaryContainer
+            else MaterialTheme.colorScheme.surface,
+            shape = MaterialTheme.shapes.small
+        )) {
+        val margin = 10.dp
+        Row(
+            modifier = Modifier.padding(margin)
+        ) {
+            //
+
+            if (isSelected) {
+                SelectedProfileImage()
+            } else {
+                ProfileImage(drawableResource = R.drawable.profile_image)
+            }
+
+            Column(
+                modifier = Modifier.padding(start = 8.dp)
+            ) {
+
+
+                val userNameWithoutHighLight = AnnotatedString(userName)
+                val subjectWithoutHighLight = AnnotatedString(subject)
+                val messageWithoutHighLight = AnnotatedString(message)
+                TitleAndTime(
+                    userNameWithoutHighLight,
+                    timeOrDate,
+                )
+                MessageSubjectBookmark(
+                    subject = subjectWithoutHighLight,
+                    message = messageWithoutHighLight,
+                    isBookMarked = isBookmarked,
+                ) {
+                    onChangeBookmark()
+                }
+
+            }
+
+
+        }
+    }
+
+}
+
+@Composable
+private fun SelectedProfileImage(modifier: Modifier = Modifier) {
+    Box(
+        modifier
+            .size(40.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.primary)
+    ) {
+        Icon(
+            Icons.Default.Check,
+            contentDescription = null,
+            modifier = Modifier
+                .size(24.dp)
+                .align(Alignment.Center),
+            tint = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EmailItemWithHighLight(
@@ -335,7 +537,7 @@ private fun EmailItemHightLightPreviews() {
                 "using jetpack compose" +
                 " and the other tool.", "md"
     )
-    val timeOrDate = "13-04-23";
+    val timeOrDate = "13-04-23"
 
     /*
     ------------
