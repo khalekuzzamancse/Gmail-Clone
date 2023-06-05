@@ -41,7 +41,7 @@ fun EmailList(
 }
 
 @Composable
-fun EmailListUsingSlotEmailItemDemo(){
+fun EmailListUsingSlotEmailItemDemo() {
     EmailListUsingSlotEmailItem(
         emails = FakeEmailList().getFakeEmails(),
         onChangeBookmark = {},
@@ -50,6 +50,7 @@ fun EmailListUsingSlotEmailItemDemo(){
         onEmailItemClick = {}
     )
 }
+
 @Composable
 fun EmailListUsingSlotEmailItem(
     modifier: Modifier = Modifier,
@@ -63,6 +64,7 @@ fun EmailListUsingSlotEmailItem(
         modifier = modifier
     ) {
         items(items = emails, key = { it.emailid }) { email ->
+
             EmailItem(
                 userName = email.userName,
                 subject = email.subject,
@@ -71,15 +73,19 @@ fun EmailListUsingSlotEmailItem(
                 isBookmarked = false,
                 isSelected = false,
                 onClick = {
+                    onEmailItemClick(email)
                     Log.i("onClickExecuted:", "SingleClick${email.emailid}")
                 },
                 onLongClick = {
+                    onEmailSelectedOrDeselected(email.emailid)
                     Log.i("onClickExecuted:", "LongClick${email.emailid}")
                 },
                 onProfileImageClick = {
+                    onEmailSelectedOrDeselected(email.emailid)
                     Log.i("onClickExecuted:", "ProfileImageClick${email.emailid}")
                 },
                 onBookmarkIconClick = {
+                    onChangeBookmark(email.emailid)
                     Log.i("onClickExecuted:", "onBookmarkClick${email.emailid}")
                 },
 
