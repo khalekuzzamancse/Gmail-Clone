@@ -14,7 +14,7 @@ updated
  */
 
 @Composable
-fun EmailList(
+fun EmailListForSearchResult(
     modifier: Modifier = Modifier,
     emails: List<EmailModel>,
     onBookIconClick: (itemId: Int) -> Unit,
@@ -25,15 +25,22 @@ fun EmailList(
         modifier = modifier
     ) {
         items(items = emails, key = { it.emailid }) { email ->
-            EmailItem(
-                email = email,
-                onEmailItemClick = {
+
+            EmailItemForSearchList(
+                userName = email.userName,
+                subject = email.subject,
+                message = email.message,
+                onClick = {
                     onEmailClick(email)
+                    Log.i("onClickExecuted:", "SingleClick")
                 },
-                highLightedText = highlightedText,
-                onChangeBookmark = {
+                searchedText = highlightedText,
+                onBookmarkIconClick = {
                     onBookIconClick(email.emailid)
-                }
+                    Log.i("onClickExecuted:", "onBookmarkClick")
+                },
+                isBookmarked = email.isBookMarked,
+                timeOrDate = email.timeOrDate,
             )
 
         }
@@ -42,7 +49,7 @@ fun EmailList(
 
 @Composable
 fun EmailListUsingSlotEmailItemDemo() {
-    EmailListUsingSlotEmailItem(
+    EmailListForSearchResult(
         emails = FakeEmailList().getFakeEmails(),
         onChangeBookmark = {},
         onEmailSelectedOrDeselected = {},
@@ -52,7 +59,7 @@ fun EmailListUsingSlotEmailItemDemo() {
 }
 
 @Composable
-fun EmailListUsingSlotEmailItem(
+fun EmailList(
     modifier: Modifier = Modifier,
     emails: List<EmailModel>,
     onChangeBookmark: (itemID: Int) -> Unit,
@@ -64,29 +71,26 @@ fun EmailListUsingSlotEmailItem(
         modifier = modifier
     ) {
         items(items = emails, key = { it.emailid }) { email ->
+            val isSelected= selectedEmailIds.contains(email.emailid)
 
             EmailItem(
                 userName = email.userName,
                 subject = email.subject,
                 message = email.message,
                 timeOrDate = email.timeOrDate,
-                isBookmarked = false,
-                isSelected = false,
+                isBookmarked = email.isBookMarked,
+                isSelected = isSelected,
                 onClick = {
                     onEmailItemClick(email)
-                    Log.i("onClickExecuted:", "SingleClick${email.emailid}")
                 },
                 onLongClick = {
                     onEmailSelectedOrDeselected(email.emailid)
-                    Log.i("onClickExecuted:", "LongClick${email.emailid}")
                 },
                 onProfileImageClick = {
                     onEmailSelectedOrDeselected(email.emailid)
-                    Log.i("onClickExecuted:", "ProfileImageClick${email.emailid}")
                 },
                 onBookmarkIconClick = {
                     onChangeBookmark(email.emailid)
-                    Log.i("onClickExecuted:", "onBookmarkClick${email.emailid}")
                 },
 
                 )
@@ -96,41 +100,13 @@ fun EmailListUsingSlotEmailItem(
 }
 
 
-@Composable
-fun EmailList(
-    modifier: Modifier = Modifier,
-    emails: List<EmailModel>,
-    onChangeBookmark: (itemID: Int) -> Unit,
-    onEmailSelectedOrDeselected: (itemID: Int) -> Unit,
-    selectedEmailIds: Set<Int>,
-    onEmailItemClick: (EmailModel) -> Unit,
-) {
-    LazyColumn(
-        modifier = modifier
-    ) {
-        items(items = emails, key = { it.emailid }) { email ->
-            EmailItem(
-                email = email,
-                onLongClick = {
-                    onEmailSelectedOrDeselected(email.emailid)
-                },
-                isSelected = selectedEmailIds.contains(email.emailid),
-                onEmailItemClick = { onEmailItemClick(email) },
-                onChangeBookmark = {
-                    onChangeBookmark(email.emailid)
-                }
-            )
-
-        }
-    }
-}
 
 
 /*
 
  */
 @Composable
-fun EmailList(
+fun EmailListForSearchResult(
     modifier: Modifier = Modifier,
     emails: List<EmailModel>,
     onChangeBookmark: (itemID: Int) -> Unit,
@@ -162,12 +138,5 @@ fun EmailList(
 @Composable
 @Preview(showBackground = true)
 private fun EmailListPreview() {
-    EmailList(
-        emails = FakeEmailList().getFakeEmails(),
-        onChangeBookmark = {},
-        onEmailSelectedOrDeselected = {},
-        selectedEmailIds = emptySet(),
-        highlightedText = "a",
-        onEmailItemClick = {}
-    )
+    EmailListUsingSlotEmailItemDemo()
 }

@@ -100,7 +100,7 @@ fun BottomNavigationDemo() {
             var selectedEmailIds by remember {
                 mutableStateOf(emptySet<Int>())
             }
-            EmailList(
+            EmailListForSearchResult(
                 emails = emails,
                 onChangeBookmark = { emailId ->
                     emails = BookmarkUpdater(emails).update(emailId)
