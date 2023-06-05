@@ -7,6 +7,80 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
 
+/*
+updated
+
+ */
+@Composable
+fun EmailList(
+    modifier: Modifier = Modifier,
+    emails: List<EmailModel>,
+    onBookIconClick: (itemId:Int) -> Unit,
+    onEmailClick: (EmailModel) -> Unit,
+    highlightedText: String,
+) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        items(items = emails, key = { it.emailid }) { email ->
+            EmailItem(
+                email = email,
+                onEmailItemClick = {
+                    onEmailClick(email)
+                },
+                highLightedText = highlightedText,
+                onChangeBookmark = {
+                    onBookIconClick(email.emailid)
+                }
+            )
+
+        }
+    }
+}
+
+@Composable
+fun EmailList(
+    modifier: Modifier = Modifier,
+    emails: List<EmailModel>,
+    onChangeBookmark: (itemID: Int) -> Unit,
+    onEmailSelectedOrDeselected: (itemID: Int) -> Unit,
+    selectedEmailIds: Set<Int>,
+    onEmailItemClick: (EmailModel) -> Unit,
+) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        items(items = emails, key = { it.emailid }) { email ->
+            EmailItem(
+                email = email,
+                onLongClick = {
+                    onEmailSelectedOrDeselected(email.emailid)
+                },
+                isSelected = selectedEmailIds.contains(email.emailid),
+                onEmailItemClick = { onEmailItemClick(email) },
+                onChangeBookmark = {
+                    onChangeBookmark(email.emailid)
+                }
+            )
+
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+ */
 @Composable
 fun EmailList(
     modifier: Modifier = Modifier,

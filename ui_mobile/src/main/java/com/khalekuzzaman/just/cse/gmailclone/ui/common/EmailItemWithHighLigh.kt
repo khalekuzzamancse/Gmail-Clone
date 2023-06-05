@@ -5,13 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -28,62 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.R
 import kotlin.random.Random
-
-@Composable
-fun EmailList(
-    modifier: Modifier = Modifier,
-    emails: List<EmailModel>,
-    onBookIconClick: (itemId:Int) -> Unit,
-    onEmailClick: (EmailModel) -> Unit,
-    highlightedText: String,
-) {
-    LazyColumn(
-        modifier = modifier
-    ) {
-        items(items = emails, key = { it.emailid }) { email ->
-            EmailItem(
-                email = email,
-                onEmailItemClick = {
-                    onEmailClick(email)
-                },
-                highLightedText = highlightedText,
-                onChangeBookmark = {
-                    onBookIconClick(email.emailid)
-                }
-            )
-
-        }
-    }
-}
-
-@Composable
-fun EmailList(
-    modifier: Modifier = Modifier,
-    emails: List<EmailModel>,
-    onChangeBookmark: (itemID: Int) -> Unit,
-    onEmailSelectedOrDeselected: (itemID: Int) -> Unit,
-    selectedEmailIds: Set<Int>,
-    onEmailItemClick: (EmailModel) -> Unit,
-) {
-    LazyColumn(
-        modifier = modifier
-    ) {
-        items(items = emails, key = { it.emailid }) { email ->
-            EmailItem(
-                email = email,
-                onLongClick = {
-                    onEmailSelectedOrDeselected(email.emailid)
-                },
-                isSelected = selectedEmailIds.contains(email.emailid),
-                onEmailItemClick = { onEmailItemClick(email) },
-                onChangeBookmark = {
-                    onChangeBookmark(email.emailid)
-                }
-            )
-
-        }
-    }
-}
 
 
 /*
@@ -150,6 +94,7 @@ fun EmailItem(
 
 }
 
+
 @Composable
 @Preview(showBackground = true)
 private fun EmailItemWithoutHighLightPreviews() {
@@ -199,6 +144,107 @@ private fun EmailItemWithoutHighLightPreviews() {
             isSelected = true
         )
     }
+
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun EmailItemSlotsPreview() {
+
+
+    Row() {
+        ProfileImage(
+            drawableResource = R.drawable.profile_image
+        )
+        Column() {
+            UserNameAndTimeSlot(
+                userName = {
+                    Text(
+                        text = "Md Khalekuzzaman",
+                        style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                },
+                timeStamp = {
+                    Text(
+                        text = "05 June 2023",
+                        style = MaterialTheme.typography.labelSmall,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            )
+            MessageAndSubjectSlot(
+                subject = {
+                    Text(
+                        text = "Subject:Slot API testing for gmail clone application so that we can use later",
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+
+                        )
+                },
+                message = {
+                    Text(
+                        text = "Congratuals,Md Khalekuzzaman this the first gmail clone project and in this project we are going to use",
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            )
+        }
+    }
+
+
+}
+
+@Composable
+fun UserNameAndTimeSlot(
+    userName: @Composable BoxScope.() -> Unit,
+    timeStamp: @Composable () -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Box(
+            modifier = Modifier.weight(1f),
+            content = userName
+        )
+        timeStamp()
+    }
+
+}
+
+@Composable
+fun MessageAndSubjectSlot(
+    subject: @Composable () -> Unit,
+    message: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Column(
+
+            modifier = modifier
+                .fillMaxWidth()
+                .weight(1f),
+        ) {
+            message()
+            subject()
+        }
+        BookmarkIcon(
+            isBookMarked = false,
+            onBookmarkIconClick = { })
+    }
+
 
 }
 
@@ -273,6 +319,7 @@ fun EmailItemWithoutHighLight(
 
 }
 
+
 @Composable
 private fun SelectedProfileImage(modifier: Modifier = Modifier) {
     Box(
@@ -340,7 +387,6 @@ fun EmailItemWithHighLight(
                 }
             }
 
-
         }
     }
 
@@ -406,7 +452,10 @@ private fun MessageSubjectBookmark(
             subject = subject,
             message = message,
         )
-        BookmarkIcon(isBookMarked = isBookMarked, onBookmarkIconClick = onBookmarkIconClick)
+        BookmarkIcon(
+            isBookMarked = isBookMarked,
+            onBookmarkIconClick = onBookmarkIconClick
+        )
     }
 }
 
