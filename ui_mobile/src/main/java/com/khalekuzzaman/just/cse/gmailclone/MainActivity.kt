@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonTopAppbar
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.ContextualTopAppbar
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailItemDemo
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 import com.khalekuzzaman.just.cse.gmailclone.ui.navigation.ModalDrawerNavHost
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
@@ -26,7 +27,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GmailCloneTheme {
-                ModalDrawerNavHost()
+               // ModalDrawerNavHost()
+                EmailItemDemo()
             }
         }
 
