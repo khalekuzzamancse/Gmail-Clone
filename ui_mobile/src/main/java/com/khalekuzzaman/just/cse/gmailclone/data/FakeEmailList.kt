@@ -8,7 +8,7 @@ class FakeEmailList {
         val list: MutableList<EmailModel> = mutableListOf()
         for (i in 1..10) {
             val email = EmailModel(
-                emailid = i,
+                emailId = i,
                 userName = "Md Khalekuzzaman : $i",
                 subject = "This the subjct of the email,that will be used for testing purpose",
                 message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +

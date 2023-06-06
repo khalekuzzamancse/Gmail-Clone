@@ -24,7 +24,7 @@ fun EmailListForSearchResult(
     LazyColumn(
         modifier = modifier
     ) {
-        items(items = emails, key = { it.emailid }) { email ->
+        items(items = emails, key = { it.emailId }) { email ->
 
             EmailItemForSearchList(
                 userName = email.userName,
@@ -36,7 +36,7 @@ fun EmailListForSearchResult(
                 },
                 searchedText = highlightedText,
                 onBookmarkIconClick = {
-                    onBookIconClick(email.emailid)
+                    onBookIconClick(email.emailId)
                     Log.i("onClickExecuted:", "onBookmarkClick")
                 },
                 isBookmarked = email.isBookMarked,
@@ -70,8 +70,8 @@ fun EmailList(
     LazyColumn(
         modifier = modifier
     ) {
-        items(items = emails, key = { it.emailid }) { email ->
-            val isSelected= selectedEmailIds.contains(email.emailid)
+        items(items = emails, key = { it.emailId }) { email ->
+            val isSelected= selectedEmailIds.contains(email.emailId)
 
             EmailItem(
                 userName = email.userName,
@@ -84,13 +84,13 @@ fun EmailList(
                     onEmailItemClick(email)
                 },
                 onLongClick = {
-                    onEmailSelectedOrDeselected(email.emailid)
+                    onEmailSelectedOrDeselected(email.emailId)
                 },
                 onProfileImageClick = {
-                    onEmailSelectedOrDeselected(email.emailid)
+                    onEmailSelectedOrDeselected(email.emailId)
                 },
                 onBookmarkIconClick = {
-                    onChangeBookmark(email.emailid)
+                    onChangeBookmark(email.emailId)
                 },
 
                 )
@@ -118,11 +118,11 @@ fun EmailListForSearchResult(
     LazyColumn(
         modifier = modifier
     ) {
-        items(items = emails, key = { it.emailid }) { email ->
+        items(items = emails, key = { it.emailId }) { email ->
             EmailItem(
                 emailModel = email,
                 onLongClick = onEmailSelectedOrDeselected,
-                isSelected = selectedEmailIds.contains(email.emailid),
+                isSelected = selectedEmailIds.contains(email.emailId),
                 onEmailItemClick = onEmailItemClick,
                 highLightedText = highlightedText,
                 onChangeBookmark = onChangeBookmark

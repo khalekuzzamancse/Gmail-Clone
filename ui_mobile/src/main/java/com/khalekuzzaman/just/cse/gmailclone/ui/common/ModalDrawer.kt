@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -31,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.R
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
 fun ModalDrawer(
@@ -41,7 +39,7 @@ fun ModalDrawer(
     //so that no one can add or remove item from it
     //also mark it as stable or immutable so  that
     //compose compiler can optimize it
-    onNavigate: (navigateTo: String) -> Unit,
+    onDrawerItemClick: (navigateTo: String) -> Unit,
     drawerState: DrawerState,
     closeDrawer: () -> Unit,
     content: @Composable () -> Unit,
@@ -59,7 +57,7 @@ fun ModalDrawer(
             DrawerContent(
                 modifier = Modifier.width(drawerWidth),
                 drawerGroups,
-                onNavigate = onNavigate,
+                onNavigate = onDrawerItemClick,
                 closeDrawer = closeDrawer,
             )
         }) {
@@ -67,7 +65,6 @@ fun ModalDrawer(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DrawerContent(
     modifier: Modifier = Modifier,
@@ -80,7 +77,7 @@ private fun DrawerContent(
         modifier = modifier.verticalScroll(scrollState)
     ) {
 
-        val firstGroupFirstItem = drawerGroups[0].items[0];
+        val firstGroupFirstItem = drawerGroups[0].items[0]
         val selectedItem = remember { mutableStateOf(firstGroupFirstItem) }
         drawerGroups.forEach { group ->
             val items = group.items
@@ -138,13 +135,12 @@ private fun DisplayDivider() {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 private fun ModalDrawerPreview() {
     ModalDrawer(
         drawerGroups = DrawerItemsProvider.drawerGroups,
-        onNavigate = {},
+        onDrawerItemClick = {},
         drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
         closeDrawer = {},
         modifier = Modifier

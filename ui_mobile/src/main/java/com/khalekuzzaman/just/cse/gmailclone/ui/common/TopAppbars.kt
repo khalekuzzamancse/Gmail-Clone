@@ -3,9 +3,16 @@ package com.khalekuzzaman.just.cse.gmailclone.ui.common
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -15,11 +22,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -27,15 +38,24 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -44,14 +64,13 @@ import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.R
 import kotlin.math.roundToInt
 
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppbarM3_01() {
 
     var moveAppbarVerticallyBy by remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
     val collapsableToolbarState =
         CollapsableToolbarState(density = LocalDensity.current) { y ->
@@ -82,97 +101,9 @@ fun TopAppbarM3_01() {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-
-@Composable
-fun CommonTopAppbar(
-    onNavigationIconClick: () -> Unit,
-    onSearchOpenerClick: () -> Unit
-) {
-
-    CollapseAbleTopAppbar(
-        onNavigationIconClick = onNavigationIconClick
-    ){
-
-       Text(
-           modifier = Modifier
-               .wrapContentWidth()
-               .weight(1f).clickable {
-               onSearchOpenerClick()
-           },
-           text = "Search in emails")
-        ProfileImage(
-            modifier = Modifier.wrapContentWidth(),
-            drawableResource = R.drawable.profile_image
-        )
-    }
-
-}
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CollapseAbleTopAppbar(
-    modifier: Modifier = Modifier,
-    title: String? = null,
-    moveAppbarVerticallyBy: Int = 0,
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-    onNavigationIconClick: () -> Unit,
-    actions: @Composable() (RowScope.() -> Unit) = {},
-) {
 
-    TopAppBar(
-        modifier = modifier
-            .offset { IntOffset(x = 0, y = moveAppbarVerticallyBy) },
-        title = {
-            title?.let { text ->
-                Text(text)
-            }
-        },
-        actions = actions,
-        navigationIcon = {
-            IconButton(onClick = { onNavigationIconClick() }) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = null)
-            }
-        },
-        scrollBehavior = scrollBehavior,
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
-        )
-
-    )
-}
-
-
-///
-class CollapsableToolbarState(
-    density: Density,
-    private val onToolbarOffsetChanged: (Int) -> Unit,
-) {
-    private val toolbarHeight: Dp = 48.dp
-    private var toolbarHeightPx: Float
-    var toolbarOffsetHeightPx = 0f
-        private set(value) {
-            field = value
-            onToolbarOffsetChanged(value.roundToInt()) // Call the callback whenever the value changes
-        }
-
-    init {
-        toolbarHeightPx = with(density) {
-            toolbarHeight.roundToPx().toFloat()
-        }
-    }
-
-    val nestedScrollConnection: NestedScrollConnection
-        get() = object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val delta = available.y
-                val newOffset = toolbarOffsetHeightPx + delta
-                toolbarOffsetHeightPx = newOffset.coerceIn(-toolbarHeightPx, 0f)
-                return Offset.Zero
-            }
-        }
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -234,7 +165,7 @@ private fun ContextualTopAppbarPreview() {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 @Preview(showBackground = false)
 private fun ContextualTopAppbarPreview2() {
@@ -262,39 +193,6 @@ private fun ContextualTopAppbarPreview2() {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-@Preview(showBackground = true)
-private fun CollapsableTopAppbarPreview() {
-    //CollapseAbleTopAppbar()
-    TopAppbarM3_01()
-}
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-@Preview(showBackground = true)
-private fun CommonTopAppbarPreview() {
-    CommonTopAppbar({},  onSearchOpenerClick = {})
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-@Preview(showBackground = true)
-private fun CommonTopAppbarPreview2() {
-    Scaffold(
-        topBar = {
-            CommonTopAppbar({}, onSearchOpenerClick = {})
-        }) {
-        LazyColumn(modifier = Modifier.padding(it)) {
-            items(10) { index ->
-                Text(
-                    "I'm item $index", modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                )
-            }
-        }
-    }
 
-}

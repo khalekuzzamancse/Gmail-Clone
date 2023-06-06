@@ -16,7 +16,7 @@ class BookmarkUpdater(private val emails: List<EmailModel>) {
     }
 
     private fun getEmailPositionById(emailId: Int): Int {
-        return emails.indexOfFirst { it.emailid == emailId }
+        return emails.indexOfFirst { it.emailId == emailId }
     }
 
     private fun updateEmailAtPosition(updatedEmail: EmailModel, position: Int) {

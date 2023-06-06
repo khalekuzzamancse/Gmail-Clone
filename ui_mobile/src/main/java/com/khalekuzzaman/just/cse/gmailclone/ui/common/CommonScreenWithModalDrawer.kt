@@ -1,25 +1,128 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerItemsProvider.drawerGroups
 import com.khalekuzzaman.just.cse.gmailclone.utils.CustomNestedScrollConnection
 import com.khalekuzzaman.just.cse.gmailclone.utils.ScrollDirection
+import kotlinx.coroutines.launch
+
+
+/*
+1.0 It will decide which pass to send to the CommonScreenWithModalDrawer()
+1.1 Based on situation it will pass different type of content
+1.2 Since it the owner of the content it will handle the content
+
+2.0:It does not and need not how to place content
+
+ */
+@Composable
+fun CommonScreenWithModalDrawerDemo() {
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val coroutineScope = rememberCoroutineScope()
+    val openDrawer: () -> Unit = {
+        coroutineScope.launch { drawerState.open() }
+    }
+    val closeDrawer: () -> Unit = {
+        coroutineScope.launch { drawerState.close() }
+    }
+
+    CommonScreenWithModalDrawer(
+        topAppbar = {
+
+        },
+        bottomBar = { BottomNavigationBar(bottomNavigationItems) },
+        onDrawerItemClick = {
+            Log.i("Clicked:DrawerItem", it)
+        },
+        closeDrawer = closeDrawer,
+        drawerState = drawerState
+    ) {
+
+    }
+
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun CommonScreenWithModalDrawerDemoPreview() {
+    CommonScreenWithModalDrawerDemo()
+}
+
+/*
+CommonScreenWithModalDrawer():
+1.it just provide the  drawer and place the passing content,
+2.It does not and need not know how to handle the content(except the drawer)
+3.It need not and does not contain and maintain any state
+
+Explanation:
+pass the handler for the drawer because It has built in drawer positioned
+It will just know how to handle the drawer and place the passed content
+   to the appropriate position,
+It does not and need know how to handle the passed control.
+    while passing the content,use the appropriate handler to them.
+
+
+
+ */
+@Composable
+fun CommonScreenWithModalDrawer(
+    modifier: Modifier = Modifier,
+    topAppbar: @Composable () -> Unit,
+    bottomBar: @Composable () -> Unit,
+    onDrawerItemClick: (navigateTo: String) -> Unit,
+    closeDrawer: () -> Unit,
+    drawerState: DrawerState,
+    fab: @Composable () -> Unit = {},
+    fabPosition: FabPosition = FabPosition.End,
+    screenContent: @Composable () -> Unit,
+) {
+    ModalDrawer(
+        modifier = modifier,
+        drawerGroups = drawerGroups,
+        onDrawerItemClick = onDrawerItemClick,
+        closeDrawer = closeDrawer,
+        drawerState = drawerState,
+    ) {
+        Scaffold(
+            topBar = topAppbar,
+            bottomBar = bottomBar,
+            floatingActionButton = fab,
+            floatingActionButtonPosition = fabPosition
+
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
+            ) {
+                screenContent()
+            }
+        }
+    }
+
+
+}
+
 
 @Composable
 fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
@@ -40,8 +143,8 @@ fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
     ) {
     ModalDrawer(
         modifier = modifier,
-        drawerGroups = DrawerItemsProvider.drawerGroups,
-        onNavigate = onNavigate,
+        drawerGroups = drawerGroups,
+        onDrawerItemClick = onNavigate,
         closeDrawer = closeDrawer,
         drawerState = drawerState,
     ) {
@@ -75,8 +178,7 @@ fun ScreenScaffold(
     onDeleteButtonClick: () -> Unit,
     onMarkAsUnReadButtonClick: () -> Unit,
 ) {
-    Box(
-    ) {
+    Box {
 
         var shouldShowExpendedFab by remember {
             mutableStateOf((true))
@@ -117,12 +219,7 @@ fun ScreenScaffold(
                         onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick
                     )
                 } else {
-                    CommonTopAppbar(
-                        onNavigationIconClick = openDrawer,
-                        onSearchOpenerClick = {
-                            showSearchBar = true
-                        }
-                    )
+
                 }
 
             },
@@ -165,7 +262,6 @@ private fun CommonScreenDemo1() {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(
     showBackground = true,
@@ -188,7 +284,6 @@ private fun CommonScreenDemo3() {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(
     showBackground = true,
