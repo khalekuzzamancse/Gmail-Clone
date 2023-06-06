@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -20,7 +19,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -80,7 +78,7 @@ fun ListScreenTopAppbarDemo() {
             .nestedScroll(collapsableToolbarState.nestedScrollConnection),
         topBar = {
 
-            ListScreensTopAppbarSlot(
+            CommonTopAppbarForListScreen(
                 profileImageResourceId = R.drawable.ic_profile_2,
                 moveAppbarVerticallyBy = moveAppbarVerticallyBy,
                 onNavigationIconClick = {},
@@ -209,7 +207,7 @@ the click the caller function can take any action that it want.
  */
 
 @Composable
-fun ListScreensTopAppbarSlot(
+fun CommonTopAppbarForListScreen(
     modifier: Modifier = Modifier,
     onNavigationIconClick: () -> Unit,
     onSearchTextClick: () -> Unit,
