@@ -1,6 +1,7 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -80,7 +81,11 @@ fun ListScreenTopAppbarDemo() {
         topBar = {
 
             ListScreensTopAppbarSlot(
-                moveAppbarVerticallyBy = moveAppbarVerticallyBy
+                profileImageResourceId = R.drawable.ic_profile_2,
+                moveAppbarVerticallyBy = moveAppbarVerticallyBy,
+                onNavigationIconClick = {},
+                onProfileIconClick = {},
+                onSearchTextClick = {}
             )
         }) {
         LazyColumn(modifier = Modifier) {
@@ -191,12 +196,25 @@ Because of the limitation of the top app bar we are going to create our own top 
 the material 3 top appbar size,color,..etc,you can look the material 3 documentation of the measurement
 and themes that we are using in this customTop app bar'
 
+This top bar do:
+It take the profile Image and  show it appropriate position.
+It has:
+Navigation Icon
+Search Text
+Profile Image
 
+Main Responsibility of this function to just notify it caller function that
+navigation icon,search text or profile icon is clicked then against
+the click the caller function can take any action that it want.
  */
 
 @Composable
 fun ListScreensTopAppbarSlot(
     modifier: Modifier = Modifier,
+    onNavigationIconClick: () -> Unit,
+    onSearchTextClick: () -> Unit,
+    onProfileIconClick: () -> Unit,
+    profileImageResourceId: Int,
     moveAppbarVerticallyBy: Int = 0,
 ) {
     Surface(
@@ -204,9 +222,11 @@ fun ListScreensTopAppbarSlot(
             .height(64.dp)
             .offset { IntOffset(x = 0, y = moveAppbarVerticallyBy) }
     ) {
-        val margin=8.dp
+        val margin = 8.dp
         Card(
-            modifier=Modifier.padding(margin).height(48.dp)
+            modifier = Modifier
+                .padding(margin)
+                .height(48.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -215,26 +235,33 @@ fun ListScreensTopAppbarSlot(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                IconButton(modifier = Modifier
-                    .padding(start = 16.dp, end = 8.dp)
-                    .size(48.dp),
-                    onClick = { /*TODO*/ }) {
+                IconButton(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 8.dp)
+                        .size(48.dp),
+                    onClick = onNavigationIconClick
+                ) {
                     Icon(
                         imageVector = Icons.Default.Menu,
                         contentDescription = ""
                     )
                 }
                 Text(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable {
+                            onSearchTextClick()
+                        },
                     text = "Search in email",
                 )
                 IconButton(
                     modifier = Modifier
                         .padding(start = 24.dp, end = 16.dp)
                         .size(48.dp),
-                    onClick = { /*TODO*/ }) {
+                    onClick = onProfileIconClick
+                ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_profile_2),
+                        painter = painterResource(id = profileImageResourceId),
                         contentDescription = ""
                     )
                 }
@@ -284,8 +311,8 @@ class CollapsableToolbarState(
     density: Density,
     private val onToolbarOffsetChanged: (Int) -> Unit,
 
-) {
-    private val toolbarHeight: Dp=64.dp
+    ) {
+    private val toolbarHeight: Dp = 64.dp
     private var toolbarHeightPx: Float
     var toolbarOffsetHeightPx = 0f
         private set(value) {
