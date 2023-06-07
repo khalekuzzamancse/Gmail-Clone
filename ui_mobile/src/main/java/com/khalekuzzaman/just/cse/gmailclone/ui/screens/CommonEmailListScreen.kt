@@ -9,7 +9,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailListForSearchResult
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonScreenWithModalDrawerAndBottomNavigationAndFAB
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailList
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
@@ -67,7 +66,8 @@ fun CommonEmailListScreen(
         onBackArrowClick = onBackArrowClick,
         onArchiveButtonClick = {},
         onDeleteButtonClick = {},
-        onMarkAsUnReadButtonClick = {}
+        onMarkAsUnReadButtonClick = {},
+        {}
     ) {
         EmailList(
             emails = emails,

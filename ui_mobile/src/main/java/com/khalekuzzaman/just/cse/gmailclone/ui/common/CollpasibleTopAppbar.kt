@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,10 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -112,77 +107,6 @@ private fun Previews() {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun Dialogue(
-    modifier: Modifier = Modifier,
-) {
-    val openDialog = remember { mutableStateOf(true) }
-
-    val googleText = buildAnnotatedString {
-        append(AnnotatedString("G", spanStyle = SpanStyle(Color.Blue)))
-        append(AnnotatedString("o", spanStyle = SpanStyle(Color.Red)))
-        append(AnnotatedString("o", spanStyle = SpanStyle(Color.Yellow)))
-        append(AnnotatedString("g", spanStyle = SpanStyle(Color.Blue)))
-        append(AnnotatedString("l", spanStyle = SpanStyle(Color.Green)))
-        append(AnnotatedString("e", spanStyle = SpanStyle(Color.Red)))
-    }
-
-    if (openDialog.value) {
-        AlertDialog(
-            modifier = modifier,
-            onDismissRequest = {
-                openDialog.value = false
-            }
-        ) {
-            Card(
-                modifier = Modifier
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(
-                        modifier =
-                        Modifier,
-                        onClick = { /*TODO*/ }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_cross),
-                            contentDescription = null
-                        )
-                    }
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center,
-                        text = googleText,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
-                Surface(
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .fillMaxSize(),
-                    shape = MaterialTheme.shapes.large,
-                    tonalElevation = AlertDialogDefaults.TonalElevation
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                        Text(
-                            text = "Put the content here",
-                        )
-
-                    }
-                }
-            }
-
-
-        }
-    }
-}
 
 
 /*
@@ -270,38 +194,7 @@ fun CommonTopAppbarForListScreen(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CollapseAbleTopAppbar(
-    modifier: Modifier = Modifier,
-    title: String? = null,
-    moveAppbarVerticallyBy: Int = 0,
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-    onNavigationIconClick: () -> Unit,
-    actions: @Composable RowScope.() -> Unit = {},
-) {
 
-    TopAppBar(
-        modifier = modifier
-            .offset { IntOffset(x = 0, y = moveAppbarVerticallyBy) },
-        title = {
-            title?.let { text ->
-                Text(text)
-            }
-        },
-        actions = actions,
-        navigationIcon = {
-            IconButton(onClick = { onNavigationIconClick() }) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = null)
-            }
-        },
-        scrollBehavior = scrollBehavior,
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
-        )
-
-    )
-}
 
 
 ///

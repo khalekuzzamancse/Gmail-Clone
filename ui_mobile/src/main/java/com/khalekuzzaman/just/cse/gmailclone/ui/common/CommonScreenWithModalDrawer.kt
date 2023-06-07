@@ -1,21 +1,20 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -24,7 +23,6 @@ import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerItemsProvider.drawerGroups
 import com.khalekuzzaman.just.cse.gmailclone.utils.CustomNestedScrollConnection
 import com.khalekuzzaman.just.cse.gmailclone.utils.ScrollDirection
-import kotlinx.coroutines.launch
 
 
 /*
@@ -35,93 +33,6 @@ import kotlinx.coroutines.launch
 2.0:It does not and need not how to place content
 
  */
-@Composable
-fun CommonScreenWithModalDrawerDemo() {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val coroutineScope = rememberCoroutineScope()
-    val openDrawer: () -> Unit = {
-        coroutineScope.launch { drawerState.open() }
-    }
-    val closeDrawer: () -> Unit = {
-        coroutineScope.launch { drawerState.close() }
-    }
-
-    CommonScreenWithModalDrawer(
-        topAppbar = {
-
-        },
-        bottomBar = { BottomNavigationBar(bottomNavigationItems) },
-        onDrawerItemClick = {
-            Log.i("Clicked:DrawerItem", it)
-        },
-        closeDrawer = closeDrawer,
-        drawerState = drawerState
-    ) {
-
-    }
-
-}
-
-@Composable
-@Preview(showBackground = true)
-private fun CommonScreenWithModalDrawerDemoPreview() {
-    CommonScreenWithModalDrawerDemo()
-}
-
-/*
-CommonScreenWithModalDrawer():
-1.it just provide the  drawer and place the passing content,
-2.It does not and need not know how to handle the content(except the drawer)
-3.It need not and does not contain and maintain any state
-
-Explanation:
-pass the handler for the drawer because It has built in drawer positioned
-It will just know how to handle the drawer and place the passed content
-   to the appropriate position,
-It does not and need know how to handle the passed control.
-    while passing the content,use the appropriate handler to them.
-
-
-
- */
-@Composable
-fun CommonScreenWithModalDrawer(
-    modifier: Modifier = Modifier,
-    topAppbar: @Composable () -> Unit,
-    bottomBar: @Composable () -> Unit,
-    onDrawerItemClick: (navigateTo: String) -> Unit,
-    closeDrawer: () -> Unit,
-    drawerState: DrawerState,
-    fab: @Composable () -> Unit = {},
-    fabPosition: FabPosition = FabPosition.End,
-    screenContent: @Composable () -> Unit,
-) {
-    ModalDrawer(
-        modifier = modifier,
-        drawerGroups = drawerGroups,
-        onDrawerItemClick = onDrawerItemClick,
-        closeDrawer = closeDrawer,
-        drawerState = drawerState,
-    ) {
-        Scaffold(
-            topBar = topAppbar,
-            bottomBar = bottomBar,
-            floatingActionButton = fab,
-            floatingActionButtonPosition = fabPosition
-
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-            ) {
-                screenContent()
-            }
-        }
-    }
-
-
-}
 
 
 @Composable
@@ -138,6 +49,7 @@ fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
     onArchiveButtonClick: () -> Unit,
     onDeleteButtonClick: () -> Unit,
     onMarkAsUnReadButtonClick: () -> Unit,
+    onMoreIconClick: () -> Unit,
     screenContent: @Composable () -> Unit,
 
     ) {
@@ -155,10 +67,11 @@ fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
             onFabClick = onFabClick,
             selectedEmailCount = selectedEmailCount,
             shouldShowContextualTopAppbar = shouldShowContextualTopAppbar,
-            onArchiveButtonClick = onArchiveButtonClick,
             onBackArrowClick = onBackArrowClick,
+            onArchiveButtonClick = onArchiveButtonClick,
             onDeleteButtonClick = onDeleteButtonClick,
             onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick,
+            onMoreIconClick = onMoreIconClick
         )
     }
 
@@ -177,6 +90,7 @@ fun ScreenScaffold(
     onArchiveButtonClick: () -> Unit,
     onDeleteButtonClick: () -> Unit,
     onMarkAsUnReadButtonClick: () -> Unit,
+    onMoreIconClick: () -> Unit,
 ) {
     Box {
 
@@ -188,6 +102,9 @@ fun ScreenScaffold(
         }
 
         var showSearchBar by remember {
+            mutableStateOf(false)
+        }
+        var shouldShowDialogBox by remember {
             mutableStateOf(false)
         }
         if (showSearchBar) {
@@ -212,18 +129,24 @@ fun ScreenScaffold(
             topBar = {
                 if (shouldShowContextualTopAppbar) {
                     ContextualTopAppbar(
+                        onBackArrowClick = onBackArrowClick,
                         selectedEmailCount = selectedEmailCount,
                         onArchiveButtonClick = onArchiveButtonClick,
-                        onBackArrowClick = onBackArrowClick,
                         onDeleteButtonClick = onDeleteButtonClick,
-                        onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick
+                        onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick,
+                        onMoreIconClick = {}
                     )
                 } else {
                     CommonTopAppbarForListScreen(
                         profileImageResourceId = R.drawable.ic_profile_2,
-                        onNavigationIconClick = {},
-                        onProfileIconClick = {},
-                        onSearchTextClick = {}
+                        onNavigationIconClick = openDrawer,
+                        onProfileIconClick = {
+                            shouldShowDialogBox = true
+
+                        },
+                        onSearchTextClick = {
+                            showSearchBar = true
+                        }
                     )
 
                 }
@@ -239,10 +162,93 @@ fun ScreenScaffold(
                     .fillMaxSize()
                     .padding(it)
             ) {
+                if (shouldShowDialogBox) {
+                    Dialogue(
+                        modifier = Modifier
+                            .fillMaxHeight(.5f)
+                            .fillMaxWidth(.8f),
+                        onCrossButtonClick = {
+                            shouldShowDialogBox = false
+                        }
+                    )
+                }
                 screenContent()
             }
         }
     }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun CommonScreenXPreview() {
+    CommonScreenX()
+}
+
+@Composable
+fun CommonScreenX(
+
+) {
+    CommonScreenSlot(
+        topAppbar = {
+            CommonTopAppbarForListScreen(
+                profileImageResourceId = R.drawable.ic_profile_2,
+                moveAppbarVerticallyBy = 0,
+                onNavigationIconClick = {},
+                onProfileIconClick = {},
+                onSearchTextClick = {}
+            )
+        },
+        bottomAppbar = {
+            BottomNavigationBar(bottomNavigationItems)
+        },
+        fab = {
+            ShowFAB(
+                shouldShowExpandedFAB = false,
+                onClick = { }
+            )
+
+        },
+        closeDrawer = {},
+        onDrawerItemClick = {},
+        drawerState = DrawerState(initialValue = DrawerValue.Closed)
+    ) {
+
+    }
+
+}
+
+@Composable
+fun CommonScreenSlot(
+    drawerState: DrawerState,
+    closeDrawer: () -> Unit,
+    onDrawerItemClick: (ItemName: String) -> Unit,
+    topAppbar: @Composable () -> Unit,
+    bottomAppbar: @Composable () -> Unit,
+    fab: @Composable () -> Unit,
+    screenContent: @Composable () -> Unit,
+) {
+    ModalDrawer(
+        modifier = Modifier,
+        drawerGroups = drawerGroups,
+        onDrawerItemClick = onDrawerItemClick,
+        closeDrawer = closeDrawer,
+        drawerState = drawerState,
+    ) {
+        Scaffold(
+            floatingActionButton = fab,
+            topBar = topAppbar, bottomBar = bottomAppbar
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
+            ) {
+                screenContent()
+            }
+        }
+    }
+
+
 }
 
 @Composable
@@ -262,7 +268,8 @@ private fun CommonScreenDemo1() {
         onBackArrowClick = {},
         onArchiveButtonClick = {},
         onDeleteButtonClick = {},
-        onMarkAsUnReadButtonClick = {}
+        onMarkAsUnReadButtonClick = {},
+        onMoreIconClick = {}
 
     ) {}
 
@@ -285,7 +292,8 @@ private fun CommonScreenDemo3() {
         onBackArrowClick = {},
         onArchiveButtonClick = {},
         onDeleteButtonClick = {},
-        onMarkAsUnReadButtonClick = {}
+        onMarkAsUnReadButtonClick = {},
+        onMoreIconClick = {}
     ) {}
 
 }
@@ -307,6 +315,7 @@ private fun CommonScreenDemo2() {
         onBackArrowClick = {},
         onArchiveButtonClick = {},
         onDeleteButtonClick = {},
-        onMarkAsUnReadButtonClick = {}
+        onMarkAsUnReadButtonClick = {},
+        onMoreIconClick = {}
     ) {}
 }

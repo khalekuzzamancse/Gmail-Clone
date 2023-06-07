@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonScreenWithModalDrawerDemo
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.ListScreenTopAppbarDemo
 import com.khalekuzzaman.just.cse.gmailclone.ui.navigation.ModalDrawerNavHost
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
@@ -17,9 +16,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GmailCloneTheme {
                 ModalDrawerNavHost()
-                // EmailListUsingSlotEmailItemDemo()
-               // CommonScreenWithModalDrawerDemo()
-             //   ListScreenTopAppbarDemo()
+
 
             }
         }
