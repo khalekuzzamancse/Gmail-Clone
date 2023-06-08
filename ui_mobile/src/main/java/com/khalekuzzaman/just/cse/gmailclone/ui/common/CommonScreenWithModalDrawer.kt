@@ -2,46 +2,24 @@ package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.PopupProperties
-
 import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerItemsProvider.drawerGroups
 import com.khalekuzzaman.just.cse.gmailclone.utils.CustomNestedScrollConnection
@@ -69,10 +47,6 @@ fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
     shouldShowContextualTopAppbar: Boolean,
     selectedEmailCount: Int,
     onBackArrowClick: () -> Unit,
-    onArchiveButtonClick: () -> Unit,
-    onDeleteButtonClick: () -> Unit,
-    onMarkAsUnReadButtonClick: () -> Unit,
-    onMoreIconClick: () -> Unit,
     screenContent: @Composable () -> Unit,
 
     ) {
@@ -91,10 +65,6 @@ fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
             selectedEmailCount = selectedEmailCount,
             shouldShowContextualTopAppbar = shouldShowContextualTopAppbar,
             onBackArrowClick = onBackArrowClick,
-            onArchiveButtonClick = onArchiveButtonClick,
-            onDeleteButtonClick = onDeleteButtonClick,
-            onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick,
-            onMoreIconClick = onMoreIconClick
         )
     }
 
@@ -110,10 +80,6 @@ fun ScreenScaffold(
     selectedEmailCount: Int,
     shouldShowContextualTopAppbar: Boolean,
     onBackArrowClick: () -> Unit,
-    onArchiveButtonClick: () -> Unit,
-    onDeleteButtonClick: () -> Unit,
-    onMarkAsUnReadButtonClick: () -> Unit,
-    onMoreIconClick: () -> Unit,
 ) {
     Box {
 
@@ -154,10 +120,7 @@ fun ScreenScaffold(
                     ContextualTopAppbar(
                         onBackArrowClick = onBackArrowClick,
                         selectedEmailCount = selectedEmailCount,
-                        onArchiveButtonClick = onArchiveButtonClick,
-                        onDeleteButtonClick = onDeleteButtonClick,
-                        onMarkAsUnReadButtonClick = onMarkAsUnReadButtonClick,
-                        onMoreIconClick = {}
+                     onMenuItemClick = {}
                     )
                 } else {
                     CommonTopAppbarForListScreen(
@@ -298,11 +261,7 @@ private fun CommonScreenDemo1() {
         onFabClick = {},
         shouldShowContextualTopAppbar = false,
         selectedEmailCount = 0,
-        onBackArrowClick = {},
-        onArchiveButtonClick = {},
-        onDeleteButtonClick = {},
-        onMarkAsUnReadButtonClick = {},
-        onMoreIconClick = {}
+        onBackArrowClick = {}
 
     ) {}
 
@@ -322,11 +281,7 @@ private fun CommonScreenDemo3() {
         onFabClick = {},
         shouldShowContextualTopAppbar = true,
         selectedEmailCount = 0,
-        onBackArrowClick = {},
-        onArchiveButtonClick = {},
-        onDeleteButtonClick = {},
-        onMarkAsUnReadButtonClick = {},
-        onMoreIconClick = {}
+        onBackArrowClick = {}
     ) {}
 
 }
@@ -345,10 +300,6 @@ private fun CommonScreenDemo2() {
         onFabClick = {},
         shouldShowContextualTopAppbar = false,
         selectedEmailCount = 0,
-        onBackArrowClick = {},
-        onArchiveButtonClick = {},
-        onDeleteButtonClick = {},
-        onMarkAsUnReadButtonClick = {},
-        onMoreIconClick = {}
+        onBackArrowClick = {}
     ) {}
 }

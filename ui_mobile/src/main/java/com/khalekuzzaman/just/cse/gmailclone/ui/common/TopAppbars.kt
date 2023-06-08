@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,56 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.R
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ContextualTopAppbar(
-    onBackArrowClick: () -> Unit,
-    selectedEmailCount: Int,
-    onArchiveButtonClick: () -> Unit,
-    onDeleteButtonClick: () -> Unit,
-    onMarkAsUnReadButtonClick: () -> Unit,
-    onMoreIconClick: () -> Unit,
-) {
-    TopAppBar(
-        title = {},
-        navigationIcon = {
-            CommonIconButton(
-                imageVector = Icons.Default.ArrowBack,
-                onClick = onBackArrowClick
-            )
-        },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
-        ),
-        actions = {
-            if (selectedEmailCount > 0) {
-                Text(text = "$selectedEmailCount")
-            }
-
-            Spacer(modifier = Modifier.width(40.dp))
-            CommonIconButton(
-                resourceId = R.drawable.ic_archive,
-                onClick = onArchiveButtonClick
-            )
-            CommonIconButton(
-                resourceId = R.drawable.ic_delete,
-                onClick = onDeleteButtonClick
-            )
-            CommonIconButton(
-                resourceId = R.drawable.ic_mark_as_unread,
-                onClick = onMarkAsUnReadButtonClick
-            )
-            CommonIconButton(
-                imageVector = Icons.Default.MoreVert,
-                onClick = { }
-            )
-            IconButton(onClick = onMoreIconClick) {
-                Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
-            }
-        }
-    )
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -139,9 +86,6 @@ private fun ContextualTopAppbarPreview2() {
             ContextualTopAppbar(
                 onBackArrowClick = {},
                 selectedEmailCount = 0,
-                onArchiveButtonClick = {},
-                onDeleteButtonClick = {},
-                onMarkAsUnReadButtonClick = {}
             ) {}
         }) {
         LazyColumn(modifier = Modifier.padding(it)) {

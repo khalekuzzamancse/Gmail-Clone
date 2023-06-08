@@ -63,11 +63,7 @@ fun CommonEmailListScreen(
         onFabClick = onFabClick,
         shouldShowContextualTopAppbar = shouldShowContextualTopAppbar,
         selectedEmailCount = selectedEmailCount,
-        onBackArrowClick = onBackArrowClick,
-        onArchiveButtonClick = {},
-        onDeleteButtonClick = {},
-        onMarkAsUnReadButtonClick = {},
-        {}
+        onBackArrowClick = onBackArrowClick
     ) {
         EmailList(
             emails = emails,
