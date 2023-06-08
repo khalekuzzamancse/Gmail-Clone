@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.R
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContextualTopAppbar(
@@ -67,12 +66,57 @@ fun ContextualTopAppbar(
                 imageVector = Icons.Default.MoreVert,
                 onClick = { }
             )
-            IconButton(onClick =onMoreIconClick) {
+            IconButton(onClick = onMoreIconClick) {
                 Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
             }
         }
     )
 }
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ContextualTopAppbar(
+    onBackArrowClick: () -> Unit,
+    selectedEmailCount: Int,
+    onMenuItemClick: (itemName: String)->Unit
+    ) {
+    TopAppBar(
+        title = {},
+        navigationIcon = {
+            CommonIconButton(
+                imageVector = Icons.Default.ArrowBack,
+                onClick = onBackArrowClick
+            )
+        },
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
+        ),
+        actions = {
+            if (selectedEmailCount > 0) {
+                Text(text = "$selectedEmailCount")
+            }
+
+            Spacer(modifier = Modifier.width(40.dp))
+            CommonIconButton(
+                resourceId = R.drawable.ic_archive,
+                onClick = {onMenuItemClick("Archive")}
+            )
+            CommonIconButton(
+                resourceId = R.drawable.ic_delete,
+                onClick =  {onMenuItemClick("Delete")}
+            )
+            CommonIconButton(
+                resourceId = R.drawable.ic_mark_as_unread,
+                onClick =  {onMenuItemClick("mark as unread")}
+            )
+            Menu(onMenuItemClick = { itemName ->
+                onMenuItemClick(itemName)
+            })
+        }
+    )
+}
+
 
 
 @Composable
@@ -81,10 +125,9 @@ private fun ContextualTopAppbarPreview() {
     ContextualTopAppbar(
         onBackArrowClick = {},
         selectedEmailCount = 0,
-        onArchiveButtonClick = {},
-        onDeleteButtonClick = {},
-        onMarkAsUnReadButtonClick = {}
-    ) {}
+    ) {
+
+    }
 }
 
 
