@@ -319,9 +319,11 @@ private fun EmailItemPreviews() {
             subject = "This the subjct of the email,that will be used for testing purpose",
             message = "Congratual Md,Abul ,this a gmail clone app,made using jetpack compose" +
                     " and the other tool.",
-            isBookMarked = false,
             timeOrDate = "13-03-23",
-            profileImageId = R.drawable.profile_image
+            profileImageId = R.drawable.profile_image,
+            isBookMarked = false,
+            sender = "khalekuzzaman91@gmail.com",
+            receiver = "abulkalam80@gmail.com"
         )
         EmailItem(emailModel = email,
             onEmailItemClick = {},

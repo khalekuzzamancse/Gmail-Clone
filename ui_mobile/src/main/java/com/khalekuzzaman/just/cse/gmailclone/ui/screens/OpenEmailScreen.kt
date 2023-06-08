@@ -1,17 +1,15 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.screens
 
+
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-
-
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
@@ -42,72 +40,142 @@ import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmail
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.BookmarkIcon
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonIconButton
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CustomIconButton
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.FormLayout
 import com.khalekuzzaman.just.cse.gmailclone.utils.TextFinder
 
-
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun OpenEmail(){
-    SubjectAndSenderInfo()
+fun ReadEmailScreenPreview() {
+    ReadEmailScreen(email = FakeEmail.email)
 }
+
 @Composable
-fun SubjectAndSenderInfo() {
-    val scrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .padding(10.dp)
-            .verticalScroll(scrollState)
-    ) {
-        SubjectAndBookmark(
-            subjectText = "A personal acccess token(classic) has been added to your account",
-            onBookmarkChange = {})
-        //
-        var shouldShowRecipentInfo by remember {
-            mutableStateOf(false)
-        }
-        SenderInfoHeader(
-            userName = "Md Abul Kalam Azad",
-            time = "5 days ago",
-            profileImageId = R.drawable.ic_profile_2,
-            onExpandClick = {
-                shouldShowRecipentInfo=!shouldShowRecipentInfo
+fun ReadEmailScreen(
+    email: EmailModel,
+) {
+    var shouldShowRecipientInfo by remember {
+        mutableStateOf(false)
+    }
+    ReadEmailLayoutSlot(
+        subjectSection = {
+            SubjectShow(text = email.subject)
+        },
+        bookMarkSection = {
+            BookmarkIcon(
+                onBookmarkIconClick = {}
+            )
+        },
+        moreInfoSection = {
+            SenderInfoHeader(
+                userName = email.userName,
+                time = email.timeOrDate,
+                profileImageId = R.drawable.ic_profile_2,
+                onExpandClick = { shouldShowRecipientInfo = !shouldShowRecipientInfo }
+            )
+
+            if (shouldShowRecipientInfo) {
+                EmailRecipientInfo(
+                    from = email.sender,
+                    to = email.receiver,
+                    date = email.timeOrDate,
+                )
             }
-        )
-
-
-        if (shouldShowRecipentInfo) {
-            EmailRecipientInfo(
-                from = "khalekuzzaman91@gmail.com",
-                to = "khalekuzzaman91@gmail.com",
-                date = "26 Mar 2023, 8:26 pm",
+        },
+        messageSection = {
+            EmailBody(message = email.message)
+        },
+        footerSection = {
+            BottomButtonSection(
+                onReplyClick = { /*TODO*/ },
+                onReplyAllClick = { /*TODO*/ },
+                onForwardClick = {}
             )
         }
 
-        //
-        EmailBody(message = FakeEmail().get())
-        BottomButtonSection(
-            onReplyClick = {},
-            onReplyAllClick = {},
-            onForwardClick = {}
-        )
-
-    }
+    )
 }
 
+@Preview(showBackground = true)
+@Composable
+fun ReadEmailLayoutSlotPreview() {
+    var shouldShowRecipientInfo by remember {
+        mutableStateOf(false)
+    }
+    ReadEmailLayoutSlot(
+        subjectSection = {
+            SubjectShow(text = FakeEmail.email.subject)
+        },
+        bookMarkSection = {
+            BookmarkIcon(
+                onBookmarkIconClick = {}
+            )
+        },
+        moreInfoSection = {
+            SenderInfoHeader(
+                userName = FakeEmail.email.userName,
+                time = FakeEmail.email.timeOrDate,
+                profileImageId = R.drawable.ic_profile_2,
+                onExpandClick = { shouldShowRecipientInfo = !shouldShowRecipientInfo }
+            )
+
+            if (shouldShowRecipientInfo) {
+                EmailRecipientInfo(
+                    from = FakeEmail.email.sender,
+                    to = FakeEmail.email.receiver,
+                    date = "26 Mar 2023, 8:26 pm",
+                )
+            }
+        },
+        messageSection = {
+            EmailBody(message = FakeEmail.email.message)
+        },
+        footerSection = {
+            BottomButtonSection(
+                onReplyClick = { /*TODO*/ },
+                onReplyAllClick = { /*TODO*/ },
+                onForwardClick = {}
+            )
+        }
+
+    )
+
+}
 
 @Composable
-@Preview(showBackground = true)
-private fun SubjectAndSenderInfoPreview() {
-    SubjectAndSenderInfo()
+fun ReadEmailLayoutSlot(
+    subjectSection: @Composable () -> Unit,
+    bookMarkSection: @Composable () -> Unit,
+    moreInfoSection: @Composable () -> Unit,
+    messageSection: @Composable () -> Unit,
+    footerSection: @Composable () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .padding(10.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(Modifier.weight(1f)) { subjectSection() }
+            bookMarkSection()
+        }
+        moreInfoSection()
+        messageSection()
+        footerSection()
+    }
+
 }
+
 
 @Composable
 private fun EmailBody(modifier: Modifier = Modifier, message: String) {
     SelectionContainer {
         val annotatedEmailString: AnnotatedString = buildAnnotatedString {
-            var str = message
-            append(str)
-            val urls = TextFinder().findUrls(str)
+            append(message)
+            val urls = TextFinder().findUrls(message)
             urls.forEach { pair ->
                 addStyle(
                     style = SpanStyle(
@@ -151,7 +219,6 @@ private fun EmailRecipientInfo(
             Text(text = date)
         }
     }
-
 
 
 }
@@ -214,7 +281,7 @@ private fun BottomSectionButton(
         onClick = onClick,
         contentPadding = PaddingValues(0.dp),
         //using content padding allows to do not shrink the button
-        //when it has small size.it shirnk all the button when width is
+        //when it has small size.it shrink all the button when width is
         //less
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -240,30 +307,9 @@ private fun BottomSectionButtonPreview() {
 @Composable
 @Preview(showBackground = true, showSystemUi = false)
 private fun EmailBodyPreview() {
-    EmailBody(message = FakeEmail().get())
+    EmailBody(message = FakeEmail.email.message)
 }
 
-@Composable
-private fun SubjectAndBookmark(
-    modifier: Modifier = Modifier,
-    subjectText: String,
-    onBookmarkChange: () -> Unit,
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        SubjectShow(
-            modifier.weight(1f),
-            text = subjectText
-        )
-        BookmarkIcon(
-            onBookmarkIconClick = onBookmarkChange
-        )
-    }
-
-}
 
 @Composable
 fun SenderInfoHeader(
@@ -281,14 +327,14 @@ fun SenderInfoHeader(
             modifier = Modifier
                 .weight(.1f)
                 .padding(5.dp),
-            painter = painterResource(id = R.drawable.ic_profile_2),
+            painter = painterResource(profileImageId),
             contentDescription = null
         )
         EmailInfo(
             modifier = Modifier.weight(.5f),
             userName = userName,
             time = time,
-            onExpandClick=onExpandClick
+            onExpandClick = onExpandClick
         )
         CommonIconButton(
             modifier = Modifier.weight(.1f),
@@ -309,11 +355,11 @@ private fun EmailInfo(
 ) {
     Column(modifier = modifier) {
         SenderNameAndTime(userName = userName, time = time)
-        Row() {
+        Row {
             Text(
                 text = "to me"
             )
-            CustomIconButton(onClick =onExpandClick) {
+            CustomIconButton(onClick = onExpandClick) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_down_arrow),
                     contentDescription = null
@@ -369,21 +415,12 @@ private fun DateORTime(modifier: Modifier = Modifier, time: String) {
 @Preview(showBackground = true)
 private fun SenderHeaderPreview() {
     SenderInfoHeader(
-        userName = "Md Abul Kalam Azad",
+        userName = "Mr. Bean",
         time = "5 days ago",
         profileImageId = R.drawable.ic_profile_2
     ) {}
 }
 
-
-@Composable
-@Preview(showBackground = true)
-private fun SubjectAndBookmarkPreview() {
-    SubjectAndBookmark(
-        subjectText = "A personal acccess token(classic) has been added to your account",
-        onBookmarkChange = {}
-    )
-}
 
 @Composable
 private fun SubjectShow(
@@ -401,5 +438,5 @@ private fun SubjectShow(
 @Composable
 @Preview(showBackground = true)
 private fun SubjectPreview() {
-    SubjectShow(text = "A personal acccess token(classic) has been added to your account")
+    SubjectShow(text = "A personal access token(classic) has been added to your account")
 }

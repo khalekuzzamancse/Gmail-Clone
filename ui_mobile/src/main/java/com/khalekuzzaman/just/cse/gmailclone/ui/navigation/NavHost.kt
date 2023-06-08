@@ -10,12 +10,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.khalekuzzaman.just.cse.gmailclone.R
+import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmail
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonListScreen
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerDestinations
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.ComposeEmail
-import com.khalekuzzaman.just.cse.gmailclone.ui.screens.OpenEmail
+import com.khalekuzzaman.just.cse.gmailclone.ui.screens.ReadEmailScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -35,11 +36,14 @@ fun ModalDrawerNavHost(
             drawerState.close()
         }
     }
+
+    var readEmail: EmailModel = FakeEmail.email;
     val navigationActions = NavigationActions(navController)
     val navigateTo: (String) -> Unit = { route ->
         navigationActions.navigateTo(route)
     }
     val navigateToOpenEmail: (EmailModel) -> Unit = {
+        readEmail = it
         navController.navigate(NonTopDestinations.OPEN_EMAIL)
     }
     val navigateToComposeEmail: () -> Unit = {
@@ -126,7 +130,7 @@ fun ModalDrawerNavHost(
             ComposeEmail()
         }
         composable(NonTopDestinations.OPEN_EMAIL) {
-            OpenEmail()
+            ReadEmailScreen(email = readEmail)
         }
     }
 

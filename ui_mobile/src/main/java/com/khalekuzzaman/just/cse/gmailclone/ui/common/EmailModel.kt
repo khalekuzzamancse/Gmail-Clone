@@ -8,4 +8,6 @@ data class EmailModel(
     val timeOrDate: String,
     val profileImageId: Int,
     val isBookMarked: Boolean,
+    val sender: String,
+    val receiver: String,
 )
