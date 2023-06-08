@@ -63,7 +63,7 @@ fun ModalDrawerNavHost(
                 closeDrawer = closeDrawer,
                 drawerState = drawerState,
                 openDrawer = openDrawer,
-                profileImageResourceId = R.drawable.profile_image,
+                profileImageResourceId = R.drawable.ic_profile_2,
                 onFabIconClick = navigateToComposeEmail,
                 onEmailClick = navigateToOpenEmail,
                 emails = FakeEmailList.getFakeEmails()

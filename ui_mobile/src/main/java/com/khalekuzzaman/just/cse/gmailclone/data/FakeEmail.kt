@@ -2,6 +2,7 @@ package com.khalekuzzaman.just.cse.gmailclone.data
 
 import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
+import kotlin.random.Random
 
 object FakeEmail {
     private val message =
@@ -32,13 +33,13 @@ object FakeEmail {
     private val reciver = "abul90@gmail.com"
 
     val email = EmailModel(
-        emailId = 100,
+        emailId = Random.nextInt(),
         subject = subject,
         message = message,
         sender = sender,
         receiver = reciver,
         timeOrDate = time,
-        profileImageId = R.drawable.ic_profile_2,
+        profileImageId = R.drawable.profileimage3,
         isBookMarked = false,
         userName = userName
     )

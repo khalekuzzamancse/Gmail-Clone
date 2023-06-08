@@ -7,7 +7,7 @@ object FakeEmailList {
     fun getFakeEmails(): List<EmailModel> {
         val list: MutableList<EmailModel> = mutableListOf()
         for (i in 1..10) {
-            val email = FakeEmail.email
+            val email = FakeEmail.email.copy(emailId = i)
             list.add(email)
         }
         return list
@@ -16,7 +16,7 @@ object FakeEmailList {
     fun getFakePrimaryEmails(): List<EmailModel> {
         val list: MutableList<EmailModel> = mutableListOf()
         for (i in 1..10) {
-            val email = FakeEmail.email
+            val email = FakeEmail.email.copy(emailId = i)
             list.add(email)
         }
         return list
@@ -25,7 +25,7 @@ object FakeEmailList {
     fun getFakePromotionEmails(): List<EmailModel> {
         val list: MutableList<EmailModel> = mutableListOf()
         for (i in 1..10) {
-            val email = FakeEmail.email
+            val email = FakeEmail.email.copy(emailId = i)
             list.add(email)
         }
         return list
@@ -34,7 +34,7 @@ object FakeEmailList {
     fun getFakeSocialEmails(): List<EmailModel> {
         val list: MutableList<EmailModel> = mutableListOf()
         for (i in 1..10) {
-            val email = FakeEmail.email
+            val email = FakeEmail.email.copy(emailId = i)
             list.add(email)
         }
         return list
@@ -43,7 +43,7 @@ object FakeEmailList {
     fun getFakeUpdateEmails(): List<EmailModel> {
         val list: MutableList<EmailModel> = mutableListOf()
         for (i in 1..10) {
-            val email = FakeEmail.email
+            val email = FakeEmail.email.copy(emailId = i)
             list.add(email)
         }
         return list
