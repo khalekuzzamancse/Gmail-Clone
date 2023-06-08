@@ -41,133 +41,6 @@ import kotlinx.coroutines.launch
  */
 
 
-@Composable
-fun CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
-    modifier: Modifier = Modifier,
-    onNavigate: (navigateTo: String) -> Unit,
-    closeDrawer: () -> Unit,
-    drawerState: DrawerState,
-    openDrawer: () -> Unit,
-    onFabClick: () -> Unit,
-    shouldShowContextualTopAppbar: Boolean,
-    selectedEmailCount: Int,
-    onBackArrowClick: () -> Unit,
-    screenContent: @Composable () -> Unit,
-
-    ) {
-    ModalDrawer(
-        modifier = modifier,
-        drawerGroups = drawerGroups,
-        onDrawerItemClick = onNavigate,
-        closeDrawer = closeDrawer,
-        drawerState = drawerState,
-    ) {
-        ScreenScaffold(
-            modifier = Modifier.fillMaxSize(),
-            screenContent = screenContent,
-            openDrawer = openDrawer,
-            onFabClick = onFabClick,
-            selectedEmailCount = selectedEmailCount,
-            shouldShowContextualTopAppbar = shouldShowContextualTopAppbar,
-            onBackArrowClick = onBackArrowClick,
-        )
-    }
-
-}
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun ScreenScaffold(
-    modifier: Modifier = Modifier,
-    screenContent: @Composable () -> Unit,
-    openDrawer: () -> Unit,
-    onFabClick: () -> Unit,
-    selectedEmailCount: Int,
-    shouldShowContextualTopAppbar: Boolean,
-    onBackArrowClick: () -> Unit,
-) {
-    Box {
-
-        var shouldShowExpendedFab by remember {
-            mutableStateOf((true))
-        }
-        val nestedScrollConnection = CustomNestedScrollConnection { _, scrollDir ->
-            shouldShowExpendedFab = (scrollDir != ScrollDirection.UP)
-        }
-
-        var showSearchBar by remember {
-            mutableStateOf(false)
-        }
-        var shouldShowDialogBox by remember {
-            mutableStateOf(false)
-        }
-        if (showSearchBar) {
-            SearchBar(
-                modifier = Modifier.matchParentSize(),
-                onBackClick = {
-                    showSearchBar = false
-                }
-            )
-        }
-
-        Scaffold(
-            modifier = modifier
-                .nestedScroll(nestedScrollConnection),
-            floatingActionButton = {
-                ShowFAB(
-                    shouldShowExpandedFAB = shouldShowExpendedFab,
-                    onClick = onFabClick
-                )
-
-            },
-            topBar = {
-                if (shouldShowContextualTopAppbar) {
-                    ContextualTopAppbar(
-                        onBackArrowClick = onBackArrowClick,
-                        selectedEmailCount = selectedEmailCount,
-                        onMenuItemClick = {}
-                    )
-                } else {
-                    CommonTopAppbarForListScreen(
-                        profileImageResourceId = R.drawable.ic_profile_2,
-                        onNavigationIconClick = openDrawer,
-                        onProfileIconClick = {
-                            shouldShowDialogBox = true
-
-                        },
-                        onSearchTextClick = {
-                            showSearchBar = true
-                        }
-                    )
-
-                }
-
-            },
-            bottomBar = {
-                BottomNavigationBar(BottomNavigationItemInfo.items) {}
-            }
-
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-            ) {
-                if (shouldShowDialogBox) {
-                    Dialogue(
-                        modifier = Modifier
-                            .fillMaxHeight(.5f)
-                            .fillMaxWidth(.8f),
-                        onCrossButtonClick = {
-                            shouldShowDialogBox = false
-                        }
-                    )
-                }
-                screenContent()
-            }
-        }
-    }
-}
 
 
 @Composable
@@ -388,17 +261,7 @@ fun CommonScreenSlot(
     showSystemUi = true
 )
 private fun CommonScreenDemo1() {
-    CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
-        onNavigate = {},
-        closeDrawer = { /*TODO*/ },
-        drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-        openDrawer = {},
-        onFabClick = {},
-        shouldShowContextualTopAppbar = false,
-        selectedEmailCount = 0,
-        onBackArrowClick = {}
-
-    ) {}
+   
 
 }
 
@@ -408,16 +271,7 @@ private fun CommonScreenDemo1() {
     showSystemUi = true
 )
 private fun CommonScreenDemo3() {
-    CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
-        onNavigate = {},
-        closeDrawer = { /*TODO*/ },
-        drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-        openDrawer = {},
-        onFabClick = {},
-        shouldShowContextualTopAppbar = true,
-        selectedEmailCount = 0,
-        onBackArrowClick = {}
-    ) {}
+   
 
 }
 
@@ -427,14 +281,5 @@ private fun CommonScreenDemo3() {
     showSystemUi = true
 )
 private fun CommonScreenDemo2() {
-    CommonScreenWithModalDrawerAndBottomNavigationAndFAB(
-        onNavigate = {},
-        closeDrawer = { /*TODO*/ },
-        drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
-        openDrawer = {},
-        onFabClick = {},
-        shouldShowContextualTopAppbar = false,
-        selectedEmailCount = 0,
-        onBackArrowClick = {}
-    ) {}
+   
 }
