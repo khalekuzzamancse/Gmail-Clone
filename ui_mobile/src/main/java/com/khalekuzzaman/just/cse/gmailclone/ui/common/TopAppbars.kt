@@ -26,8 +26,10 @@ import com.khalekuzzaman.just.cse.gmailclone.R
 fun ContextualTopAppbar(
     onBackArrowClick: () -> Unit,
     selectedEmailCount: Int,
-    onMenuItemClick: (itemName: String)->Unit
-    ) {
+    onMenuItemClick: (itemName: String) -> Unit,
+) {
+
+
     TopAppBar(
         title = {},
         navigationIcon = {
@@ -47,23 +49,23 @@ fun ContextualTopAppbar(
             Spacer(modifier = Modifier.width(40.dp))
             CommonIconButton(
                 resourceId = R.drawable.ic_archive,
-                onClick = {onMenuItemClick("Archive")}
+                onClick = { onMenuItemClick(PopUpMenuItemName.ARCHIVE) }
             )
             CommonIconButton(
                 resourceId = R.drawable.ic_delete,
-                onClick =  {onMenuItemClick("Delete")}
+                onClick = { onMenuItemClick(PopUpMenuItemName.DELETE) }
             )
             CommonIconButton(
                 resourceId = R.drawable.ic_mark_as_unread,
-                onClick =  {onMenuItemClick("mark as unread")}
+                onClick = { onMenuItemClick(PopUpMenuItemName.MARK_AS_READ_OR_UNREAD) }
             )
-            Menu(onMenuItemClick = { itemName ->
-                onMenuItemClick(itemName)
-            })
+            Menu(
+                menuItems = PopUpMenuItemName.listForInboxes,
+                onMenuItemClick = onMenuItemClick,
+            )
         }
     )
 }
-
 
 
 @Composable

@@ -29,11 +29,14 @@ import androidx.compose.ui.unit.dp
     showSystemUi = true
 )
 private fun Preview() {
-    Menu {
-        Log.i("Clicked",it)
+    val onMenuItemClick: (String) -> Unit = { it ->
+        Log.i("Clicked", it)
     }
+    Menu(
+        menuItems = PopUpMenuItemName.listForInboxes,
+        onMenuItemClick = onMenuItemClick,
+    )
 }
-
 
 
 /*
@@ -43,9 +46,24 @@ top app bar,that is why we have to move the menu by using
 I think this not the better solution but at this moment this the only solution
 that comes into my mind,find the better solution  later
  */
+object PopUpMenuItemName {
+    const val ARCHIVE = "Archive"
+    const val DELETE = "Delete"
+    const val MARK_AS_READ_OR_UNREAD= "Mark as read"
+    const val MOVE_TO = "Move to"
+    const val SNOOZE = "Snooze"
+    const val CHANGE_LABELS = "Change labels"
+    const val ADD_STAR = "Add star"
+    const val MARK_AS_NOT_IMPORTANT = "Mark as not important"
+    const val MUTE = "Mute"
+    const val REPORT_SPAM = "Report spam"
+    val listForInboxes = listOf(
+        MOVE_TO, SNOOZE, CHANGE_LABELS, ADD_STAR, MARK_AS_NOT_IMPORTANT, MUTE, REPORT_SPAM
+    )
+}
 
 @Composable
-fun Menu(onMenuItemClick: (ItemName: String) -> Unit) {
+fun Menu(onMenuItemClick: (ItemName: String) -> Unit, menuItems: List<String>) {
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -71,11 +89,11 @@ fun Menu(onMenuItemClick: (ItemName: String) -> Unit) {
 
             }
         ) {
-            for (i in 1..7) {
+            menuItems.forEach {
                 DropdownMenuItem(text = {
-                    Text(text = "Option $i")
+                    Text(text = it)
                 }, onClick = {
-                    onMenuItemClick( "Option $i")
+                    onMenuItemClick(it)
                     expanded = false
 
                 })

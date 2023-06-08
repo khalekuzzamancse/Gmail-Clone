@@ -1,6 +1,7 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,15 +17,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.R
+import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerItemsProvider.drawerGroups
 import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
 import com.khalekuzzaman.just.cse.gmailclone.utils.CustomNestedScrollConnection
 import com.khalekuzzaman.just.cse.gmailclone.utils.ScrollDirection
+import kotlinx.coroutines.launch
 
 
 /*
@@ -140,7 +144,7 @@ fun ScreenScaffold(
 
             },
             bottomBar = {
-                BottomNavigationBar(bottomNavigationItems)
+                BottomNavigationBar(BottomNavigationItemInfo.items) {}
             }
 
         ) {
@@ -171,9 +175,31 @@ fun ScreenScaffold(
     showBackground = true,
     showSystemUi = true
 )
-private fun CommonScreenXPreview() {
+private fun CommonListScreenPreview() {
+    CommonListScreenDemo()
+}
 
-
+@Composable
+fun CommonListScreenDemo() {
+    val drawerState = DrawerState(initialValue = DrawerValue.Open)
+    val coroutineScope = rememberCoroutineScope()
+    val closeDrawer: () -> Unit = {
+        coroutineScope.launch {
+            drawerState.close()
+        }
+    }
+    val openDrawer: () -> Unit = {
+        coroutineScope.launch {
+            drawerState.open()
+        }
+    }
+    CommonListScreen(
+        closeDrawer = closeDrawer,
+        drawerState = drawerState,
+        openDrawer = openDrawer,
+        profileImageResourceId = R.drawable.ic_profile_2,
+        emails = FakeEmailList().getFakeEmails()
+    )
 }
 
 @Composable
@@ -181,7 +207,6 @@ fun CommonListScreen(
     closeDrawer: () -> Unit,
     drawerState: DrawerState,
     openDrawer: () -> Unit,
-    onNavigationIconClick: () -> Unit,
     profileImageResourceId: Int,
     emails: List<EmailModel>,
 ) {
@@ -204,53 +229,61 @@ fun CommonListScreen(
         selectedEmailCount = 0
         selectedEmailIds = emptySet()
     }
-    val onPopUpMenuItemClick: (String) -> Unit = {
+    val onContextualTopAppbarItemClick: (String) -> Unit = {
+        Log.i("Clicked:ContextualItem->", it)
+
+    }
+    val onBottomNavigationItemClick: (String) -> Unit = {
+        Log.i("Clicked:BottomNavItem->", it)
 
     }
     val onDrawerItemClick: (String) -> Unit = {
-
+        Log.i("Clicked:DrawerItem->", it)
     }
     val searchTextClick: () -> Unit = {
-
+        Log.i("Clicked:GeneralTopbar->", "searchText")
     }
     val onProfileIconClick: () -> Unit = {
-
+        Log.i("Clicked:GeneralTopbar->", "profileIcon")
     }
     val onFabClick: () -> Unit = {
+        Log.i("Clicked:FAB->", "fab")
+    }
+    val onChangeBookmark: (Int) -> Unit = { emailId ->
+        emails = BookmarkUpdater(emails).update(emailId)
+    }
+    val onEmailSelectedOrDeselected: (Int) -> Unit = { emailId ->
+        selectedEmailIds = if (selectedEmailIds.contains(emailId)) {
+            selectedEmailIds.minus(emailId)
+        } else {
+            selectedEmailIds.plus(emailId)
+        }
+        onEmailSelectedCountChange(selectedEmailIds.size)
+    }
+    val onEmailItemClick: (EmailModel) -> Unit = {
 
     }
-
 
     CommonScreenX(
         closeDrawer = closeDrawer,
         drawerState = drawerState,
         onDrawerItemClick = onDrawerItemClick,
-        onNavigationIconClick = onNavigationIconClick,
+        onNavigationIconClick = openDrawer,
         onSearchTextClick = searchTextClick,
         profileImageResourceId = profileImageResourceId,
         onProfileIconClick = onProfileIconClick,
         onBackArrowClick = onBackArrowClick,
         numberOfSelectedEmails = selectedEmailCount,
-        onPopUpMenuItemClick = onPopUpMenuItemClick,
-        onFabClick = onFabClick
+        onPopUpMenuItemClick = onContextualTopAppbarItemClick,
+        onFabClick = onFabClick,
+        onBottomNavigationIconClick = onBottomNavigationItemClick
     ) {//Screen content
         EmailList(
             emails = emails,
-            onChangeBookmark = { emailId ->
-                emails = BookmarkUpdater(emails).update(emailId)
-            },
-            onEmailSelectedOrDeselected = { emailId ->
-                selectedEmailIds = if (selectedEmailIds.contains(emailId)) {
-                    selectedEmailIds.minus(emailId)
-                } else {
-                    selectedEmailIds.plus(emailId)
-                }
-                onEmailSelectedCountChange(selectedEmailIds.size)
-            },
+            onChangeBookmark = onChangeBookmark,
+            onEmailSelectedOrDeselected = onEmailSelectedOrDeselected,
             selectedEmailIds = selectedEmailIds,
-            onEmailItemClick = {
-
-            }
+            onEmailItemClick = onEmailItemClick
         )
     }
 }
@@ -268,6 +301,7 @@ fun CommonScreenX(
     numberOfSelectedEmails: Int,
     onPopUpMenuItemClick: (itemName: String) -> Unit,
     onFabClick: () -> Unit,
+    onBottomNavigationIconClick: (itemName: String) -> Unit,
     screenContent: @Composable () -> Unit,
 ) {
     val shouldShowContextualTopAppbar = numberOfSelectedEmails > 0
@@ -293,7 +327,10 @@ fun CommonScreenX(
         },
 
         bottomAppbar = {
-            BottomNavigationBar(bottomNavigationItems)
+            BottomNavigationBar(
+                BottomNavigationItemInfo.items,
+                onBottomNavItemClick = onBottomNavigationIconClick
+            )
         },
         fab = {
             ShowFAB(

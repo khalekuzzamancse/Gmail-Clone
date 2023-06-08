@@ -31,16 +31,29 @@ data class BottomNavigationItem(
     val iconId: Int,
 )
 
-val bottomNavigationItems = listOf(
-    BottomNavigationItem("mail", R.drawable.ic_email),
-    BottomNavigationItem("video chat", R.drawable.ic_video_chat),
-)
+object BottomNavigationItemInfo {
+    object ItemNames {
+        const val MAIL = "Mail"
+        const val VIDEO_CHAT = "Video chat"
+    }
+
+    val items = listOf(
+        BottomNavigationItem(ItemNames.MAIL, R.drawable.ic_email),
+        BottomNavigationItem(ItemNames.VIDEO_CHAT, R.drawable.ic_video_chat),
+    )
+}
+
 
 @Composable
-fun BottomNavigationBar(items: List<BottomNavigationItem>) {
-    NavigationBar(modifier = Modifier
-        .fillMaxWidth()
-        .height(60.dp)) {
+fun BottomNavigationBar(
+    items: List<BottomNavigationItem>,
+    onBottomNavItemClick: (itemName: String) -> Unit,
+) {
+    NavigationBar(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+    ) {
         var selected by remember {
             mutableStateOf(items[0])
         }
@@ -48,6 +61,7 @@ fun BottomNavigationBar(items: List<BottomNavigationItem>) {
             NavigationBarItem(
                 selected = selected == item,
                 onClick = {
+                    onBottomNavItemClick(item.label)
                     selected = item
                 },
                 icon = {
@@ -64,7 +78,7 @@ fun BottomNavigationBar(items: List<BottomNavigationItem>) {
 @Composable
 @Preview
 private fun BottomNavbarPreview() {
-    BottomNavigationBar(bottomNavigationItems)
+    BottomNavigationBar(BottomNavigationItemInfo.items) {}
 }
 
 
@@ -89,7 +103,7 @@ fun BottomNavigationDemo() {
 
         },
         bottomBar = {
-            BottomNavigationBar(bottomNavigationItems)
+            BottomNavigationBar(BottomNavigationItemInfo.items) {}
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
