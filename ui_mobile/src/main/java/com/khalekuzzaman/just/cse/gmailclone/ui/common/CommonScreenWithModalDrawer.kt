@@ -120,7 +120,7 @@ fun ScreenScaffold(
                     ContextualTopAppbar(
                         onBackArrowClick = onBackArrowClick,
                         selectedEmailCount = selectedEmailCount,
-                     onMenuItemClick = {}
+                        onMenuItemClick = {}
                     )
                 } else {
                     CommonTopAppbarForListScreen(
@@ -171,21 +171,43 @@ fun ScreenScaffold(
     showSystemUi = true
 )
 private fun CommonScreenXPreview() {
-    CommonScreenX()
+
 
 }
 
 @Composable
-fun CommonScreenX() {
+fun CommonScreenX(
+    closeDrawer: () -> Unit,
+    drawerState: DrawerState,
+    onDrawerItemClick: (ItemName: String) -> Unit,
+    onNavigationIconClick: () -> Unit,
+    onSearchTextClick: () -> Unit,
+    profileImageResourceId: Int,
+    onProfileIconClick: () -> Unit,
+    onBackArrowClick: () -> Unit,
+    numberOfSelectedEmails: Int,
+    onPopUpMenuItemClick: (itemName: String) -> Unit,
+    onFabClick: () -> Unit,
+) {
+    val shouldShowContextualTopAppbar = numberOfSelectedEmails > 0
     CommonScreenSlot(
+
         topAppbar = {
-            ContextualTopAppbar(
-                onBackArrowClick = {},
-                selectedEmailCount = 0,
-                onMenuItemClick = {
-                    Log.i("Clicked", it)
-                }
-            )
+            if (shouldShowContextualTopAppbar) {
+                ContextualTopAppbar(
+                    onBackArrowClick = onBackArrowClick,
+                    selectedEmailCount = numberOfSelectedEmails,
+                    onMenuItemClick = onPopUpMenuItemClick
+                )
+
+            } else {
+                CommonTopAppbarForListScreen(
+                    onNavigationIconClick = onNavigationIconClick,
+                    onSearchTextClick = onSearchTextClick,
+                    onProfileIconClick = onProfileIconClick,
+                    profileImageResourceId = profileImageResourceId,
+                )
+            }
 
         },
 
@@ -195,22 +217,18 @@ fun CommonScreenX() {
         fab = {
             ShowFAB(
                 shouldShowExpandedFAB = false,
-                onClick = {
-
-                }
+                onClick = onFabClick
             )
 
         },
-        closeDrawer = {},
-        onDrawerItemClick = {},
-        drawerState = DrawerState(initialValue = DrawerValue.Closed)
+        closeDrawer = closeDrawer,
+        onDrawerItemClick = onDrawerItemClick,
+        drawerState = drawerState
     ) {
 
     }
 
 }
-
-
 
 
 @Composable
