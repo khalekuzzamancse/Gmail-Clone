@@ -1,7 +1,6 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -176,6 +175,32 @@ private fun CommonScreenXPreview() {
 }
 
 @Composable
+fun CommonListScreen(
+    closeDrawer: () -> Unit,
+    drawerState: DrawerState,
+    openDrawer: () -> Unit,
+    onNavigationIconClick: () -> Unit,
+    profileImageResourceId: Int,
+
+) {
+    CommonScreenX(
+        closeDrawer = closeDrawer,
+        drawerState = drawerState,
+        onDrawerItemClick = {},
+        onNavigationIconClick = onNavigationIconClick,
+        onSearchTextClick = {},
+        profileImageResourceId = profileImageResourceId,
+        onProfileIconClick ={},
+        onBackArrowClick = {},
+        numberOfSelectedEmails = 0,
+        onPopUpMenuItemClick = {},
+        onFabClick = {}
+    ) {//Screen content
+
+    }
+}
+
+@Composable
 fun CommonScreenX(
     closeDrawer: () -> Unit,
     drawerState: DrawerState,
@@ -188,6 +213,7 @@ fun CommonScreenX(
     numberOfSelectedEmails: Int,
     onPopUpMenuItemClick: (itemName: String) -> Unit,
     onFabClick: () -> Unit,
+    screenContent: @Composable () -> Unit,
 ) {
     val shouldShowContextualTopAppbar = numberOfSelectedEmails > 0
     CommonScreenSlot(
@@ -223,10 +249,9 @@ fun CommonScreenX(
         },
         closeDrawer = closeDrawer,
         onDrawerItemClick = onDrawerItemClick,
-        drawerState = drawerState
-    ) {
-
-    }
+        drawerState = drawerState,
+        screenContent = screenContent
+    )
 
 }
 

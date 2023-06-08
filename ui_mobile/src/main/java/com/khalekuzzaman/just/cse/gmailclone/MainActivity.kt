@@ -7,8 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonScreenX
 
-import com.khalekuzzaman.just.cse.gmailclone.ui.common.ListScreenTopAppbarDemo
-import com.khalekuzzaman.just.cse.gmailclone.ui.navigation.ModalDrawerNavHost
 import com.khalekuzzaman.just.cse.gmailclone.ui.theme.GmailCloneTheme
 
 class MainActivity : ComponentActivity() {
