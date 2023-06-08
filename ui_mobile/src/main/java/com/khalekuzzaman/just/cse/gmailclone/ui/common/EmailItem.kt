@@ -171,6 +171,8 @@ separate parameter,this give us more flexibility such as changing,re using and t
 If we used the EmailModel as parameter,if for some reason we change the internal
 structure of the EmailModel then we need to change also this function unnecessary.
  */
+
+
 @Composable
 fun EmailItemForSearchList(
     modifier: Modifier = Modifier,

@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -21,6 +22,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerItemsProvider.drawerGroups
+import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
 import com.khalekuzzaman.just.cse.gmailclone.utils.CustomNestedScrollConnection
 import com.khalekuzzaman.just.cse.gmailclone.utils.ScrollDirection
 
@@ -181,22 +183,75 @@ fun CommonListScreen(
     openDrawer: () -> Unit,
     onNavigationIconClick: () -> Unit,
     profileImageResourceId: Int,
-
+    emails: List<EmailModel>,
 ) {
+
+    var emails by remember {
+        mutableStateOf(emails)
+    }
+    //List of selected email
+    var selectedEmailIds by remember {
+        mutableStateOf(emptySet<Int>())
+    }
+
+    var selectedEmailCount by remember {
+        mutableIntStateOf(0)
+    }
+    val onEmailSelectedCountChange: (totalSelected: Int) -> Unit = {
+        selectedEmailCount = it
+    }
+    val onBackArrowClick: () -> Unit = {
+        selectedEmailCount = 0
+        selectedEmailIds = emptySet()
+    }
+    val onPopUpMenuItemClick: (String) -> Unit = {
+
+    }
+    val onDrawerItemClick: (String) -> Unit = {
+
+    }
+    val searchTextClick: () -> Unit = {
+
+    }
+    val onProfileIconClick: () -> Unit = {
+
+    }
+    val onFabClick: () -> Unit = {
+
+    }
+
+
     CommonScreenX(
         closeDrawer = closeDrawer,
         drawerState = drawerState,
-        onDrawerItemClick = {},
+        onDrawerItemClick = onDrawerItemClick,
         onNavigationIconClick = onNavigationIconClick,
-        onSearchTextClick = {},
+        onSearchTextClick = searchTextClick,
         profileImageResourceId = profileImageResourceId,
-        onProfileIconClick ={},
-        onBackArrowClick = {},
-        numberOfSelectedEmails = 0,
-        onPopUpMenuItemClick = {},
-        onFabClick = {}
+        onProfileIconClick = onProfileIconClick,
+        onBackArrowClick = onBackArrowClick,
+        numberOfSelectedEmails = selectedEmailCount,
+        onPopUpMenuItemClick = onPopUpMenuItemClick,
+        onFabClick = onFabClick
     ) {//Screen content
+        EmailList(
+            emails = emails,
+            onChangeBookmark = { emailId ->
+                emails = BookmarkUpdater(emails).update(emailId)
+            },
+            onEmailSelectedOrDeselected = { emailId ->
+                selectedEmailIds = if (selectedEmailIds.contains(emailId)) {
+                    selectedEmailIds.minus(emailId)
+                } else {
+                    selectedEmailIds.plus(emailId)
+                }
+                onEmailSelectedCountChange(selectedEmailIds.size)
+            },
+            selectedEmailIds = selectedEmailIds,
+            onEmailItemClick = {
 
+            }
+        )
     }
 }
 
