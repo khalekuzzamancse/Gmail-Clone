@@ -186,6 +186,7 @@ data class DrawerGroup(
  */
 class DrawerDestinations {
     companion object {
+        const val CommonListScreen="Common List Screen"
         const val ALL_INBOXES = "All inboxes"
         const val PRIMARY = "Primary"
         const val PROMOTIONS = "Promotions"

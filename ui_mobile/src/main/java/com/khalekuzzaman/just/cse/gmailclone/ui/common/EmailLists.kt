@@ -50,7 +50,7 @@ fun EmailListForSearchResult(
 @Composable
 fun EmailListUsingSlotEmailItemDemo() {
     EmailListForSearchResult(
-        emails = FakeEmailList().getFakeEmails(),
+        emails = FakeEmailList.getFakeEmails(),
         onChangeBookmark = {},
         onEmailSelectedOrDeselected = {},
         selectedEmailIds = emptySet(),

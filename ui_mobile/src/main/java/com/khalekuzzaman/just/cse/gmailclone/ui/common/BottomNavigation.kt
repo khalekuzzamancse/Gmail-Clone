@@ -108,7 +108,7 @@ fun BottomNavigationDemo() {
     ) {
         Column(modifier = Modifier.padding(it)) {
             var emails by remember {
-                mutableStateOf(FakeEmailList().getFakeEmails())
+                mutableStateOf(FakeEmailList.getFakeEmails())
             }
             //List of selected email
             var selectedEmailIds by remember {

@@ -18,8 +18,8 @@ import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(
-    modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var queryText by remember {
         mutableStateOf("")
@@ -99,7 +99,7 @@ fun SearchBar(
 
 private fun getSearchResult(queryText: String): List<EmailModel> {
     return (
-            FakeEmailList().getFakeEmails().filter { email ->
+            FakeEmailList.getFakeEmails().filter { email ->
                 email.userName.contains(queryText, ignoreCase = true) ||
                         email.subject.contains(queryText, ignoreCase = true) ||
                         email.message.contains(queryText, ignoreCase = true)
@@ -114,5 +114,5 @@ private fun getSearchResult(queryText: String): List<EmailModel> {
     showSystemUi = true
 )
 private fun SearchBarPreview() {
-    SearchBar {}
+    SearchBar({})
 }

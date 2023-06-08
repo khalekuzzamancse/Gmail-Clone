@@ -1,7 +1,6 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.navigation
 
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -10,6 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.khalekuzzaman.just.cse.gmailclone.R
+import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonListScreen
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerDestinations
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.ComposeEmail
@@ -51,20 +53,70 @@ fun ModalDrawerNavHost(
     ) {
 
         composable(DrawerDestinations.ALL_INBOXES) {
-
+            CommonListScreen(
+                onDrawerItemClick = navigateTo,
+                onBottomNavigationIconClick = navigateTo,
+                closeDrawer = closeDrawer,
+                drawerState = drawerState,
+                openDrawer = openDrawer,
+                profileImageResourceId = R.drawable.profile_image,
+                onFabIconClick = navigateToComposeEmail,
+                onEmailClick = navigateToOpenEmail,
+                emails = FakeEmailList.getFakeEmails()
+            )
 
         }
         composable(DrawerDestinations.PRIMARY) {
-
+            CommonListScreen(
+                onDrawerItemClick = navigateTo,
+                onBottomNavigationIconClick = navigateTo,
+                closeDrawer = closeDrawer,
+                drawerState = drawerState,
+                openDrawer = openDrawer,
+                profileImageResourceId = R.drawable.ic_profile_2,
+                onFabIconClick = navigateToComposeEmail,
+                onEmailClick = navigateToOpenEmail,
+                emails = FakeEmailList.getFakePrimaryEmails()
+            )
         }
         composable(DrawerDestinations.PROMOTIONS) {
-
+            CommonListScreen(
+                onDrawerItemClick = navigateTo,
+                onBottomNavigationIconClick = navigateTo,
+                closeDrawer = closeDrawer,
+                drawerState = drawerState,
+                openDrawer = openDrawer,
+                profileImageResourceId = R.drawable.ic_profile_2,
+                onFabIconClick = navigateToComposeEmail,
+                onEmailClick = navigateToOpenEmail,
+                emails = FakeEmailList.getFakePromotionEmails()
+            )
         }
         composable(DrawerDestinations.SOCIAL) {
-
+            CommonListScreen(
+                onDrawerItemClick = navigateTo,
+                onBottomNavigationIconClick = navigateTo,
+                closeDrawer = closeDrawer,
+                drawerState = drawerState,
+                openDrawer = openDrawer,
+                profileImageResourceId = R.drawable.ic_profile_2,
+                onFabIconClick = navigateToComposeEmail,
+                onEmailClick = navigateToOpenEmail,
+                emails = FakeEmailList.getFakeSocialEmails()
+            )
         }
         composable(DrawerDestinations.UPDATES) {
-
+            CommonListScreen(
+                onDrawerItemClick = navigateTo,
+                onBottomNavigationIconClick = navigateTo,
+                closeDrawer = closeDrawer,
+                drawerState = drawerState,
+                openDrawer = openDrawer,
+                profileImageResourceId = R.drawable.ic_profile_2,
+                onFabIconClick = navigateToComposeEmail,
+                onEmailClick = navigateToOpenEmail,
+                emails = FakeEmailList.getFakeUpdateEmails()
+            )
         }
         composable(DrawerDestinations.FORUMS) {
 
