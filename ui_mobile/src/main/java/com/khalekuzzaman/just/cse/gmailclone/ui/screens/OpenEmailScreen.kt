@@ -1,21 +1,32 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.screens
 
 
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,7 +49,10 @@ import androidx.compose.ui.unit.sp
 import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmail
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.BookmarkIcon
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.BottomNavigationBar
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.BottomNavigationItemInfo
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonIconButton
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.ContextualTopAppbar
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CustomIconButton
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.FormLayout
@@ -57,43 +71,62 @@ fun ReadEmailScreen(
     var shouldShowRecipientInfo by remember {
         mutableStateOf(false)
     }
-    ReadEmailLayoutSlot(
-        subjectSection = {
-            SubjectShow(text = email.subject)
-        },
-        bookMarkSection = {
-            BookmarkIcon(
-                onBookmarkIconClick = {}
+    Scaffold(
+        topBar = {
+            ContextualTopAppbar(
+                onBackArrowClick = { /*TODO*/ },
+                selectedEmailCount = 0,
+                onMenuItemClick = {}
             )
         },
-        moreInfoSection = {
-            SenderInfoHeader(
-                userName = email.userName,
-                time = email.timeOrDate,
-                profileImageId = R.drawable.ic_profile_2,
-                onExpandClick = { shouldShowRecipientInfo = !shouldShowRecipientInfo }
-            )
-
-            if (shouldShowRecipientInfo) {
-                EmailRecipientInfo(
-                    from = email.sender,
-                    to = email.receiver,
-                    date = email.timeOrDate,
-                )
-            }
-        },
-        messageSection = {
-            EmailBody(message = email.message)
-        },
-        footerSection = {
-            BottomButtonSection(
-                onReplyClick = { /*TODO*/ },
-                onReplyAllClick = { /*TODO*/ },
-                onForwardClick = {}
+        bottomBar = {
+            BottomNavigationBar(
+                items = BottomNavigationItemInfo.items,
+                onBottomNavItemClick = {}
             )
         }
+    ) {
+        ReadEmailLayoutSlot(
+            modifier = Modifier.padding(it),
+            subjectSection = {
+                SubjectShow(text = email.subject)
+            },
+            bookMarkSection = {
+                BookmarkIcon(
+                    onBookmarkIconClick = {}
+                )
+            },
+            moreInfoSection = {
+                SenderInfoHeader(
+                    userName = email.userName,
+                    time = email.timeOrDate,
+                    profileImageId = R.drawable.ic_profile_2,
+                    onExpandClick = { shouldShowRecipientInfo = !shouldShowRecipientInfo }
+                )
 
-    )
+                if (shouldShowRecipientInfo) {
+                    EmailRecipientInfo(
+                        from = email.sender,
+                        to = email.receiver,
+                        date = email.timeOrDate,
+                    )
+                }
+            },
+            messageSection = {
+                EmailBody(message =email.message)
+            },
+            footerSection = {
+                BottomButtonSection(
+                    onReplyClick = { /*TODO*/ },
+                    onReplyAllClick = { /*TODO*/ },
+                    onForwardClick = {}
+                )
+            }
+
+        )
+
+    }
+
 }
 
 @Preview(showBackground = true)
@@ -144,15 +177,18 @@ fun ReadEmailLayoutSlotPreview() {
 
 @Composable
 fun ReadEmailLayoutSlot(
+    modifier: Modifier = Modifier,
     subjectSection: @Composable () -> Unit,
     bookMarkSection: @Composable () -> Unit,
     moreInfoSection: @Composable () -> Unit,
     messageSection: @Composable () -> Unit,
     footerSection: @Composable () -> Unit,
 ) {
+
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(10.dp)
+            .fillMaxSize()
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -163,9 +199,11 @@ fun ReadEmailLayoutSlot(
             bookMarkSection()
         }
         moreInfoSection()
-        messageSection()
-        footerSection()
+        Box(Modifier.weight(1f)) { messageSection() }
+            footerSection()
+
     }
+
 
 }
 
