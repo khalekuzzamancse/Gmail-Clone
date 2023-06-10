@@ -12,9 +12,11 @@ import androidx.navigation.compose.rememberNavController
 import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmail
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonLabelListScreen
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonListScreen
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerDestinations
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
+
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.ComposeEmail
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.ReadEmailScreen
 import kotlinx.coroutines.launch
@@ -124,6 +126,19 @@ fun ModalDrawerNavHost(
         }
         composable(DrawerDestinations.FORUMS) {
 
+        }
+        composable(DrawerDestinations.IMPORTANT) {
+            CommonLabelListScreen(
+                onDrawerItemClick = navigateTo,
+                onBottomNavigationIconClick = navigateTo,
+                closeDrawer = closeDrawer,
+                drawerState = drawerState,
+                openDrawer = openDrawer,
+                profileImageResourceId = R.drawable.ic_profile_2,
+                onFabIconClick = navigateToComposeEmail,
+                onEmailClick = navigateToOpenEmail,
+                emails = FakeEmailList.getFakeUpdateEmails()
+            )
         }
 
         composable(NonTopDestinations.COMPOSE_EMAIL) {

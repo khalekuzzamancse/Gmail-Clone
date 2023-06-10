@@ -4,6 +4,7 @@ import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 import kotlin.random.Random
 
+
 object FakeEmail {
     private val message =
         "We will hold AtCoder Grand Contest 062. This contest counts for GP30 scores.\n" +

@@ -1,7 +1,7 @@
 package com.khalekuzzaman.just.cse.gmailclone.data
 
-import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
+
 
 object FakeEmailList {
     fun getFakeEmails(): List<EmailModel> {

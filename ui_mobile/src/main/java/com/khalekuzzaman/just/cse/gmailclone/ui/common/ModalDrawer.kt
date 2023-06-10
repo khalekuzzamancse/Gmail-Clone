@@ -264,7 +264,7 @@ object DrawerItemsProvider {
     )
 
     private fun getLastGroup(): List<ModalDrawerItem> = listOf(
-        ModalDrawerItem(DrawerDestinations.SETTINGS, R.drawable.ic_setting, 0),
+        ModalDrawerItem(DrawerDestinations.SETTINGS, R.drawable.ic_calendar, 0),
         ModalDrawerItem(DrawerDestinations.HELP_AND_FEEDBACK, R.drawable.ic_help_and_feedback, 0),
     )
 
