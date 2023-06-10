@@ -19,10 +19,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GmailCloneTheme {
-           //    ModalDrawerNavHost()
+            ModalDrawerNavHost()
               //  ContextualTopAppbarMenu()
                 //CommonListScreenDemo()
-                ReadEmailScreen(email = FakeEmail.email)
+             //   ReadEmailScreen(email = FakeEmail.email)
 
             }
         }
