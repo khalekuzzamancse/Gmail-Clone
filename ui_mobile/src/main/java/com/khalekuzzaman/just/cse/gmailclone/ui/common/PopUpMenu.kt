@@ -33,8 +33,8 @@ private fun Preview() {
         Log.i("Clicked", it)
     }
     Menu(
-        menuItems = PopUpMenuItemName.listForInboxes,
         onMenuItemClick = onMenuItemClick,
+        menuItems = PopUpMenuItemName.listForInboxes,
     )
 }
 
@@ -49,7 +49,7 @@ that comes into my mind,find the better solution  later
 object PopUpMenuItemName {
     const val ARCHIVE = "Archive"
     const val DELETE = "Delete"
-    const val MARK_AS_READ_OR_UNREAD= "Mark as read"
+    const val MARK_AS_READ_OR_UNREAD = "Mark as read"
     const val MOVE_TO = "Move to"
     const val SNOOZE = "Snooze"
     const val CHANGE_LABELS = "Change labels"
@@ -57,13 +57,37 @@ object PopUpMenuItemName {
     const val MARK_AS_NOT_IMPORTANT = "Mark as not important"
     const val MUTE = "Mute"
     const val REPORT_SPAM = "Report spam"
+    const val ADD_TO_TASK = "Add to Tasks"
+    const val HELP_AND_FEEDBACK = "Help and feedback"
+    const val REPLY_ALL = "Reply all"
+    const val PRINT = "Print"
+    const val PRINT_ALL = "Print all"
+    const val MARK_UNREAD_FROM_HERE = "Mark unread from here"
+    const val BLOCK_USER = "Block user"
+    const val FORWARD = "Forward"
     val listForInboxes = listOf(
-        MOVE_TO, SNOOZE, CHANGE_LABELS, ADD_STAR, MARK_AS_NOT_IMPORTANT, MUTE, REPORT_SPAM
+        MOVE_TO, SNOOZE, CHANGE_LABELS,
+        ADD_STAR, MARK_AS_NOT_IMPORTANT,
+        MUTE, REPORT_SPAM
+    )
+    val listForReadEmailScreenInfo = listOf(
+        REPLY_ALL, FORWARD, ADD_STAR, PRINT,
+        MARK_UNREAD_FROM_HERE, BLOCK_USER,
+        REPORT_SPAM
+    )
+    val listForReadEmailScreenTopBarMenu = listOf(
+        MOVE_TO, SNOOZE, CHANGE_LABELS,
+        MARK_AS_NOT_IMPORTANT,
+        MUTE, PRINT_ALL, REPORT_SPAM, ADD_TO_TASK, HELP_AND_FEEDBACK
     )
 }
 
 @Composable
-fun Menu(onMenuItemClick: (ItemName: String) -> Unit, menuItems: List<String>) {
+fun Menu(
+    onMenuItemClick: (ItemName: String) -> Unit,
+    menuItems: List<String>,
+    offset: DpOffset = DpOffset(0.dp, (-200).dp),
+) {
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -81,7 +105,7 @@ fun Menu(onMenuItemClick: (ItemName: String) -> Unit, menuItems: List<String>) {
             )
         }
         DropdownMenu(
-            offset = DpOffset(0.dp, (-200).dp),
+            offset = offset,
             modifier = Modifier,
             expanded = expanded,
             onDismissRequest = {

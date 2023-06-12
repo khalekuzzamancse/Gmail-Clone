@@ -1,16 +1,11 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.common
 
 import android.util.Log
-import android.widget.Space
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
@@ -149,7 +144,7 @@ fun CommonLabelListScreen(
         onPopUpMenuItemClick = onContextualTopAppbarItemClick,
         onFabClick = onFabClick,
         onBottomNavigationIconClick = onBottomNavigationItemClick,
-        searchBox = if (showSearchBox) searchBox else noSearchBox
+        overlappingFullScreenContent = if (showSearchBox) searchBox else noSearchBox
     ) {//Screen content
         Column {
             LabelScreenButtonDemo()
@@ -160,6 +155,7 @@ fun CommonLabelListScreen(
                 selectedEmailIds = selectedEmailIds,
                 onEmailItemClick = onEmailItemClick
             )
+
         }
 
     }

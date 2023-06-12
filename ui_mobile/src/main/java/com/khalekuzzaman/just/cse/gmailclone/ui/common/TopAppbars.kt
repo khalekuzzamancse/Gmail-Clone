@@ -27,6 +27,7 @@ fun ContextualTopAppbar(
     onBackArrowClick: () -> Unit,
     selectedEmailCount: Int,
     onMenuItemClick: (itemName: String) -> Unit,
+    menuItems: List<String>,
 ) {
 
 
@@ -60,8 +61,8 @@ fun ContextualTopAppbar(
                 onClick = { onMenuItemClick(PopUpMenuItemName.MARK_AS_READ_OR_UNREAD) }
             )
             Menu(
-                menuItems = PopUpMenuItemName.listForInboxes,
                 onMenuItemClick = onMenuItemClick,
+                menuItems = menuItems,
             )
         }
     )
@@ -74,9 +75,11 @@ private fun ContextualTopAppbarPreview() {
     ContextualTopAppbar(
         onBackArrowClick = {},
         selectedEmailCount = 0,
-    ) {
+        {
 
-    }
+        },
+ emptyList<String>(),
+    )
 }
 
 
@@ -88,7 +91,9 @@ private fun ContextualTopAppbarPreview2() {
             ContextualTopAppbar(
                 onBackArrowClick = {},
                 selectedEmailCount = 0,
-            ) {}
+                {},
+ emptyList<String>(),
+            )
         }) {
         LazyColumn(modifier = Modifier.padding(it)) {
             items(3) { index ->

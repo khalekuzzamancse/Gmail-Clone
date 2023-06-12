@@ -1,27 +1,16 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.screens
 
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -44,6 +33,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.khalekuzzaman.just.cse.gmailclone.R
@@ -56,6 +46,8 @@ import com.khalekuzzaman.just.cse.gmailclone.ui.common.ContextualTopAppbar
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CustomIconButton
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.FormLayout
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.Menu
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.PopUpMenuItemName
 
 import com.khalekuzzaman.just.cse.gmailclone.utils.TextFinder
 
@@ -77,7 +69,8 @@ fun ReadEmailScreen(
             ContextualTopAppbar(
                 onBackArrowClick = { /*TODO*/ },
                 selectedEmailCount = 0,
-                onMenuItemClick = {}
+                onMenuItemClick = {},
+                menuItems = PopUpMenuItemName.listForReadEmailScreenTopBarMenu
             )
         },
         bottomBar = {
@@ -102,7 +95,11 @@ fun ReadEmailScreen(
                     userName = email.userName,
                     time = email.timeOrDate,
                     profileImageId = R.drawable.ic_profile_2,
-                    onExpandClick = { shouldShowRecipientInfo = !shouldShowRecipientInfo }
+                    onExpandClick = { shouldShowRecipientInfo = !shouldShowRecipientInfo },
+                    onMenuItemClick = {
+                    },
+                    menuItems = PopUpMenuItemName.
+                    listForReadEmailScreenInfo
                 )
 
                 if (shouldShowRecipientInfo) {
@@ -130,51 +127,6 @@ fun ReadEmailScreen(
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ReadEmailLayoutSlotPreview() {
-    var shouldShowRecipientInfo by remember {
-        mutableStateOf(false)
-    }
-    ReadEmailLayoutSlot(
-        subjectSection = {
-            SubjectShow(text = FakeEmail.email.subject)
-        },
-        bookMarkSection = {
-            BookmarkIcon(
-                onBookmarkIconClick = {}
-            )
-        },
-        moreInfoSection = {
-            SenderInfoHeader(
-                userName = FakeEmail.email.userName,
-                time = FakeEmail.email.timeOrDate,
-                profileImageId = R.drawable.ic_profile_2,
-                onExpandClick = { shouldShowRecipientInfo = !shouldShowRecipientInfo }
-            )
-
-            if (shouldShowRecipientInfo) {
-                EmailRecipientInfo(
-                    from = FakeEmail.email.sender,
-                    to = FakeEmail.email.receiver,
-                    date = "26 Mar 2023, 8:26 pm",
-                )
-            }
-        },
-        messageSection = {
-            EmailBody(message = FakeEmail.email.message)
-        },
-        footerSection = {
-            BottomButtonSection(
-                onReplyClick = { /*TODO*/ },
-                onReplyAllClick = { /*TODO*/ },
-                onForwardClick = {}
-            )
-        }
-
-    )
-
-}
 
 @Composable
 fun ReadEmailLayoutSlot(
@@ -356,6 +308,8 @@ fun SenderInfoHeader(
     time: String,
     profileImageId: Int,
     onExpandClick: () -> Unit,
+    onMenuItemClick: (item: String) -> Unit,
+    menuItems: List<String>,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -379,9 +333,10 @@ fun SenderInfoHeader(
             modifier = Modifier.weight(.1f),
             resourceId = R.drawable.ic_reply
         )
-        CommonIconButton(
-            modifier = Modifier.weight(.1f),
-            imageVector = Icons.Default.MoreVert
+        Menu(
+            onMenuItemClick = onMenuItemClick,
+            menuItems = menuItems,
+            offset = DpOffset(0.dp,0.dp)
         )
     }
 }
@@ -456,8 +411,11 @@ private fun SenderHeaderPreview() {
     SenderInfoHeader(
         userName = "Mr. Bean",
         time = "5 days ago",
-        profileImageId = R.drawable.ic_profile_2
-    ) {}
+        profileImageId = R.drawable.ic_profile_2,
+        {},
+        {},
+ emptyList<String>()
+    )
 }
 
 

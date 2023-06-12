@@ -168,7 +168,7 @@ fun CommonListScreen(
         onPopUpMenuItemClick = onContextualTopAppbarItemClick,
         onFabClick = onFabClick,
         onBottomNavigationIconClick = onBottomNavigationItemClick,
-        searchBox = if (showSearchBox) searchBox else noSearchBox
+        overlappingFullScreenContent = if (showSearchBox) searchBox else noSearchBox
     ) {//Screen content
         Box() {
             EmailList(
@@ -197,7 +197,7 @@ fun CommonScreenX(
     onPopUpMenuItemClick: (itemName: String) -> Unit,
     onFabClick: () -> Unit,
     onBottomNavigationIconClick: (itemName: String) -> Unit,
-    searchBox: @Composable () -> Unit,
+    overlappingFullScreenContent: @Composable () -> Unit,
     screenContent: @Composable () -> Unit,
 ) {
     val shouldShowContextualTopAppbar = numberOfSelectedEmails > 0
@@ -207,7 +207,8 @@ fun CommonScreenX(
                 ContextualTopAppbar(
                     onBackArrowClick = onBackArrowClick,
                     selectedEmailCount = numberOfSelectedEmails,
-                    onMenuItemClick = onPopUpMenuItemClick
+                    onMenuItemClick = onPopUpMenuItemClick,
+                    menuItems = emptyList<String>()
                 )
 
             } else {
@@ -238,7 +239,7 @@ fun CommonScreenX(
         onDrawerItemClick = onDrawerItemClick,
         drawerState = drawerState,
         screenContent = screenContent,
-        searchBox = searchBox
+        searchBox = overlappingFullScreenContent
     )
 
 }

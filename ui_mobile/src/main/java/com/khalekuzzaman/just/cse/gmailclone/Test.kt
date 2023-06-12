@@ -4,15 +4,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextDecoration
 import com.khalekuzzaman.just.cse.gmailclone.utils.TextFinder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
-fun main() {
-    val urls = TextFinder().findText(
-        text = "abcdaB",
-        "Ab" +
-                ""
-    )
-    urls.forEach { pair ->
-        print("$pair")
+suspend fun main() {
+    coroutineScope {
+        for (i in 1..4) {
+            withContext(Dispatchers.Main) {
+                println("$i")
+            }
+            delay(500)
+        }
     }
-
 }
