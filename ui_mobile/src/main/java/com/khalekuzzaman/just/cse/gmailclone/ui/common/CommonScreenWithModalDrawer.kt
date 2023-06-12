@@ -239,7 +239,7 @@ fun CommonScreenX(
         onDrawerItemClick = onDrawerItemClick,
         drawerState = drawerState,
         screenContent = screenContent,
-        searchBox = overlappingFullScreenContent
+        overlappingFullScreenContent = overlappingFullScreenContent
     )
 
 }
@@ -253,7 +253,7 @@ fun CommonScreenSlot(
     topAppbar: @Composable () -> Unit,
     bottomAppbar: @Composable () -> Unit,
     fab: @Composable () -> Unit,
-    searchBox: @Composable () -> Unit,
+    overlappingFullScreenContent: @Composable () -> Unit,
     screenContent: @Composable () -> Unit,
 ) {
     ModalDrawer(
@@ -277,7 +277,7 @@ fun CommonScreenSlot(
                 }
             }
             Box(modifier = Modifier.matchParentSize()) {
-                searchBox()
+                overlappingFullScreenContent()
             }
 
         }

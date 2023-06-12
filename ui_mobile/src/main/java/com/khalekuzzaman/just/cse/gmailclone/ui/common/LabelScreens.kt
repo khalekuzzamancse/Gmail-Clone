@@ -144,7 +144,8 @@ fun CommonLabelListScreen(
         onPopUpMenuItemClick = onContextualTopAppbarItemClick,
         onFabClick = onFabClick,
         onBottomNavigationIconClick = onBottomNavigationItemClick,
-        overlappingFullScreenContent = if (showSearchBox) searchBox else noSearchBox
+       // overlappingFullScreenContent = if (showSearchBox) searchBox else noSearchBox
+        overlappingFullScreenContent = { BottomSheetDemo() }
     ) {//Screen content
         Column {
             LabelScreenButtonDemo()
