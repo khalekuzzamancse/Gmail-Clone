@@ -40,7 +40,7 @@ object FakeEmail {
         sender = sender,
         receiver = reciver,
         timeOrDate = time,
-        profileImageId = R.drawable.profileimage3,
+        profileImageId = R.drawable.ic_profile_2,
         isBookMarked = false,
         userName = userName
     )

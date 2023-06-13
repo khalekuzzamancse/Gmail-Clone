@@ -20,6 +20,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -233,8 +234,21 @@ fun LabelBottomSheetSlot(
 
  */
 @Composable
-fun RecipientBottomSheet(
+@Preview(showBackground = true)
+fun DatesBottomSheetPreview() {
+    val list = listOf(
+        "Any time",
+        "Older than a week",
+        "Older than a month",
+        "Older than a six months",
+        "Older than a year",
+    )
+    DatesBottomSheet(list)
+}
 
+@Composable
+fun DatesBottomSheet(
+    list: List<String>,
 ) {
     LabelBottomSheetSlot(
         dismissButton = {
@@ -247,24 +261,96 @@ fun RecipientBottomSheet(
         title = {
             Text(
                 style = MaterialTheme.typography.titleLarge,
-                text = "Label"
+                text = "Dates"
             )
         },
-        searchContent = {
-            Row(modifier = Modifier.height(48.dp)) {
-            }
-        }
 
-    ) {
+        ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
-
+            list.forEach {
+                SortByTimeItem(
+                    onClick = { /*TODO*/ },
+                    text = it
+                )
+            }
 
         }
     }
+}
+
+
+@Composable
+@Preview(showBackground = true)
+fun SortByTimeItemPreview() {
+    SortByTimeItem(
+        onClick = { /*TODO*/ },
+        text = "Any time"
+    )
+}
+
+@Composable
+fun SortByTimeItem(
+    onClick: () -> Unit,
+    selected: Boolean = false,
+    text: String,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(selected = selected, onClick = onClick)
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(text = text)
+    }
+}
+
+
+@Composable
+@Preview(showBackground = true)
+fun RecipientListPreview() {
+    RecipientList(
+        emailList = FakeEmailList.getFakeEmails()
+    )
+}
+
+@Composable
+fun RecipientList(
+    emailList: List<EmailModel>,
+) {
+    val emailMap: HashMap<String, MutableList<EmailModel>> = HashMap()
+    for (email in emailList) {
+        val firstChar = email.receiver.firstOrNull()?.uppercaseChar()?.toString()
+        if (firstChar != null) {
+            if (emailMap.containsKey(firstChar)) {
+                emailMap[firstChar]?.add(email)
+            } else {
+                emailMap[firstChar] = mutableListOf(email)
+            }
+        }
+    }
+    LazyColumn {
+        emailMap.forEach { (key, value) ->
+            item {
+                Text(
+                    text = key,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+            items(value) { item ->
+                RecipientBottomSheetItem(
+                    profileImageResourceId = item.profileImageId,
+                    title = item.receiver,
+                    subTitle = item.receiver,
+                )
+            }
+        }
+
+    }
+
 }
 
 @Composable
@@ -290,7 +376,7 @@ fun RecipientBottomSheetSuggestionList(
                 contentDescription = null
             )
         }
-        LazyColumn() {
+        LazyColumn {
 
             items(items = list) { item ->
                 RecipientBottomSheetItem(
