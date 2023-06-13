@@ -98,11 +98,16 @@ val labelItemList = listOf(
 )
 
 @Composable
-@Preview(showBackground = true)
 fun BottomSheetDemo() {
     LabelSheet(
         list = labelItemList,
         onChecked = {})
+}
+
+@Composable
+@Preview(showBackground = true)
+fun BottomSheetDemoPreview() {
+    BottomSheetDemo()
 }
 
 @Composable
@@ -234,8 +239,7 @@ fun LabelBottomSheetSlot(
 
  */
 @Composable
-@Preview(showBackground = true)
-fun DatesBottomSheetPreview() {
+fun DatesBottomSheetDemo() {
     val list = listOf(
         "Any time",
         "Older than a week",
@@ -244,6 +248,12 @@ fun DatesBottomSheetPreview() {
         "Older than a year",
     )
     DatesBottomSheet(list)
+}
+
+@Composable
+@Preview(showBackground = true)
+fun DatesBottomSheetPreview() {
+    DatesBottomSheetDemo()
 }
 
 @Composable
@@ -282,6 +292,54 @@ fun DatesBottomSheet(
     }
 }
 
+@Composable
+@Preview(showSystemUi = true)
+fun BottomSheetRecipientDemoPreview() {
+    BottomSheetRecipientDemo()
+}
+
+@Composable
+fun BottomSheetRecipientDemo() {
+    BottomSheetRecipient(list = FakeEmailList.getFakeEmails())
+}
+
+@Composable
+fun BottomSheetRecipient(
+    list: List<EmailModel>,
+) {
+    LabelBottomSheetSlot(
+        dismissButton = {
+            Icon(
+                modifier = Modifier.padding(start = 24.dp),
+                painter = painterResource(id = R.drawable.ic_cross),
+                contentDescription = null
+            )
+        },
+        title = {
+            Text(
+                style = MaterialTheme.typography.titleLarge,
+                text = "Form"
+            )
+        },
+        searchContent = {
+            Spacer(modifier = Modifier.height(48.dp))
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            RecipientBottomSheetSuggestionList(
+                list = list
+            )
+            RecipientList(
+                emailList = list
+            )
+
+
+        }
+    }
+}
 
 @Composable
 @Preview(showBackground = true)
@@ -308,6 +366,11 @@ fun SortByTimeItem(
     }
 }
 
+
+@Composable
+fun RecipientListDemo() {
+
+}
 
 @Composable
 @Preview(showBackground = true)
