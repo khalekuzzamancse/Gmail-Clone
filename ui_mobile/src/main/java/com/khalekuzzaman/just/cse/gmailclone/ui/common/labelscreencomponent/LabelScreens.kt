@@ -1,4 +1,4 @@
-package com.khalekuzzaman.just.cse.gmailclone.ui.common
+package com.khalekuzzaman.just.cse.gmailclone.ui.common.labelscreencomponent
 
 import android.util.Log
 import androidx.compose.foundation.horizontalScroll
@@ -28,6 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonScreenX
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailList
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.SearchBar
 import com.khalekuzzaman.just.cse.gmailclone.utils.BookmarkUpdater
 
 

@@ -12,7 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmail
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
-import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonLabelListScreen
+import com.khalekuzzaman.just.cse.gmailclone.ui.common.labelscreencomponent.CommonLabelListScreen
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonListScreen
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerDestinations
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
