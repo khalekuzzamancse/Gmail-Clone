@@ -18,7 +18,7 @@ import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerDestinations
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.ComposeEmail
-import com.khalekuzzaman.just.cse.gmailclone.ui.screens.ReadEmailScreen
+import com.khalekuzzaman.just.cse.gmailclone.ui.screens.read_mail.ReadEmailScreen
 import kotlinx.coroutines.launch
 
 @Composable
