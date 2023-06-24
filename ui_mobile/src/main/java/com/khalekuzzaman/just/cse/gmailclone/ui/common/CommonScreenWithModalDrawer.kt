@@ -205,6 +205,7 @@ fun CommonScreenX(
         topAppbar = {
             if (shouldShowContextualTopAppbar) {
                 ContextualTopAppbar(
+                    shouldShowBackArrow = true,
                     onBackArrowClick = onBackArrowClick,
                     selectedEmailCount = numberOfSelectedEmails,
                     onMenuItemClick = onPopUpMenuItemClick,

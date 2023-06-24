@@ -6,13 +6,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -32,6 +37,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -51,15 +57,26 @@ import com.khalekuzzaman.just.cse.gmailclone.ui.common.PopUpMenuItemName
 
 import com.khalekuzzaman.just.cse.gmailclone.utils.TextFinder
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(
+    showBackground = true,
+    showSystemUi = true
+)
+
+@Preview(
+    showBackground = true,
+    device = Devices.PIXEL_C,
+    showSystemUi = true
+)
 @Composable
 fun ReadEmailScreenPreview() {
-    ReadEmailScreen(email = FakeEmail.email)
+    ReadEmailScreen(email = FakeEmail.email, isExpandedScreen = false)
 }
+
 
 @Composable
 fun ReadEmailScreen(
     email: EmailModel,
+    isExpandedScreen: Boolean,
 ) {
     var shouldShowRecipientInfo by remember {
         mutableStateOf(false)
@@ -67,6 +84,7 @@ fun ReadEmailScreen(
     Scaffold(
         topBar = {
             ContextualTopAppbar(
+                shouldShowBackArrow = !isExpandedScreen,
                 onBackArrowClick = { /*TODO*/ },
                 selectedEmailCount = 0,
                 onMenuItemClick = {},
@@ -98,8 +116,7 @@ fun ReadEmailScreen(
                     onExpandClick = { shouldShowRecipientInfo = !shouldShowRecipientInfo },
                     onMenuItemClick = {
                     },
-                    menuItems = PopUpMenuItemName.
-                    listForReadEmailScreenInfo
+                    menuItems = PopUpMenuItemName.listForReadEmailScreenInfo
                 )
 
                 if (shouldShowRecipientInfo) {
@@ -111,14 +128,23 @@ fun ReadEmailScreen(
                 }
             },
             messageSection = {
-                EmailBody(message =email.message)
+                EmailBody(message = email.message)
             },
             footerSection = {
-                BottomButtonSection(
-                    onReplyClick = { /*TODO*/ },
-                    onReplyAllClick = { /*TODO*/ },
-                    onForwardClick = {}
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                ) {
+                    BottomSectionButton(
+                        modifier = Modifier.weight(1f),
+                        leftIconId = R.drawable.ic_reply, label = "Reply", onClick = {})
+                    BottomSectionButton(
+                        modifier = Modifier.weight(1f),
+                        leftIconId = R.drawable.ic_reply_all, label = "Reply all", onClick = {})
+                    BottomSectionButton(
+                        modifier = Modifier.weight(1f),
+                        leftIconId = R.drawable.ic_forward, label = "Forward", onClick = {})
+                }
             }
 
         )
@@ -153,7 +179,7 @@ fun ReadEmailLayoutSlot(
         }
         moreInfoSection()
         Box(Modifier.weight(1f)) { messageSection() }
-            footerSection()
+        footerSection()
 
     }
 
@@ -224,39 +250,6 @@ private fun EmailRecipientInfoPreview() {
     )
 }
 
-@Composable
-private fun BottomButtonSection(
-    modifier: Modifier = Modifier,
-    onReplyClick: () -> Unit,
-    onReplyAllClick: () -> Unit,
-    onForwardClick: () -> Unit,
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-    ) {
-        BottomSectionButton(
-            modifier = Modifier.weight(1f),
-            leftIconId = R.drawable.ic_reply, label = "Reply", onClick = {})
-        BottomSectionButton(
-            modifier = Modifier.weight(1f),
-            leftIconId = R.drawable.ic_reply_all, label = "Reply all", onClick = {})
-        BottomSectionButton(
-            modifier = Modifier.weight(1f),
-            leftIconId = R.drawable.ic_forward, label = "Forward", onClick = {})
-    }
-
-}
-
-@Composable
-@Preview(showBackground = true)
-private fun BottomButtonSectionPreview() {
-    BottomButtonSection(
-        onReplyClick = {},
-        onReplyAllClick = {},
-        onForwardClick = {}
-    )
-}
 
 @Composable
 private fun BottomSectionButton(
@@ -303,6 +296,88 @@ private fun EmailBodyPreview() {
 
 
 @Composable
+fun SenderInfoHeaderExpandedScreen(
+    userName: String,
+    time: String,
+    profileImageId: Int,
+    onExpandClick: () -> Unit,
+    onMenuItemClick: (item: String) -> Unit,
+    menuItems: List<String>,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Row(modifier = Modifier.weight(1f)) {
+            Text(
+               // text = userName,
+                text=userName,
+                style = MaterialTheme.typography.titleMedium,
+                maxLines = 1,
+                modifier=Modifier.weight(1f),
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(modifier = Modifier.width(2.dp))
+            Text(
+                text = time,
+                style = MaterialTheme.typography.labelSmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+
+                )
+        }
+
+
+        Row(modifier = Modifier) {
+            CommonIconButton(
+                resourceId = R.drawable.ic_reply
+            )
+            CommonIconButton(
+                resourceId = R.drawable.ic_forward
+            )
+            Menu(
+                onMenuItemClick = onMenuItemClick,
+                menuItems = menuItems,
+                offset = DpOffset(0.dp, 0.dp)
+            )
+        }
+    }
+}
+
+@Preview(
+    device = Devices.PIXEL_C
+)
+@Composable
+fun SenderInfoExpandedScreenPreview() {
+
+    Column() {
+        var string="";
+        for (i in 1..500)
+            string+="a"
+        SenderInfoHeaderExpandedScreen(
+            userName=string,
+            time = "5 days ago",
+            profileImageId = R.drawable.ic_profile_2,
+            onExpandClick = {},
+            onMenuItemClick = {},
+            menuItems = emptyList()
+        )
+       Divider(modifier = Modifier.padding(top=5.dp).fillMaxWidth())
+        SenderInfoHeaderExpandedScreen(
+            userName = "Md Abul Kalam",
+            time = "5 days ago",
+            profileImageId = R.drawable.ic_profile_2,
+            onExpandClick = {},
+            onMenuItemClick = {},
+            menuItems = emptyList()
+        )
+    }
+
+}
+
+@Composable
 fun SenderInfoHeader(
     userName: String,
     time: String,
@@ -336,7 +411,7 @@ fun SenderInfoHeader(
         Menu(
             onMenuItemClick = onMenuItemClick,
             menuItems = menuItems,
-            offset = DpOffset(0.dp,0.dp)
+            offset = DpOffset(0.dp, 0.dp)
         )
     }
 }
@@ -372,38 +447,23 @@ private fun SenderNameAndTime(userName: String, time: String) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        SenderName(
+        Text(
+            text = userName,
+            style = MaterialTheme.typography.titleMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f),
-            title = userName
         )
-        DateORTime(time = time)
+        Text(
+            text = time,
+            style = MaterialTheme.typography.labelSmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+
+            )
     }
 }
 
-@Composable
-private fun SenderName(modifier: Modifier = Modifier, title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleMedium,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        //Make sure the when the content of the title increase
-        //Or the size of the title then the time do not shrink or disappear
-        // Ensure the first child takes the remaining space
-        modifier = modifier
-    )
-}
-
-@Composable
-private fun DateORTime(modifier: Modifier = Modifier, time: String) {
-    Text(
-        text = time,
-        style = MaterialTheme.typography.labelSmall,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        modifier = modifier,
-    )
-}
 
 @Composable
 @Preview(showBackground = true)
@@ -414,7 +474,7 @@ private fun SenderHeaderPreview() {
         profileImageId = R.drawable.ic_profile_2,
         {},
         {},
- emptyList<String>()
+        emptyList<String>()
     )
 }
 

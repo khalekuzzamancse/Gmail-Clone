@@ -24,6 +24,7 @@ import com.khalekuzzaman.just.cse.gmailclone.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContextualTopAppbar(
+    shouldShowBackArrow: Boolean,
     onBackArrowClick: () -> Unit,
     selectedEmailCount: Int,
     onMenuItemClick: (itemName: String) -> Unit,
@@ -34,10 +35,12 @@ fun ContextualTopAppbar(
     TopAppBar(
         title = {},
         navigationIcon = {
-            CommonIconButton(
-                imageVector = Icons.Default.ArrowBack,
-                onClick = onBackArrowClick
-            )
+            if (shouldShowBackArrow){
+                CommonIconButton(
+                    imageVector = Icons.Default.ArrowBack,
+                    onClick = onBackArrowClick
+                )
+            }
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
@@ -73,12 +76,13 @@ fun ContextualTopAppbar(
 @Preview(showBackground = true)
 private fun ContextualTopAppbarPreview() {
     ContextualTopAppbar(
+        true,
         onBackArrowClick = {},
         selectedEmailCount = 0,
         {
 
         },
- emptyList<String>(),
+        emptyList(),
     )
 }
 
@@ -89,10 +93,11 @@ private fun ContextualTopAppbarPreview2() {
     Scaffold(
         topBar = {
             ContextualTopAppbar(
+                true,
                 onBackArrowClick = {},
                 selectedEmailCount = 0,
                 {},
- emptyList<String>(),
+                emptyList(),
             )
         }) {
         LazyColumn(modifier = Modifier.padding(it)) {

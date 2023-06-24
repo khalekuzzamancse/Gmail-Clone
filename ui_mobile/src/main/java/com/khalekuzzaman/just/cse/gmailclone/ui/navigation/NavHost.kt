@@ -145,7 +145,7 @@ fun ModalDrawerNavHost(
             ComposeEmail()
         }
         composable(NonTopDestinations.OPEN_EMAIL) {
-            ReadEmailScreen(email = readEmail)
+            ReadEmailScreen(email = readEmail, isExpandedScreen = false)
         }
     }
 
