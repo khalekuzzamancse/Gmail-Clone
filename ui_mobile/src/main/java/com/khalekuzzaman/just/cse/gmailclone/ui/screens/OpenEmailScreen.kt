@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Button
@@ -296,83 +294,119 @@ private fun EmailBodyPreview() {
 
 
 @Composable
-fun SenderInfoHeaderExpandedScreen(
-    userName: String,
-    time: String,
-    profileImageId: Int,
-    onExpandClick: () -> Unit,
-    onMenuItemClick: (item: String) -> Unit,
-    menuItems: List<String>,
+fun SenderInfoSlotExpandedScreen(
+    profileImage: @Composable () -> Unit,
+    userName: @Composable () -> Unit,
+    timeStamp: @Composable () -> Unit,
+    replyArrow: @Composable () -> Unit,
+    forwardArrow: @Composable () -> Unit,
+    moreMenuIcon: @Composable () -> Unit,
+    expandedIcon: @Composable () -> Unit,
+    toMeText: @Composable () -> Unit,
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
 
-        Row(modifier = Modifier.weight(1f)) {
-            Text(
-               // text = userName,
-                text=userName,
-                style = MaterialTheme.typography.titleMedium,
-                maxLines = 1,
-                modifier=Modifier.weight(1f),
-                overflow = TextOverflow.Ellipsis,
-            )
-            Spacer(modifier = Modifier.width(2.dp))
-            Text(
-                text = time,
-                style = MaterialTheme.typography.labelSmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-
-                )
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Box( modifier=Modifier.align(Alignment.CenterVertically)){
+            profileImage()
         }
 
+        Column(modifier = Modifier.weight(1f)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(modifier = Modifier.weight(1f)) {
+                    Box(Modifier.weight(1f)) { userName() }
+                    Spacer(modifier = Modifier.width(2.dp))
+                    timeStamp()
+                }
+                Row(modifier = Modifier) {
+                    replyArrow()
+                    forwardArrow()
+                    moreMenuIcon()
+                }
+            }
+            Row(modifier = Modifier) {
+                toMeText()
+                expandedIcon()
+            }
 
-        Row(modifier = Modifier) {
-            CommonIconButton(
-                resourceId = R.drawable.ic_reply
-            )
-            CommonIconButton(
-                resourceId = R.drawable.ic_forward
-            )
-            Menu(
-                onMenuItemClick = onMenuItemClick,
-                menuItems = menuItems,
-                offset = DpOffset(0.dp, 0.dp)
-            )
         }
     }
+
+
 }
 
 @Preview(
-    device = Devices.PIXEL_C
+    device = Devices.TABLET
 )
 @Composable
 fun SenderInfoExpandedScreenPreview() {
 
     Column() {
-        var string="";
-        for (i in 1..500)
-            string+="a"
-        SenderInfoHeaderExpandedScreen(
-            userName=string,
-            time = "5 days ago",
-            profileImageId = R.drawable.ic_profile_2,
-            onExpandClick = {},
-            onMenuItemClick = {},
-            menuItems = emptyList()
+        var string = "";
+        for (i in 1..50)
+            string += "a"
+        SenderInfoSlotExpandedScreen(
+            profileImage = {
+                CommonIconButton(
+                    resourceId = R.drawable.ic_profile_2
+                )
+            },
+            userName = {
+                Text(
+                    text = string,
+                    style = MaterialTheme.typography.titleLarge,
+                    maxLines = 1,
+                    modifier = Modifier.weight(1f),
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
+            timeStamp = {
+                Text(
+                    text = "5 days ago",
+                    style = MaterialTheme.typography.labelMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+
+                    )
+            },
+            replyArrow = {
+                CommonIconButton(
+                    resourceId = R.drawable.ic_reply
+                )
+            },
+            forwardArrow = {
+
+                CommonIconButton(
+                    resourceId = R.drawable.ic_forward
+                )
+            },
+            moreMenuIcon = {
+                Menu(
+                    onMenuItemClick = {},
+                    menuItems = emptyList(),
+                    offset = DpOffset(0.dp, 0.dp)
+                )
+
+            },
+            toMeText = {
+                Text(
+                    text = "to me",
+                    style = MaterialTheme.typography.labelLarge,
+                )
+            },
+            expandedIcon = {
+                CustomIconButton(onClick = { }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_down_arrow),
+                        contentDescription = null
+                    )
+                }
+            }
         )
-       Divider(modifier = Modifier.padding(top=5.dp).fillMaxWidth())
-        SenderInfoHeaderExpandedScreen(
-            userName = "Md Abul Kalam",
-            time = "5 days ago",
-            profileImageId = R.drawable.ic_profile_2,
-            onExpandClick = {},
-            onMenuItemClick = {},
-            menuItems = emptyList()
-        )
+
     }
 
 }
