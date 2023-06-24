@@ -24,7 +24,6 @@ import com.khalekuzzaman.just.cse.gmailclone.ui.common.Menu
 
 @Composable
 fun SenderInfoSlotExpandedScreen(
-    isExpandedScreen: Boolean,
     profileImage: @Composable () -> Unit,
     userName: @Composable () -> Unit,
     timeStamp: @Composable () -> Unit,
@@ -50,24 +49,10 @@ fun SenderInfoSlotExpandedScreen(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (isExpandedScreen) {
-                        /*
-                 Problems:
-                 When the userName text size increase then the
-                 timeStamp will overlap.
-                 Later we have to fix the bug
-                  */
-                        Box(Modifier) {
+                        Box(Modifier.weight(1f, fill = false)) {
                             userName()
                         }
                         timeStamp()
-                    } else {
-                        Box(Modifier.weight(1f)) {
-                            userName()
-                        }
-                        timeStamp()
-                    }
-
 
                 }
 
@@ -88,6 +73,7 @@ fun SenderInfoSlotExpandedScreen(
 
 }
 
+@Preview()
 @Preview(
     device = Devices.TABLET
 )
@@ -99,7 +85,6 @@ fun SenderInfoExpandedScreenPreview() {
         for (i in 1..50)
             string += "a"
         SenderInfoSlotExpandedScreen(
-            isExpandedScreen = true,
             profileImage = {
                 CommonIconButton(
                     resourceId = R.drawable.ic_profile_2
@@ -158,77 +143,6 @@ fun SenderInfoExpandedScreenPreview() {
             }
         )
 
-
-    }
-
-}
-
-@Preview()
-@Composable
-fun SenderInfoCompactScreenPreview() {
-
-    Column {
-        var string = ""
-        for (i in 1..50)
-            string += "a"
-        SenderInfoSlotExpandedScreen(
-            isExpandedScreen = false,
-            profileImage = {
-                CommonIconButton(
-                    resourceId = R.drawable.ic_profile_2
-                )
-            },
-            userName = {
-                Text(
-                    text = string,
-                    style = MaterialTheme.typography.titleLarge,
-                    maxLines = 1,
-                    modifier = Modifier.weight(1f),
-                    overflow = TextOverflow.Ellipsis,
-                )
-            },
-            timeStamp = {
-                Text(
-                    text = "5 days ago",
-                    style = MaterialTheme.typography.labelMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-
-                    )
-            },
-            replyArrow = {
-                CommonIconButton(
-                    resourceId = R.drawable.ic_reply
-                )
-            },
-            moreMenuIcon = {
-                Menu(
-                    onMenuItemClick = {},
-                    menuItems = emptyList(),
-                    offset = DpOffset(0.dp, 0.dp)
-                )
-
-            },
-            toMeText = {
-                Text(
-                    text = "to me",
-                    style = MaterialTheme.typography.labelLarge,
-                )
-            },
-            forwardArrow = {
-                /*
-              in compact screen the forward arrow not present
-                 */
-            },
-            expandedIcon = {
-                CustomIconButton(onClick = { }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_down_arrow),
-                        contentDescription = null
-                    )
-                }
-            }
-        )
 
     }
 

@@ -25,7 +25,6 @@ fun SenderInfoHeader(
 ) {
 
     SenderInfoSlotExpandedScreen(
-        isExpandedScreen = true,
         profileImage = {
             CommonIconButton(
                 resourceId =profileImageId
@@ -85,8 +84,6 @@ fun SenderInfoHeader(
 }
 
 
-
-
 @Composable
 @Preview(showBackground = true)
 private fun SenderHeaderPreview() {
@@ -94,8 +91,8 @@ private fun SenderHeaderPreview() {
         userName = "Mr. Bean",
         time = "5 days ago",
         profileImageId = R.drawable.ic_profile_2,
-        {},
-        {},
+        onExpandClick = {},
+        onMenuItemClick = {},
         emptyList()
     )
 }
