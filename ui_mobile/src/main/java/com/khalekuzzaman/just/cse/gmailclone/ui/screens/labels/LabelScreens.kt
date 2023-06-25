@@ -1,4 +1,4 @@
-package com.khalekuzzaman.just.cse.gmailclone.ui.common.labelscreencomponent
+package com.khalekuzzaman.just.cse.gmailclone.ui.screens.labels
 
 import android.util.Log
 import androidx.compose.foundation.horizontalScroll
@@ -102,10 +102,10 @@ fun CommonLabelListScreen(
     }
     val searchTextClick: () -> Unit = {
         showSearchBox = true
-        Log.i("Clicked:GeneralTopbar->", "searchText")
+        Log.i("Clicked:GeneralTop bar->", "searchText")
     }
     val onProfileIconClick: () -> Unit = {
-        Log.i("Clicked:GeneralTopbar->", "profileIcon")
+        Log.i("Clicked:GeneralTop bar->", "profileIcon")
     }
     val onFabClick: () -> Unit = {
         onFabIconClick()
@@ -131,9 +131,11 @@ fun CommonLabelListScreen(
     val searchBox: @Composable () -> Unit = {
         SearchBar(onBackClick = onSearchBoxBackIconClick)
     }
+    var label by remember { mutableStateOf("") }
 
-    val noSearchBox: @Composable () -> Unit = {}
 
+    val emptyComposable: @Composable () -> Unit = {}
+    val dismissSheet: () -> Unit = { label = "" }
 
     CommonScreenX(
         closeDrawer = closeDrawer,
@@ -148,11 +150,41 @@ fun CommonLabelListScreen(
         onPopUpMenuItemClick = onContextualTopAppbarItemClick,
         onFabClick = onFabClick,
         onBottomNavigationIconClick = onBottomNavigationItemClick,
-       // overlappingFullScreenContent = if (showSearchBox) searchBox else noSearchBox
-        overlappingFullScreenContent = { BottomSheetDemo() }
+        overlappingFullScreenContent =
+        {
+            when (label) {
+                DropDownLabels.LABEL -> LabelSheet(
+                    onChecked = {},
+                    onCrossButtonClick = dismissSheet,
+                    list = labelItemList
+                )
+
+                DropDownLabels.TO ->
+                    BottomSheetRecipient(
+                        onCrossButtonClick = dismissSheet,
+                        list = FakeEmailList.getFakeEmails(),
+                        title = "TO"
+                    )
+
+                DropDownLabels.FROM ->
+                    BottomSheetRecipient(
+                        onCrossButtonClick = dismissSheet,
+                        list = FakeEmailList.getFakeEmails(),
+                        title = "FROM"
+                    )
+
+                else -> emptyComposable()
+            }
+        }
+
     ) {//Screen content
         Column {
-            LabelScreenButtonDemo()
+            LabelButtons(
+                onButtonClick = {
+                    label = it
+                }
+
+            )
             EmailList(
                 emails = emails,
                 onChangeBookmark = onChangeBookmark,
@@ -177,38 +209,41 @@ object DropDownLabels {
 }
 
 @Composable
-fun LabelScreenButtonDemo() {
+fun LabelButtons(
+    onButtonClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.horizontalScroll(rememberScrollState())
+        modifier = modifier.horizontalScroll(rememberScrollState())
     ) {
         // Usage
         DropDownButton(
-            onClick = { /*TODO*/ },
+            onClick = { onButtonClick(DropDownLabels.LABEL) },
             label = DropDownLabels.LABEL
         )
         DropDownButton(
-            onClick = { /*TODO*/ },
+            onClick = { onButtonClick(DropDownLabels.FROM) },
             label = DropDownLabels.FROM
         )
         DropDownButton(
-            onClick = { /*TODO*/ },
+            onClick = { onButtonClick(DropDownLabels.TO) },
             label = DropDownLabels.TO
         )
         DropDownButton(
-            onClick = { /*TODO*/ },
+            onClick = { onButtonClick(DropDownLabels.ATTACHMENT) },
             label = DropDownLabels.ATTACHMENT
         )
         DropDownButton(
-            onClick = { /*TODO*/ },
+            onClick = { onButtonClick(DropDownLabels.DATE) },
             label = DropDownLabels.DATE
         )
         DropDownButtonWithoutIcon(
-            onClick = { /*TODO*/ },
+            onClick = { onButtonClick(DropDownLabels.IS_UNREAD) },
             label = DropDownLabels.IS_UNREAD
         )
         DropDownButtonWithoutIcon(
-            onClick = { /*TODO*/ },
+            onClick = { onButtonClick(DropDownLabels.EXCLUDE_CALENDAR_UPDATES) },
             label = DropDownLabels.EXCLUDE_CALENDAR_UPDATES
         )
     }
@@ -217,7 +252,9 @@ fun LabelScreenButtonDemo() {
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 private fun DropDownButtonPreview() {
-    LabelScreenButtonDemo()
+    LabelButtons(
+        onButtonClick = {}
+    )
 }
 
 

@@ -1,4 +1,4 @@
-package com.khalekuzzaman.just.cse.gmailclone.ui.common.labelscreencomponent
+package com.khalekuzzaman.just.cse.gmailclone.ui.screens.labels
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

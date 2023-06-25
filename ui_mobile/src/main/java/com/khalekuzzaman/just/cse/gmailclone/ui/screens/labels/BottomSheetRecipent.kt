@@ -1,5 +1,6 @@
-package com.khalekuzzaman.just.cse.gmailclone.ui.common.labelscreencomponent
+package com.khalekuzzaman.just.cse.gmailclone.ui.screens.labels
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +27,6 @@ import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmailList
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 
 
-
 /*
 -
 
@@ -40,17 +40,27 @@ fun BottomSheetRecipientDemoPreview() {
 
 @Composable
 fun BottomSheetRecipientDemo() {
-    BottomSheetRecipient(list = FakeEmailList.getFakeEmails())
+    BottomSheetRecipient(
+        onCrossButtonClick = {},
+        list = FakeEmailList.getFakeEmails(),
+        title = ""
+    )
 }
 
 @Composable
 fun BottomSheetRecipient(
+    onCrossButtonClick: () -> Unit,
     list: List<EmailModel>,
+    title: String,
 ) {
     LabelBottomSheetSlot(
         dismissButton = {
             Icon(
-                modifier = Modifier.padding(start = 24.dp),
+                modifier = Modifier
+                    .padding(start = 24.dp)
+                    .clickable {
+                        onCrossButtonClick()
+                    },
                 painter = painterResource(id = R.drawable.ic_cross),
                 contentDescription = null
             )
@@ -58,7 +68,7 @@ fun BottomSheetRecipient(
         title = {
             Text(
                 style = MaterialTheme.typography.titleLarge,
-                text = "Form"
+                text = title
             )
         },
         searchContent = {
@@ -80,8 +90,6 @@ fun BottomSheetRecipient(
         }
     }
 }
-
-
 
 
 @Composable
