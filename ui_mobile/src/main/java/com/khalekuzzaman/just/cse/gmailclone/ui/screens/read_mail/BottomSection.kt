@@ -31,13 +31,13 @@ fun FooterSection(
     ) {
         BottomSectionButton(
             modifier = Modifier.weight(1f),
-            leftIconId = R.drawable.ic_reply, label = "Reply", onClick = {})
+            leftIconId = R.drawable.ic_reply, label = "Reply", onClick = onReplyButtonClick)
         BottomSectionButton(
             modifier = Modifier.weight(1f),
-            leftIconId = R.drawable.ic_reply_all, label = "Reply all", onClick = {})
+            leftIconId = R.drawable.ic_reply_all, label = "Reply all", onClick = onReplyAllButtonClick)
         BottomSectionButton(
             modifier = Modifier.weight(1f),
-            leftIconId = R.drawable.ic_forward, label = "Forward", onClick = {})
+            leftIconId = R.drawable.ic_forward, label = "Forward", onClick = onForwardButtonClick)
     }
 }
 

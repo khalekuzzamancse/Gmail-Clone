@@ -1,5 +1,6 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.navigation
 
+import android.util.Log
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -145,7 +146,35 @@ fun ModalDrawerNavHost(
             ComposeEmail()
         }
         composable(NonTopDestinations.OPEN_EMAIL) {
-            ReadEmailScreen(email = readEmail, isExpandedScreen = false)
+            ReadEmailScreen(
+                email = readEmail,
+                onForwardButtonClick = {
+                    Log.i("Clicked:", "Forward");
+                },
+                onMenuItemClick = {
+                    Log.i("Clicked:MenuItem", it);
+                },
+                onTopBarMenuItemClick = {
+                    Log.i("Clicked:TopMenuItem", it);
+                },
+                onReplyAllButtonClick = {
+                    Log.i("Clicked:", "replyAll");
+                },
+                onReplyButtonClick = {
+                    Log.i("Clicked:", "reply");
+                },
+                onBackArrowClick = {
+                    Log.i("Clicked:", "backArrow");
+                },
+                onBookmarkIconClick = {
+                    Log.i("Clicked:", "bookmark");
+                },
+                onBottomNavItemClick = {
+                    Log.i("Clicked:BottomMenuItem", it);
+                },
+                isExpandedScreen = false
+
+            )
         }
     }
 

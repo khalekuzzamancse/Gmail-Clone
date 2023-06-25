@@ -21,6 +21,8 @@ fun SenderInfoHeader(
     profileImageId: Int,
     onExpandClick: () -> Unit,
     onMenuItemClick: (item: String) -> Unit,
+    onReplyIconArrowClick: () -> Unit,
+    onForwardArrowClick: () -> Unit,
     menuItems: List<String>,
 ) {
 
@@ -49,13 +51,15 @@ fun SenderInfoHeader(
         },
         replyArrow = {
             CommonIconButton(
-                resourceId = R.drawable.ic_reply
+                resourceId = R.drawable.ic_reply,
+                onClick = onReplyIconArrowClick
             )
         },
         forwardArrow = {
 
             CommonIconButton(
-                resourceId = R.drawable.ic_forward
+                resourceId = R.drawable.ic_forward,
+                onClick = onForwardArrowClick
             )
         },
         moreMenuIcon = {
@@ -93,6 +97,8 @@ private fun SenderHeaderPreview() {
         profileImageId = R.drawable.ic_profile_2,
         onExpandClick = {},
         onMenuItemClick = {},
+        {},
+        {},
         emptyList()
     )
 }

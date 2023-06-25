@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import com.khalekuzzaman.just.cse.gmailclone.R
 import com.khalekuzzaman.just.cse.gmailclone.data.FakeEmail
-import com.khalekuzzaman.just.cse.gmailclone.ui.common.BookmarkIcon
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.BottomNavigationBar
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.BottomNavigationItemInfo
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.ContextualTopAppbar
@@ -23,21 +22,55 @@ import com.khalekuzzaman.just.cse.gmailclone.ui.common.PopUpMenuItemName
     showBackground = true,
     showSystemUi = true
 )
+@Composable
+fun ReadEmailScreenPreview() {
+    ReadEmailScreen(
+        email = FakeEmail.email,
+        onForwardButtonClick = {},
+        onMenuItemClick = {},
+        onTopBarMenuItemClick = {},
+        onReplyAllButtonClick = {},
+        onReplyButtonClick = {},
+        onBackArrowClick = {},
+        onBookmarkIconClick = {},
+        onBottomNavItemClick = {},
+        isExpandedScreen = false
+    )
+}
 
 @Preview(
     showBackground = true,
-    device = Devices.PIXEL_C,
-    showSystemUi = true
+    showSystemUi = true,
+    device = Devices.TABLET
 )
 @Composable
-fun ReadEmailScreenPreview() {
-    ReadEmailScreen(email = FakeEmail.email, isExpandedScreen = false)
+fun ReadEmailScreenTabletPreview() {
+    ReadEmailScreen(
+        email = FakeEmail.email,
+        onForwardButtonClick = {},
+        onMenuItemClick = {},
+        onTopBarMenuItemClick = {},
+        onReplyAllButtonClick = {},
+        onReplyButtonClick = {},
+        onBackArrowClick = {},
+        onBookmarkIconClick = {},
+        onBottomNavItemClick = {},
+        isExpandedScreen = true
+    )
 }
 
 
 @Composable
 fun ReadEmailScreen(
     email: EmailModel,
+    onForwardButtonClick: () -> Unit,
+    onMenuItemClick: (menuItem: String) -> Unit,
+    onReplyButtonClick: () -> Unit,
+    onReplyAllButtonClick: () -> Unit,
+    onTopBarMenuItemClick: (menuItem: String) -> Unit,
+    onBackArrowClick: () -> Unit,
+    onBookmarkIconClick: () -> Unit,
+    onBottomNavItemClick: (String) -> Unit,
     isExpandedScreen: Boolean,
 ) {
     var shouldShowRecipientInfo by remember {
@@ -47,16 +80,16 @@ fun ReadEmailScreen(
         topBar = {
             ContextualTopAppbar(
                 shouldShowBackArrow = !isExpandedScreen,
-                onBackArrowClick = { /*TODO*/ },
+                onBackArrowClick = onBackArrowClick,
                 selectedEmailCount = 0,
-                onMenuItemClick = {},
+                onMenuItemClick = onTopBarMenuItemClick,
                 menuItems = PopUpMenuItemName.listForReadEmailScreenTopBarMenu
             )
         },
         bottomBar = {
             BottomNavigationBar(
                 items = BottomNavigationItemInfo.items,
-                onBottomNavItemClick = {}
+                onBottomNavItemClick = onBottomNavItemClick
             )
         }
     ) {
@@ -64,13 +97,10 @@ fun ReadEmailScreen(
             modifier = Modifier.padding(it),
             subjectSection = {
                 SubjectAndBookmarkRow(
-                    onBookmarkIconClick = {},
+                    onBookmarkIconClick = onBookmarkIconClick,
                     isBookmarked = false,
                     subject = email.subject
                 )
-            },
-            bookMarkSection = {
-
             },
             moreInfoSection = {
                 SenderInfoHeader(
@@ -78,8 +108,9 @@ fun ReadEmailScreen(
                     time = email.timeOrDate,
                     profileImageId = R.drawable.ic_profile_2,
                     onExpandClick = { shouldShowRecipientInfo = !shouldShowRecipientInfo },
-                    onMenuItemClick = {
-                    },
+                    onMenuItemClick = onMenuItemClick,
+                    onReplyIconArrowClick = onReplyButtonClick,
+                    onForwardArrowClick = onForwardButtonClick,
                     menuItems = PopUpMenuItemName.listForReadEmailScreenInfo
                 )
 
@@ -93,14 +124,14 @@ fun ReadEmailScreen(
             },
             messageSection = {
                 EmailBody(message = email.message)
-            },
+            }
+        ,
             footerSection = {
                 FooterSection(
-                    onReplyButtonClick = {},
-                    onReplyAllButtonClick = {},
-                    onForwardButtonClick = {},
+                    onReplyButtonClick = onReplyButtonClick,
+                    onReplyAllButtonClick = onReplyAllButtonClick,
+                    onForwardButtonClick = onForwardButtonClick,
                 )
-
             }
 
         )

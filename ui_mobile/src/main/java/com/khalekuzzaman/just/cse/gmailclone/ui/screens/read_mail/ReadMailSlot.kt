@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,7 +19,6 @@ import androidx.compose.ui.unit.dp
 fun ReadEmailLayoutSlot(
     modifier: Modifier = Modifier,
     subjectSection: @Composable () -> Unit,
-    bookMarkSection: @Composable () -> Unit,
     moreInfoSection: @Composable () -> Unit,
     messageSection: @Composable () -> Unit,
     footerSection: @Composable () -> Unit,
@@ -25,18 +27,12 @@ fun ReadEmailLayoutSlot(
     Column(
         modifier = modifier
             .padding(10.dp)
+            .verticalScroll(rememberScrollState())
             .fillMaxSize()
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(Modifier.weight(1f)) { subjectSection() }
-            bookMarkSection()
-        }
+        subjectSection()
         moreInfoSection()
-        Box(Modifier.weight(1f)) { messageSection() }
+        messageSection()
         footerSection()
 
     }

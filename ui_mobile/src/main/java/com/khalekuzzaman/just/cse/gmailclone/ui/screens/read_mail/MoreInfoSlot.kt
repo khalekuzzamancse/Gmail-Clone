@@ -73,7 +73,7 @@ fun SenderInfoSlotExpandedScreen(
 
 }
 
-@Preview()
+@Preview
 @Preview(
     device = Devices.TABLET
 )
