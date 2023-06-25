@@ -18,7 +18,7 @@ import com.khalekuzzaman.just.cse.gmailclone.ui.common.CommonListScreen
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.DrawerDestinations
 import com.khalekuzzaman.just.cse.gmailclone.ui.common.EmailModel
 
-import com.khalekuzzaman.just.cse.gmailclone.ui.screens.ComposeEmail
+import com.khalekuzzaman.just.cse.gmailclone.ui.screens.compose_mail.ComposeEmail
 import com.khalekuzzaman.just.cse.gmailclone.ui.screens.read_mail.ReadEmailScreen
 import kotlinx.coroutines.launch
 
@@ -143,7 +143,22 @@ fun ModalDrawerNavHost(
         }
 
         composable(NonTopDestinations.COMPOSE_EMAIL) {
-            ComposeEmail()
+
+            ComposeEmail(
+                onBackArrowClick = {
+                    Log.i("Clicked:", "back");
+                },
+                onMenuItemClick = {
+                    Log.i("Clicked:", it);
+                },
+                onAttachmentIconClick = {
+                    Log.i("Clicked:", "attachment");
+                },
+                onSendButtonClick = {
+                    Log.i("Clicked:", "send");
+                },
+                from = "khalekuzzaman91@gmail.com"
+            )
         }
         composable(NonTopDestinations.OPEN_EMAIL) {
             ReadEmailScreen(
