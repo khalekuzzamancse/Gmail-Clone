@@ -173,6 +173,11 @@ fun CommonLabelListScreen(
                         title = "FROM"
                     )
 
+                DropDownLabels.DATE -> DatesBottomSheet(
+                    onCrossClick = dismissSheet,
+                    dateOrderList
+                )
+
                 else -> emptyComposable()
             }
         }
@@ -180,8 +185,9 @@ fun CommonLabelListScreen(
     ) {//Screen content
         Column {
             LabelButtons(
-                onButtonClick = {
-                    label = it
+                onButtonClick = {labelName->
+                    label = labelName
+                    Log.i("LabelClick:",label)
                 }
 
             )

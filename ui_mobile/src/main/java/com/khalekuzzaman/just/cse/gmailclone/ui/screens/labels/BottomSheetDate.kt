@@ -1,5 +1,6 @@
 package com.khalekuzzaman.just.cse.gmailclone.ui.screens.labels
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,17 +20,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.khalekuzzaman.just.cse.gmailclone.R
-
+val dateOrderList = listOf(
+    "Any time",
+    "Older than a week",
+    "Older than a month",
+    "Older than a six months",
+    "Older than a year",
+)
 @Composable
 fun DatesBottomSheetDemo() {
-    val list = listOf(
-        "Any time",
-        "Older than a week",
-        "Older than a month",
-        "Older than a six months",
-        "Older than a year",
-    )
-    DatesBottomSheet(list)
+    
+    DatesBottomSheet(onCrossClick = {}, dateOrderList)
 }
 @Composable
 @Preview(showBackground = true)
@@ -64,12 +65,17 @@ fun DatesBottomSheetPreview() {
 
 @Composable
 fun DatesBottomSheet(
+    onCrossClick: () -> Unit,
     list: List<String>,
 ) {
     LabelBottomSheetSlot(
         dismissButton = {
             Icon(
-                modifier = Modifier.padding(start = 24.dp),
+                modifier = Modifier
+                    .padding(start = 24.dp)
+                    .clickable{
+                              onCrossClick()
+                    },
                 painter = painterResource(id = R.drawable.ic_cross),
                 contentDescription = null
             )
